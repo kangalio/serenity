@@ -1684,7 +1684,6 @@ impl Http {
         map: &Value,
         files: Vec<AttachmentType<'_>>,
     ) -> Result<Message> {
-        println!("num files = {}", files.len());
         let (body, multipart) = make_interaction_response_body_multipart(map, files);
         self.fire(Request {
             body: body.as_deref(),

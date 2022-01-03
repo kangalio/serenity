@@ -77,8 +77,8 @@ async fn interaction_handler(
             command
                 .edit_original_interaction_response(&ctx.http, |response| {
                     response.add_file(serenity_logo);
-                    response.0.insert("attachments", serde_json::json! { [
-                        { "filename": "idk.png", "description": "poopoo" }
+                    response.0.insert("attachments", serenity::json::json! { [
+                        { "filename": "idk.png", "description": "poopoo", "id": 0 }
                     ] });
                     response
                 })
