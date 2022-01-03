@@ -461,41 +461,17 @@ impl Http {
     ///
     /// Functions the same as [`Self::execute_webhook`]
     #[cfg(feature = "unstable_discord_api")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "unstable_discord_api")))]
     pub async fn create_followup_message(
         &self,
         interaction_token: &str,
         map: &Value,
+        files: Vec<AttachmentType<'_>>,
     ) -> Result<Message> {
+        let (body, multipart) = make_interaction_response_body_multipart(map, files);
         self.fire(Request {
-            body: Some(map.to_string().as_bytes()),
-            multipart: None,
-            headers: None,
-            route: RouteInfo::CreateFollowupMessage {
-                application_id: self.application_id,
-                interaction_token,
-            },
-        })
-        .await
-    }
-
-    /// Create a follow-up message with attachments for an Interaction.
-    ///
-    /// Functions the same as [`Self::execute_webhook`]
-    #[cfg(feature = "unstable_discord_api")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "unstable_discord_api")))]
-    pub async fn create_followup_message_with_files(
-        &self,
-        interaction_token: &str,
-        map: &Value,
-        files: impl IntoIterator<Item = AttachmentType<'_>>,
-    ) -> Result<Message> {
-        self.fire(Request {
-            body: None,
-            multipart: Some(Multipart {
-                files: files.into_iter().map(Into::into).collect(),
-                payload_json: Some(map.clone()),
-                fields: vec![],
-            }),
+            body: body.as_deref(),
+            multipart,
             headers: None,
             route: RouteInfo::CreateFollowupMessage {
                 application_id: self.application_id,
@@ -676,10 +652,12 @@ impl Http {
         interaction_id: u64,
         interaction_token: &str,
         map: &Value,
+        files: Vec<AttachmentType<'_>>,
     ) -> Result<()> {
+        let (body, multipart) = make_interaction_response_body_multipart(map, files);
         self.wind(204, Request {
-            body: Some(map.to_string().as_bytes()),
-            multipart: None,
+            body: body.as_deref(),
+            multipart,
             headers: None,
             route: RouteInfo::CreateInteractionResponse {
                 interaction_id,
@@ -1704,10 +1682,13 @@ impl Http {
         &self,
         interaction_token: &str,
         map: &Value,
+        files: Vec<AttachmentType<'_>>,
     ) -> Result<Message> {
+        println!("num files = {}", files.len());
+        let (body, multipart) = make_interaction_response_body_multipart(map, files);
         self.fire(Request {
-            body: Some(map.to_string().as_bytes()),
-            multipart: None,
+            body: body.as_deref(),
+            multipart,
             headers: None,
             route: RouteInfo::EditOriginalInteractionResponse {
                 application_id: self.application_id,
@@ -3772,6 +3753,24 @@ impl Http {
         trace!("Unsuccessful response: {:?}", response);
 
         Err(Error::Http(Box::new(HttpError::from_response(response).await)))
+    }
+}
+
+fn make_interaction_response_body_multipart<'a>(
+    map: &Value,
+    files: Vec<AttachmentType<'a>>,
+) -> (Option<Vec<u8>>, Option<Multipart<'a>>) {
+    if files.is_empty() {
+        (Some(map.to_string().into()), None)
+    } else {
+        (
+            None,
+            Some(Multipart {
+                files,
+                payload_json: Some(map.clone()),
+                fields: vec![],
+            }),
+        )
     }
 }
 

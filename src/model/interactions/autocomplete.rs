@@ -73,7 +73,7 @@ impl AutocompleteInteraction {
             "data": data,
         });
 
-        http.as_ref().create_interaction_response(self.id.0, &self.token, &map).await
+        http.as_ref().create_interaction_response(self.id.0, &self.token, &map, Vec::new()).await
     }
 }
 

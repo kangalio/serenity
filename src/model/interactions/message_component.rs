@@ -82,9 +82,15 @@ impl MessageComponentInteraction {
     /// [`Error::Model`]: crate::error::Error::Model
     /// [`Error::Http`]: crate::error::Error::Http
     /// [`Error::Json`]: crate::error::Error::Json
-    pub async fn create_interaction_response<F>(&self, http: impl AsRef<Http>, f: F) -> Result<()>
+    pub async fn create_interaction_response<'a, F>(
+        &self,
+        http: impl AsRef<Http>,
+        f: F,
+    ) -> Result<()>
     where
-        F: FnOnce(&mut CreateInteractionResponse) -> &mut CreateInteractionResponse,
+        F: for<'b> FnOnce(
+            &'b mut CreateInteractionResponse<'a>,
+        ) -> &'b mut CreateInteractionResponse<'a>,
     {
         let mut interaction_response = CreateInteractionResponse::default();
         f(&mut interaction_response);
@@ -94,7 +100,14 @@ impl MessageComponentInteraction {
         Message::check_content_length(&map)?;
         Message::check_embed_length(&map)?;
 
-        http.as_ref().create_interaction_response(self.id.0, &self.token, &Value::from(map)).await
+        http.as_ref()
+            .create_interaction_response(
+                self.id.0,
+                &self.token,
+                &Value::from(map),
+                interaction_response.1,
+            )
+            .await
     }
 
     /// Edits the initial interaction response.
@@ -116,13 +129,15 @@ impl MessageComponentInteraction {
     /// [`Error::Model`]: crate::error::Error::Model
     /// [`Error::Http`]: crate::error::Error::Http
     /// [`Error::Json`]: crate::error::Error::Json
-    pub async fn edit_original_interaction_response<F>(
+    pub async fn edit_original_interaction_response<'a, F>(
         &self,
         http: impl AsRef<Http>,
         f: F,
     ) -> Result<Message>
     where
-        F: FnOnce(&mut EditInteractionResponse) -> &mut EditInteractionResponse,
+        F: for<'b> FnOnce(
+            &'b mut EditInteractionResponse<'a>,
+        ) -> &'b mut EditInteractionResponse<'a>,
     {
         let mut interaction_response = EditInteractionResponse::default();
         f(&mut interaction_response);
@@ -132,7 +147,13 @@ impl MessageComponentInteraction {
         Message::check_content_length(&map)?;
         Message::check_embed_length(&map)?;
 
-        http.as_ref().edit_original_interaction_response(&self.token, &Value::from(map)).await
+        http.as_ref()
+            .edit_original_interaction_response(
+                &self.token,
+                &Value::from(map),
+                interaction_response.1,
+            )
+            .await
     }
 
     /// Deletes the initial interaction response.
@@ -176,7 +197,9 @@ impl MessageComponentInteraction {
         Message::check_content_length(&map)?;
         Message::check_embed_length(&map)?;
 
-        http.as_ref().create_followup_message(&self.token, &Value::from(map)).await
+        http.as_ref()
+            .create_followup_message(&self.token, &Value::from(map), interaction_response.1)
+            .await
     }
 
     /// Edits a followup response to the response sent.

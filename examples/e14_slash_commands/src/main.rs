@@ -8,6 +8,7 @@ use serenity::{
         interactions::{
             application_command::{
                 ApplicationCommand,
+                ApplicationCommandInteraction,
                 ApplicationCommandInteractionDataOptionValue,
                 ApplicationCommandOptionType,
             },
@@ -18,43 +19,92 @@ use serenity::{
     prelude::*,
 };
 
+async fn interaction_handler(
+    ctx: &Context,
+    command: &ApplicationCommandInteraction,
+) -> Result<(), serenity::Error> {
+    match command.data.name.as_str() {
+        "ping" => {
+            command
+                .create_interaction_response(&ctx.http, |response| {
+                    response
+                        .kind(InteractionResponseType::ChannelMessageWithSource)
+                        .interaction_response_data(|m| m.content("Hey, I'm alive!"))
+                })
+                .await?;
+        },
+        "id" => {
+            let options = command
+                .data
+                .options
+                .get(0)
+                .expect("Expected user option")
+                .resolved
+                .as_ref()
+                .expect("Expected user object");
+
+            let content = if let ApplicationCommandInteractionDataOptionValue::User(user, _member) =
+                options
+            {
+                format!("{}'s id is {}", user.tag(), user.id)
+            } else {
+                "Please provide a valid user".to_string()
+            };
+
+            command
+                .create_interaction_response(&ctx.http, |response| {
+                    response
+                        .kind(InteractionResponseType::ChannelMessageWithSource)
+                        .interaction_response_data(|m| m.content(content))
+                })
+                .await?;
+        },
+        "images" => {
+            let ferris_eyes = "https://raw.githubusercontent.com/serenity-rs/serenity/current/examples/e09_create_message_builder/ferris_eyes.png";
+            let serenity_logo =
+                "https://raw.githubusercontent.com/serenity-rs/serenity/current/logo.png";
+
+            command
+                .create_interaction_response(&ctx.http, |response| {
+                    response
+                        .kind(InteractionResponseType::ChannelMessageWithSource)
+                        .interaction_response_data(|m| m.add_file(ferris_eyes))
+                })
+                .await?;
+            command
+                .create_followup_message(&ctx.http, |response| response.add_file(serenity_logo))
+                .await?;
+            command
+                .edit_original_interaction_response(&ctx.http, |response| {
+                    response.add_file(serenity_logo);
+                    response.0.insert("attachments", serde_json::json! { [
+                        { "filename": "idk.png", "description": "poopoo" }
+                    ] });
+                    response
+                })
+                .await?;
+        },
+        _ => {
+            command
+                .create_interaction_response(&ctx.http, |response| {
+                    response
+                        .kind(InteractionResponseType::ChannelMessageWithSource)
+                        .interaction_response_data(|m| m.content("not implemented :("))
+                })
+                .await?;
+        },
+    }
+
+    Ok(())
+}
+
 struct Handler;
 
 #[async_trait]
 impl EventHandler for Handler {
     async fn interaction_create(&self, ctx: Context, interaction: Interaction) {
         if let Interaction::ApplicationCommand(command) = interaction {
-            let content = match command.data.name.as_str() {
-                "ping" => "Hey, I'm alive!".to_string(),
-                "id" => {
-                    let options = command
-                        .data
-                        .options
-                        .get(0)
-                        .expect("Expected user option")
-                        .resolved
-                        .as_ref()
-                        .expect("Expected user object");
-
-                    if let ApplicationCommandInteractionDataOptionValue::User(user, _member) =
-                        options
-                    {
-                        format!("{}'s id is {}", user.tag(), user.id)
-                    } else {
-                        "Please provide a valid user".to_string()
-                    }
-                },
-                _ => "not implemented :(".to_string(),
-            };
-
-            if let Err(why) = command
-                .create_interaction_response(&ctx.http, |response| {
-                    response
-                        .kind(InteractionResponseType::ChannelMessageWithSource)
-                        .interaction_response_data(|message| message.content(content))
-                })
-                .await
-            {
+            if let Err(why) = interaction_handler(&ctx, &command).await {
                 println!("Cannot respond to slash command: {}", why);
             }
         }
@@ -83,6 +133,9 @@ impl EventHandler for Handler {
                             .kind(ApplicationCommandOptionType::User)
                             .required(true)
                     })
+                })
+                .create_application_command(|command| {
+                    command.name("images").description("Outputs some nice images")
                 })
                 .create_application_command(|command| {
                     command

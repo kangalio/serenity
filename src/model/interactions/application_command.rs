@@ -100,9 +100,15 @@ impl ApplicationCommandInteraction {
     /// [`Error::Model`]: crate::error::Error::Model
     /// [`Error::Http`]: crate::error::Error::Http
     /// [`Error::Json`]: crate::error::Error::Json
-    pub async fn create_interaction_response<F>(&self, http: impl AsRef<Http>, f: F) -> Result<()>
+    pub async fn create_interaction_response<'a, F>(
+        &self,
+        http: impl AsRef<Http>,
+        f: F,
+    ) -> Result<()>
     where
-        F: FnOnce(&mut CreateInteractionResponse) -> &mut CreateInteractionResponse,
+        F: for<'b> FnOnce(
+            &'b mut CreateInteractionResponse<'a>,
+        ) -> &'b mut CreateInteractionResponse<'a>,
     {
         let mut interaction_response = CreateInteractionResponse::default();
         f(&mut interaction_response);
@@ -111,7 +117,14 @@ impl ApplicationCommandInteraction {
 
         Message::check_lengths(&map)?;
 
-        http.as_ref().create_interaction_response(self.id.0, &self.token, &Value::from(map)).await
+        http.as_ref()
+            .create_interaction_response(
+                self.id.0,
+                &self.token,
+                &Value::from(map),
+                interaction_response.1,
+            )
+            .await
     }
 
     /// Edits the initial interaction response.
@@ -133,13 +146,15 @@ impl ApplicationCommandInteraction {
     /// [`Error::Model`]: crate::error::Error::Model
     /// [`Error::Http`]: crate::error::Error::Http
     /// [`Error::Json`]: crate::error::Error::Json
-    pub async fn edit_original_interaction_response<F>(
+    pub async fn edit_original_interaction_response<'a, F>(
         &self,
         http: impl AsRef<Http>,
         f: F,
     ) -> Result<Message>
     where
-        F: FnOnce(&mut EditInteractionResponse) -> &mut EditInteractionResponse,
+        F: for<'b> FnOnce(
+            &'b mut EditInteractionResponse<'a>,
+        ) -> &'b mut EditInteractionResponse<'a>,
     {
         let mut interaction_response = EditInteractionResponse::default();
         f(&mut interaction_response);
@@ -148,7 +163,13 @@ impl ApplicationCommandInteraction {
 
         Message::check_lengths(&map)?;
 
-        http.as_ref().edit_original_interaction_response(&self.token, &Value::from(map)).await
+        http.as_ref()
+            .edit_original_interaction_response(
+                &self.token,
+                &Value::from(map),
+                interaction_response.1,
+            )
+            .await
     }
 
     /// Deletes the initial interaction response.
@@ -191,17 +212,9 @@ impl ApplicationCommandInteraction {
 
         Message::check_lengths(&map)?;
 
-        if interaction_response.1.is_empty() {
-            http.as_ref().create_followup_message(&self.token, &Value::from(map)).await
-        } else {
-            http.as_ref()
-                .create_followup_message_with_files(
-                    &self.token,
-                    &Value::from(map),
-                    interaction_response.1,
-                )
-                .await
-        }
+        http.as_ref()
+            .create_followup_message(&self.token, &Value::from(map), interaction_response.1)
+            .await
     }
 
     /// Edits a followup response to the response sent.
