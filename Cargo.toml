@@ -8,7 +8,7 @@ license = "ISC"
 name = "serenity"
 readme = "README.md"
 repository = "https://github.com/serenity-rs/serenity.git"
-version = "0.11.2"
+version = "0.11.5"
 edition = "2018"
 include = ["src/**/*", "LICENSE.md", "README.md", "CHANGELOG.md", "build.rs"]
 
@@ -35,7 +35,7 @@ features = ["log"]
 
 [dependencies.command_attr]
 path = "./command_attr"
-version = "0.4.0"
+version = "0.4.1"
 optional = true
 
 [dependencies.serde]
@@ -117,7 +117,8 @@ features = ["std"]
 version = "2.1"
 
 [dependencies.moka]
-version = "0.8"
+version = "0.9"
+default-features = false
 features = ["dash"]
 optional = true
 
@@ -178,7 +179,7 @@ gateway = ["flate2", "http", "utils"]
 http = []
 absolute_ratelimits = ["http"]
 model = ["builder", "http"]
-voice-model = ["serenity-voice-model"]
+voice_model = ["serenity-voice-model"]
 standard_framework = ["framework", "uwl", "levenshtein", "command_attr", "static_assertions"]
 unstable_discord_api = []
 utils = ["base64"]
@@ -187,7 +188,7 @@ tokio_task_builder = ["tokio/tracing"]
 time = []
 
 # Enables simd accelerated parsing
-simdjson = ["simd-json"]
+simd_json = ["simd-json"]
 
 # Enables temporary caching in functions that retrieve data via the HTTP API.
 temp_cache = ["cache", "moka"]
@@ -208,6 +209,10 @@ native_tls_backend = [
     "tokio",
     "bytes",
 ]
+
+# TODO(next): Remove, these are deprecated aliases
+simdjson = ["simd_json"]
+voice-model = ["voice_model"]
 
 [package.metadata.docs.rs]
 features = ["default", "collector", "unstable_discord_api", "voice", "voice-model"]

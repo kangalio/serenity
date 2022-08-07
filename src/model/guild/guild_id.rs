@@ -666,7 +666,6 @@ impl GuildId {
     /// Returns [`Error::Http`] if the current user lacks permission.
     ///
     /// [Manage Emojis and Stickers]: Permissions::MANAGE_EMOJIS_AND_STICKERS
-    /// [`Error::Http`]: crate::error::Error::Http
     #[inline]
     pub async fn edit_emoji(
         self,
@@ -698,8 +697,6 @@ impl GuildId {
     /// # Errors
     ///
     /// Returns [`Error::Http`] if the current user lacks the necessary permissions.
-    ///
-    /// [`Error::Http`]: crate::error::Error::Http
     #[inline]
     pub async fn edit_member<F>(
         self,
@@ -728,7 +725,6 @@ impl GuildId {
     /// Returns [`Error::Http`] if the current user lacks permission.
     ///
     /// [Change Nickname]: Permissions::CHANGE_NICKNAME
-    /// [`Error::Http`]: crate::error::Error::Http
     #[inline]
     pub async fn edit_nickname(
         self,
@@ -757,7 +753,6 @@ impl GuildId {
     /// Returns [`Error::Http`] if the current user lacks permission.
     ///
     /// [Manage Roles]: Permissions::MANAGE_ROLES
-    /// [`Error::Http`]: crate::error::Error::Http
     #[inline]
     pub async fn edit_role<F>(
         self,
@@ -816,7 +811,6 @@ impl GuildId {
     ///
     /// Returns [`Error::Http`] if the current user lacks permission.
     ///
-    /// [`Error::Http`]: crate::error::Error::Http
     /// [Manage Emojis and Stickers]: crate::model::permissions::Permissions::MANAGE_EMOJIS_AND_STICKERS
     #[inline]
     pub async fn edit_sticker<F>(
@@ -852,7 +846,6 @@ impl GuildId {
     /// Returns an [`Error::Http`] if the current user lacks permission.
     ///
     /// [Manage Roles]: Permissions::MANAGE_ROLES
-    /// [`Error::Http`]: crate::error::Error::Http
     #[inline]
     pub async fn edit_role_position(
         self,
@@ -868,8 +861,6 @@ impl GuildId {
     /// # Errors
     ///
     /// Returns an [`Error::Http`] if some mandatory fields are not provided.
-    ///
-    /// [`Error::Http`]: crate::error::Error::Http
     pub async fn edit_welcome_screen<F>(
         &self,
         http: impl AsRef<Http>,
@@ -892,8 +883,6 @@ impl GuildId {
     ///
     /// Returns an [`Error::Http`] if the bot does not have the `MANAGE_GUILD`
     /// permission.
-    ///
-    /// [`Error::Http`]: crate::error::Error::Http
     pub async fn edit_widget<F>(&self, http: impl AsRef<Http>, f: F) -> Result<GuildWidget>
     where
         F: FnOnce(&mut EditGuildWidget) -> &mut EditGuildWidget,
@@ -938,8 +927,6 @@ impl GuildId {
     /// # Errors
     ///
     /// Returns an [`Error::Http`] if the current user is not in the guild.
-    ///
-    /// [`Error::Http`]: crate::error::Error::Http
     #[inline]
     pub async fn to_partial_guild(self, http: impl AsRef<Http>) -> Result<PartialGuild> {
         http.as_ref().get_guild(self.0).await
@@ -953,8 +940,6 @@ impl GuildId {
     /// # Errors
     ///
     /// Returns an [`Error::Http`] if the current user is not in the guild.
-    ///
-    /// [`Error::Http`]: crate::error::Error::Http
     #[inline]
     pub async fn to_partial_guild_with_counts(
         self,
@@ -968,8 +953,6 @@ impl GuildId {
     /// # Errors
     ///
     /// Returns an [`Error::Http`] if the guild is unavailable.
-    ///
-    /// [`Error::Http`]: crate::error::Error::Http
     #[inline]
     pub async fn emojis(&self, http: impl AsRef<Http>) -> Result<Vec<Emoji>> {
         http.as_ref().get_emojis(self.0).await
@@ -980,8 +963,6 @@ impl GuildId {
     /// # Errors
     ///
     /// Returns an [`Error::Http`] if an emoji with that Id does not exist.
-    ///
-    /// [`Error::Http`]: crate::error::Error::Http
     #[inline]
     pub async fn emoji(&self, http: impl AsRef<Http>, emoji_id: EmojiId) -> Result<Emoji> {
         http.as_ref().get_emoji(self.0, emoji_id.0).await
@@ -992,8 +973,6 @@ impl GuildId {
     /// # Errors
     ///
     /// Returns an [`Error::Http`] if the guild is unavailable.
-    ///
-    /// [`Error::Http`]: crate::error::Error::Http
     #[inline]
     pub async fn stickers(&self, http: impl AsRef<Http>) -> Result<Vec<Sticker>> {
         http.as_ref().get_guild_stickers(self.0).await
@@ -1004,8 +983,6 @@ impl GuildId {
     /// # Errors
     ///
     /// Returns an [`Error::Http`] if an sticker with that Id does not exist.
-    ///
-    /// [`Error::Http`]: crate::error::Error::Http
     #[inline]
     pub async fn sticker(&self, http: impl AsRef<Http>, sticker_id: StickerId) -> Result<Sticker> {
         http.as_ref().get_guild_sticker(self.0, sticker_id.0).await
@@ -1022,8 +999,6 @@ impl GuildId {
     /// the API response.
     ///
     /// [Manage Guild]: Permissions::MANAGE_GUILD
-    /// [`Error::Http`]: crate::error::Error::Http
-    /// [`Error::Json`]: crate::error::Error::Json
     #[inline]
     pub async fn integrations(self, http: impl AsRef<Http>) -> Result<Vec<Integration>> {
         http.as_ref().get_guild_integrations(self.0).await
@@ -1040,8 +1015,6 @@ impl GuildId {
     /// deserializing the API response.
     ///
     /// [Manage Guild]: Permissions::MANAGE_GUILD
-    /// [`Error::Http`]: crate::error::Error::Http
-    /// [`Error::Json`]: crate::error::Error::Json
     #[inline]
     pub async fn invites(self, http: impl AsRef<Http>) -> Result<Vec<RichInvite>> {
         http.as_ref().get_guild_invites(self.0).await
@@ -1056,7 +1029,6 @@ impl GuildId {
     /// Returns [`Error::Http`] if the member cannot be kicked by
     /// the current user.
     ///
-    /// [`Error::Http`]: crate::error::Error::Http
     /// [Kick Members]: Permissions::KICK_MEMBERS
     #[inline]
     pub async fn kick(self, http: impl AsRef<Http>, user_id: impl Into<UserId>) -> Result<()> {
@@ -1083,8 +1055,6 @@ impl GuildId {
     ///
     /// May return an [`Error::Http`] if the current user
     /// cannot leave the guild, or currently is not in the guild.
-    ///
-    /// [`Error::Http`]: crate::error::Error::Http
     #[inline]
     pub async fn leave(self, http: impl AsRef<Http>) -> Result<()> {
         http.as_ref().leave_guild(self.0).await
@@ -1099,8 +1069,6 @@ impl GuildId {
     ///
     /// Returns an [`Error::Http`] if the user is not in the guild,
     /// or if the guild is otherwise unavailable
-    ///
-    /// [`Error::Http`]: crate::error::Error::Http
     #[inline]
     pub async fn member(
         self,
@@ -1134,8 +1102,6 @@ impl GuildId {
     /// return [`Error::NotInRange`] if the input is not within range.
     ///
     /// [`User`]: crate::model::user::User
-    /// [`Error::Http`]: crate::error::Error::Http
-    /// [`Error::NotInRange`]: crate::error::Error::NotInRange
     #[inline]
     pub async fn members(
         self,
@@ -1187,7 +1153,6 @@ impl GuildId {
     /// in a voice channel for this [`Guild`].
     ///
     /// [Move Members]: Permissions::MOVE_MEMBERS
-    /// [`Error::Http`]: crate::error::Error::Http
     #[inline]
     pub async fn move_member(
         self,
@@ -1292,8 +1257,6 @@ impl GuildId {
     /// # Errors
     ///
     /// Returns an [`Error::Http`] if the API returns an error.
-    ///
-    /// [`Error::Http`]: crate::error::Error::Http
     #[inline]
     pub async fn search_members(
         self,
@@ -1507,9 +1470,6 @@ impl GuildId {
     /// Will return an [`Error::Http`] if the bot is lacking permissions.
     /// Can also return an [`Error::Json`] if there is an error deserializing
     /// the API response.
-    ///
-    /// [`Error::Http`]: crate::error::Error::Http
-    /// [`Error::Json`]: crate::error::Error::Json
     #[inline]
     pub async fn webhooks(self, http: impl AsRef<Http>) -> Result<Vec<Webhook>> {
         http.as_ref().get_guild_webhooks(self.0).await
@@ -1595,9 +1555,6 @@ impl GuildId {
     /// # Errors
     ///
     /// If there is an error, it will be either [`Error::Http`] or [`Error::Json`].
-    ///
-    /// [`Error::Http`]: crate::error::Error::Http
-    /// [`Error::Json`]: crate::error::Error::Json
     pub async fn create_application_command_permission<F>(
         &self,
         http: impl AsRef<Http>,
@@ -1626,9 +1583,7 @@ impl GuildId {
     /// # Errors
     ///
     /// If there is an error, it will be either [`Error::Http`] or [`Error::Json`].
-    ///
-    /// [`Error::Http`]: crate::error::Error::Http
-    /// [`Error::Json`]: crate::error::Error::Json
+    #[deprecated(note = "use `create_appliction_command_permission`.")]
     pub async fn set_application_commands_permissions<F>(
         &self,
         http: impl AsRef<Http>,
@@ -1650,9 +1605,6 @@ impl GuildId {
     /// # Errors
     ///
     /// If there is an error, it will be either [`Error::Http`] or [`Error::Json`].
-    ///
-    /// [`Error::Http`]: crate::error::Error::Http
-    /// [`Error::Json`]: crate::error::Error::Json
     pub async fn get_application_commands(&self, http: impl AsRef<Http>) -> Result<Vec<Command>> {
         http.as_ref().get_guild_application_commands(self.0).await
     }
@@ -1662,9 +1614,6 @@ impl GuildId {
     /// # Errors
     ///
     /// If there is an error, it will be either [`Error::Http`] or [`Error::Json`].
-    ///
-    /// [`Error::Http`]: crate::error::Error::Http
-    /// [`Error::Json`]: crate::error::Error::Json
     pub async fn get_application_command(
         &self,
         http: impl AsRef<Http>,
@@ -1678,9 +1627,6 @@ impl GuildId {
     /// # Errors
     ///
     /// If there is an error, it will be either [`Error::Http`] or [`Error::Json`].
-    ///
-    /// [`Error::Http`]: crate::error::Error::Http
-    /// [`Error::Json`]: crate::error::Error::Json
     pub async fn edit_application_command<F>(
         &self,
         http: impl AsRef<Http>,
@@ -1701,9 +1647,6 @@ impl GuildId {
     /// # Errors
     ///
     /// If there is an error, it will be either [`Error::Http`] or [`Error::Json`].
-    ///
-    /// [`Error::Http`]: crate::error::Error::Http
-    /// [`Error::Json`]: crate::error::Error::Json
     pub async fn delete_application_command(
         &self,
         http: impl AsRef<Http>,
@@ -1717,9 +1660,6 @@ impl GuildId {
     /// # Errors
     ///
     /// If there is an error, it will be either [`Error::Http`] or [`Error::Json`].
-    ///
-    /// [`Error::Http`]: crate::error::Error::Http
-    /// [`Error::Json`]: crate::error::Error::Json
     pub async fn get_application_commands_permissions(
         &self,
         http: impl AsRef<Http>,
@@ -1732,9 +1672,6 @@ impl GuildId {
     /// # Errors
     ///
     /// If there is an error, it will be either [`Error::Http`] or [`Error::Json`].
-    ///
-    /// [`Error::Http`]: crate::error::Error::Http
-    /// [`Error::Json`]: crate::error::Error::Json
     pub async fn get_application_command_permissions(
         &self,
         http: impl AsRef<Http>,
