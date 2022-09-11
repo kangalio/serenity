@@ -1,108 +1,108 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/model/invite.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>invite.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script src="../../../crates.js"></script><script defer src="../../../main.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script>
-    <noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../serenity/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/model/invite.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>invite.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../serenity/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div>
         </a><h2 class="location"></h2>
     </nav>
     <nav class="sidebar"><a class="sidebar-logo" href="../../../serenity/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div>
-        </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../serenity/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><nav class="sub"><div class="theme-picker hidden"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><form class="search-form"><div class="search-container"><div>
-                                <input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../../../wheel.svg"></a></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">  1</span>
-<span id="2">  2</span>
-<span id="3">  3</span>
-<span id="4">  4</span>
-<span id="5">  5</span>
-<span id="6">  6</span>
-<span id="7">  7</span>
-<span id="8">  8</span>
-<span id="9">  9</span>
-<span id="10"> 10</span>
-<span id="11"> 11</span>
-<span id="12"> 12</span>
-<span id="13"> 13</span>
-<span id="14"> 14</span>
-<span id="15"> 15</span>
-<span id="16"> 16</span>
-<span id="17"> 17</span>
-<span id="18"> 18</span>
-<span id="19"> 19</span>
-<span id="20"> 20</span>
-<span id="21"> 21</span>
-<span id="22"> 22</span>
-<span id="23"> 23</span>
-<span id="24"> 24</span>
-<span id="25"> 25</span>
-<span id="26"> 26</span>
-<span id="27"> 27</span>
-<span id="28"> 28</span>
-<span id="29"> 29</span>
-<span id="30"> 30</span>
-<span id="31"> 31</span>
-<span id="32"> 32</span>
-<span id="33"> 33</span>
-<span id="34"> 34</span>
-<span id="35"> 35</span>
-<span id="36"> 36</span>
-<span id="37"> 37</span>
-<span id="38"> 38</span>
-<span id="39"> 39</span>
-<span id="40"> 40</span>
-<span id="41"> 41</span>
-<span id="42"> 42</span>
-<span id="43"> 43</span>
-<span id="44"> 44</span>
-<span id="45"> 45</span>
-<span id="46"> 46</span>
-<span id="47"> 47</span>
-<span id="48"> 48</span>
-<span id="49"> 49</span>
-<span id="50"> 50</span>
-<span id="51"> 51</span>
-<span id="52"> 52</span>
-<span id="53"> 53</span>
-<span id="54"> 54</span>
-<span id="55"> 55</span>
-<span id="56"> 56</span>
-<span id="57"> 57</span>
-<span id="58"> 58</span>
-<span id="59"> 59</span>
-<span id="60"> 60</span>
-<span id="61"> 61</span>
-<span id="62"> 62</span>
-<span id="63"> 63</span>
-<span id="64"> 64</span>
-<span id="65"> 65</span>
-<span id="66"> 66</span>
-<span id="67"> 67</span>
-<span id="68"> 68</span>
-<span id="69"> 69</span>
-<span id="70"> 70</span>
-<span id="71"> 71</span>
-<span id="72"> 72</span>
-<span id="73"> 73</span>
-<span id="74"> 74</span>
-<span id="75"> 75</span>
-<span id="76"> 76</span>
-<span id="77"> 77</span>
-<span id="78"> 78</span>
-<span id="79"> 79</span>
-<span id="80"> 80</span>
-<span id="81"> 81</span>
-<span id="82"> 82</span>
-<span id="83"> 83</span>
-<span id="84"> 84</span>
-<span id="85"> 85</span>
-<span id="86"> 86</span>
-<span id="87"> 87</span>
-<span id="88"> 88</span>
-<span id="89"> 89</span>
-<span id="90"> 90</span>
-<span id="91"> 91</span>
-<span id="92"> 92</span>
-<span id="93"> 93</span>
-<span id="94"> 94</span>
-<span id="95"> 95</span>
-<span id="96"> 96</span>
-<span id="97"> 97</span>
-<span id="98"> 98</span>
-<span id="99"> 99</span>
+        </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../serenity/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><div id="settings-menu" tabindex="-1">
+                                <a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div>
+                        </div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<span id="2">2</span>
+<span id="3">3</span>
+<span id="4">4</span>
+<span id="5">5</span>
+<span id="6">6</span>
+<span id="7">7</span>
+<span id="8">8</span>
+<span id="9">9</span>
+<span id="10">10</span>
+<span id="11">11</span>
+<span id="12">12</span>
+<span id="13">13</span>
+<span id="14">14</span>
+<span id="15">15</span>
+<span id="16">16</span>
+<span id="17">17</span>
+<span id="18">18</span>
+<span id="19">19</span>
+<span id="20">20</span>
+<span id="21">21</span>
+<span id="22">22</span>
+<span id="23">23</span>
+<span id="24">24</span>
+<span id="25">25</span>
+<span id="26">26</span>
+<span id="27">27</span>
+<span id="28">28</span>
+<span id="29">29</span>
+<span id="30">30</span>
+<span id="31">31</span>
+<span id="32">32</span>
+<span id="33">33</span>
+<span id="34">34</span>
+<span id="35">35</span>
+<span id="36">36</span>
+<span id="37">37</span>
+<span id="38">38</span>
+<span id="39">39</span>
+<span id="40">40</span>
+<span id="41">41</span>
+<span id="42">42</span>
+<span id="43">43</span>
+<span id="44">44</span>
+<span id="45">45</span>
+<span id="46">46</span>
+<span id="47">47</span>
+<span id="48">48</span>
+<span id="49">49</span>
+<span id="50">50</span>
+<span id="51">51</span>
+<span id="52">52</span>
+<span id="53">53</span>
+<span id="54">54</span>
+<span id="55">55</span>
+<span id="56">56</span>
+<span id="57">57</span>
+<span id="58">58</span>
+<span id="59">59</span>
+<span id="60">60</span>
+<span id="61">61</span>
+<span id="62">62</span>
+<span id="63">63</span>
+<span id="64">64</span>
+<span id="65">65</span>
+<span id="66">66</span>
+<span id="67">67</span>
+<span id="68">68</span>
+<span id="69">69</span>
+<span id="70">70</span>
+<span id="71">71</span>
+<span id="72">72</span>
+<span id="73">73</span>
+<span id="74">74</span>
+<span id="75">75</span>
+<span id="76">76</span>
+<span id="77">77</span>
+<span id="78">78</span>
+<span id="79">79</span>
+<span id="80">80</span>
+<span id="81">81</span>
+<span id="82">82</span>
+<span id="83">83</span>
+<span id="84">84</span>
+<span id="85">85</span>
+<span id="86">86</span>
+<span id="87">87</span>
+<span id="88">88</span>
+<span id="89">89</span>
+<span id="90">90</span>
+<span id="91">91</span>
+<span id="92">92</span>
+<span id="93">93</span>
+<span id="94">94</span>
+<span id="95">95</span>
+<span id="96">96</span>
+<span id="97">97</span>
+<span id="98">98</span>
+<span id="99">99</span>
 <span id="100">100</span>
 <span id="101">101</span>
 <span id="102">102</span>
@@ -417,20 +417,9 @@
 <span id="411">411</span>
 <span id="412">412</span>
 <span id="413">413</span>
-<span id="414">414</span>
-<span id="415">415</span>
-<span id="416">416</span>
-<span id="417">417</span>
-<span id="418">418</span>
-<span id="419">419</span>
-<span id="420">420</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Models for server and channel invites.</span>
 
-<span class="kw">use</span> <span class="ident">chrono</span>::{<span class="ident">DateTime</span>, <span class="ident">Utc</span>};
-
 <span class="kw">use</span> <span class="ident"><span class="kw">super</span>::prelude</span>::<span class="kw-2">*</span>;
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;cache&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;model&quot;</span>))]</span>
-<span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">utils</span> <span class="kw">as</span> <span class="ident">model_utils</span>, <span class="ident">Permissions</span>};
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;model&quot;</span>)]</span>
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::builder::CreateInvite</span>;
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;cache&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;model&quot;</span>))]</span>
@@ -439,12 +428,12 @@
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::http</span>::{<span class="ident">CacheHttp</span>, <span class="ident">Http</span>};
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;model&quot;</span>)]</span>
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::internal::prelude</span>::<span class="kw-2">*</span>;
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;model&quot;</span>)]</span>
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::json</span>;
 
 <span class="doccomment">/// Information about an invite code.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// Information can not be accessed for guilds the current user is banned from.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// [Discord docs](https://discord.com/developers/docs/resources/invite#invite-object).</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Deserialize</span>, <span class="ident">Serialize</span>)]</span>
 <span class="attribute">#[<span class="ident">non_exhaustive</span>]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Invite</span> {
@@ -481,9 +470,9 @@
     <span class="doccomment">/// Only shows up if `target_type` is `EmmbeddedApplication`.</span>
     <span class="kw">pub</span> <span class="ident">target_application</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ApplicationId</span><span class="op">&gt;</span>,
 
-    <span class="comment">// /// The expiration date of this invite, returned from `Http::get_invite` when</span>
-    <span class="comment">// /// `with_expiration` is true.</span>
-    <span class="comment">// pub expires_at: Option&lt;DateTime&lt;Utc&gt;&gt;,</span>
+    <span class="doccomment">/// The expiration date of this invite, returned from `Http::get_invite` when</span>
+    <span class="doccomment">/// `with_expiration` is true.</span>
+    <span class="kw">pub</span> <span class="ident">expires_at</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Timestamp</span><span class="op">&gt;</span>,
     <span class="doccomment">/// The Stage instance data if there is a public Stage instance in the Stage</span>
     <span class="doccomment">/// channel this invite is for.</span>
     <span class="kw">pub</span> <span class="ident">stage_instance</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">InviteStageInstance</span><span class="op">&gt;</span>,
@@ -491,48 +480,23 @@
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;model&quot;</span>)]</span>
 <span class="kw">impl</span> <span class="ident">Invite</span> {
-    <span class="doccomment">/// Creates an invite for a [`GuildChannel`], providing a builder so that</span>
-    <span class="doccomment">/// fields may optionally be set.</span>
+    <span class="doccomment">/// Creates an invite for the given channel.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// See the documentation for the [`CreateInvite`] builder for information</span>
-    <span class="doccomment">/// on how to use this and the default values that it provides.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Requires the [Create Invite] permission.</span>
+    <span class="doccomment">/// **Note**: Requires the [Create Instant Invite] permission.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Errors</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// If the `cache` is enabled, returns a [`ModelError::InvalidPermissions`]</span>
-    <span class="doccomment">/// if the current user does not have the required [permission].</span>
+    <span class="doccomment">/// If the `cache` is enabled, returns [`ModelError::InvalidPermissions`] if the current user</span>
+    <span class="doccomment">/// lacks permission. Otherwise returns [`Error::Http`], as well as if invalid data is given.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// [`CreateInvite`]: crate::builder::CreateInvite</span>
-    <span class="doccomment">/// [Create Invite]: Permissions::CREATE_INVITE</span>
-    <span class="doccomment">/// [permission]: super::permissions</span>
+    <span class="doccomment">/// [Create Instant Invite]: Permissions::CREATE_INSTANT_INVITE</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">create</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(
+    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">create</span>(
         <span class="ident">cache_http</span>: <span class="kw">impl</span> <span class="ident">CacheHttp</span>,
         <span class="ident">channel_id</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">ChannelId</span><span class="op">&gt;</span>,
-        <span class="ident">f</span>: <span class="ident">F</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">RichInvite</span><span class="op">&gt;</span>
-    <span class="kw">where</span>
-        <span class="ident">F</span>: <span class="ident">FnOnce</span>(<span class="ident">CreateInvite</span>) -&gt; <span class="ident">CreateInvite</span>,
-    {
-        <span class="kw">let</span> <span class="ident">channel_id</span> <span class="op">=</span> <span class="ident">channel_id</span>.<span class="ident">into</span>();
-
-        <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;cache&quot;</span>)]</span>
-        {
-            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">cache</span>) <span class="op">=</span> <span class="ident">cache_http</span>.<span class="ident">cache</span>() {
-                <span class="ident">model_utils::user_has_perms_cache</span>(
-                    <span class="ident">cache</span>,
-                    <span class="ident">channel_id</span>,
-                    <span class="prelude-val">None</span>,
-                    <span class="ident">Permissions::CREATE_INVITE</span>,
-                )<span class="question-mark">?</span>;
-            }
-        }
-
-        <span class="kw">let</span> <span class="ident">map</span> <span class="op">=</span> <span class="ident">json::hashmap_to_json_map</span>(<span class="ident">f</span>(<span class="ident">CreateInvite::default</span>()).<span class="number">0</span>);
-
-        <span class="ident">cache_http</span>.<span class="ident">http</span>().<span class="ident">create_invite</span>(<span class="ident">channel_id</span>.<span class="number">0</span>, <span class="kw-2">&amp;</span><span class="ident">map</span>, <span class="prelude-val">None</span>).<span class="kw">await</span>
+        <span class="ident">builder</span>: <span class="ident">CreateInvite</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">RichInvite</span><span class="op">&gt;</span> {
+        <span class="ident">channel_id</span>.<span class="ident">into</span>().<span class="ident">create_invite</span>(<span class="ident">cache_http</span>, <span class="ident">builder</span>).<span class="kw">await</span>
     }
 
     <span class="doccomment">/// Deletes the invite.</span>
@@ -549,13 +513,12 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// [Manage Guild]: Permissions::MANAGE_GUILD</span>
     <span class="doccomment">/// [permission]: super::permissions</span>
-    <span class="doccomment">/// [`Error::Http`]: crate::error::Error::Http</span>
     <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">delete</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">cache_http</span>: <span class="kw">impl</span> <span class="ident">CacheHttp</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Invite</span><span class="op">&gt;</span> {
         <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;cache&quot;</span>)]</span>
         {
             <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">cache</span>) <span class="op">=</span> <span class="ident">cache_http</span>.<span class="ident">cache</span>() {
                 <span class="kw">let</span> <span class="ident">guild_id</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">guild</span>.<span class="ident">as_ref</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">g</span><span class="op">|</span> <span class="ident">g</span>.<span class="ident">id</span>);
-                <span class="ident">model_utils::user_has_perms_cache</span>(
+                <span class="ident"><span class="kw">crate</span>::utils::user_has_perms_cache</span>(
                     <span class="ident">cache</span>,
                     <span class="self">self</span>.<span class="ident">channel</span>.<span class="ident">id</span>,
                     <span class="ident">guild_id</span>,
@@ -564,17 +527,34 @@
             }
         }
 
-        <span class="ident">cache_http</span>.<span class="ident">http</span>().<span class="ident">as_ref</span>().<span class="ident">delete_invite</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">code</span>).<span class="kw">await</span>
+        <span class="ident">cache_http</span>.<span class="ident">http</span>().<span class="ident">as_ref</span>().<span class="ident">delete_invite</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">code</span>, <span class="prelude-val">None</span>).<span class="kw">await</span>
     }
 
-    <span class="doccomment">/// Gets the information about an invite.</span>
+    <span class="doccomment">/// Gets information about an invite.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Arguments</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// * `code` - The invite code.</span>
+    <span class="doccomment">/// * `member_counts` - Whether to include information about the current number</span>
+    <span class="doccomment">/// of members in the server that the invite belongs to.</span>
+    <span class="doccomment">/// * `expiration` - Whether to include information about when the invite expires.</span>
+    <span class="doccomment">/// * `event_id` - An optional server event ID to include with the invite.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// More information about these arguments can be found on Discord&#39;s</span>
+    <span class="doccomment">/// [API documentation](https://discord.com/developers/docs/resources/invite#get-invite).</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Errors</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// May return an [`Error::Http`] if the invite is invalid.</span>
     <span class="doccomment">/// Can also return an [`Error::Json`] if there is an error</span>
     <span class="doccomment">/// deserializing the API response.</span>
-    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">get</span>(<span class="ident">http</span>: <span class="kw">impl</span> <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">Http</span><span class="op">&gt;</span>, <span class="ident">code</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">stats</span>: <span class="ident">bool</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Invite</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">get</span>(
+        <span class="ident">http</span>: <span class="kw">impl</span> <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">Http</span><span class="op">&gt;</span>,
+        <span class="ident">code</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
+        <span class="ident">member_counts</span>: <span class="ident">bool</span>,
+        <span class="ident">expiration</span>: <span class="ident">bool</span>,
+        <span class="ident">event_id</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Invite</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">invite</span> <span class="op">=</span> <span class="ident">code</span>;
 
         <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;utils&quot;</span>)]</span>
@@ -582,7 +562,7 @@
             <span class="ident">invite</span> <span class="op">=</span> <span class="ident"><span class="kw">crate</span>::utils::parse_invite</span>(<span class="ident">invite</span>);
         }
 
-        <span class="ident">http</span>.<span class="ident">as_ref</span>().<span class="ident">get_invite</span>(<span class="ident">invite</span>, <span class="ident">stats</span>).<span class="kw">await</span>
+        <span class="ident">http</span>.<span class="ident">as_ref</span>().<span class="ident">get_invite</span>(<span class="ident">invite</span>, <span class="ident">member_counts</span>, <span class="ident">expiration</span>, <span class="ident">event_id</span>).<span class="kw">await</span>
     }
 
     <span class="doccomment">/// Returns a URL to use for the invite.</span>
@@ -601,12 +581,12 @@
     <span class="doccomment">/// #     &quot;approximate_presence_count&quot;: Some(717),</span>
     <span class="doccomment">/// #     &quot;code&quot;: &quot;WxZumR&quot;,</span>
     <span class="doccomment">/// #     &quot;channel&quot;: {</span>
-    <span class="doccomment">/// #         &quot;id&quot;: ChannelId(1),</span>
+    <span class="doccomment">/// #         &quot;id&quot;: ChannelId::new(1),</span>
     <span class="doccomment">/// #         &quot;name&quot;: &quot;foo&quot;,</span>
     <span class="doccomment">/// #         &quot;type&quot;: ChannelType::Text,</span>
     <span class="doccomment">/// #     },</span>
     <span class="doccomment">/// #     &quot;guild&quot;: {</span>
-    <span class="doccomment">/// #         &quot;id&quot;: GuildId(2),</span>
+    <span class="doccomment">/// #         &quot;id&quot;: GuildId::new(2),</span>
     <span class="doccomment">/// #         &quot;icon&quot;: None::&lt;String&gt;,</span>
     <span class="doccomment">/// #         &quot;name&quot;: &quot;bar&quot;,</span>
     <span class="doccomment">/// #         &quot;splash_hash&quot;: None::&lt;String&gt;,</span>
@@ -614,7 +594,7 @@
     <span class="doccomment">/// #         &quot;voice_channel_count&quot;: 3,</span>
     <span class="doccomment">/// #     },</span>
     <span class="doccomment">/// #     &quot;inviter&quot;: {</span>
-    <span class="doccomment">/// #         &quot;id&quot;: UserId(3),</span>
+    <span class="doccomment">/// #         &quot;id&quot;: UserId::new(3),</span>
     <span class="doccomment">/// #         &quot;username&quot;: &quot;foo&quot;,</span>
     <span class="doccomment">/// #         &quot;discriminator&quot;: &quot;1234&quot;,</span>
     <span class="doccomment">/// #         &quot;avatar&quot;: &quot;aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&quot;</span>
@@ -624,12 +604,15 @@
     <span class="doccomment">/// assert_eq!(invite.url(), &quot;https://discord.gg/WxZumR&quot;);</span>
     <span class="doccomment">/// # }</span>
     <span class="doccomment">/// ```</span>
+    <span class="attribute">#[<span class="ident">must_use</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">url</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">String</span> {
         <span class="macro">format!</span>(<span class="string">&quot;https://discord.gg/{}&quot;</span>, <span class="self">self</span>.<span class="ident">code</span>)
     }
 }
 
 <span class="doccomment">/// A minimal amount of information about the channel an invite points to.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// [Discord docs](https://discord.com/developers/docs/resources/invite#invite-object-example-invite-object).</span>
 <span class="attribute">#[<span class="ident">non_exhaustive</span>]</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Deserialize</span>, <span class="ident">Serialize</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">InviteChannel</span> {
@@ -640,6 +623,8 @@
 }
 
 <span class="doccomment">/// A minimal amount of information about the guild an invite points to.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// [Discord docs](https://discord.com/developers/docs/resources/invite#invite-object-example-invite-object).</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Deserialize</span>, <span class="ident">Serialize</span>)]</span>
 <span class="attribute">#[<span class="ident">non_exhaustive</span>]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">InviteGuild</span> {
@@ -665,7 +650,7 @@
     <span class="doccomment">/// [`utils::shard_id`]: crate::utils::shard_id</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;cache&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;utils&quot;</span>))]</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">shard_id</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">cache</span>: <span class="kw">impl</span> <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">Cache</span><span class="op">&gt;</span>) -&gt; <span class="ident">u64</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">shard_id</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">cache</span>: <span class="kw">impl</span> <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">Cache</span><span class="op">&gt;</span>) -&gt; <span class="ident">u32</span> {
         <span class="self">self</span>.<span class="ident">id</span>.<span class="ident">shard_id</span>(<span class="kw-2">&amp;</span><span class="ident">cache</span>)
     }
 
@@ -691,8 +676,8 @@
     <span class="doccomment">/// ```</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;utils&quot;</span>, <span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;cache&quot;</span>)))]</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">shard_id</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">shard_count</span>: <span class="ident">u64</span>) -&gt; <span class="ident">u64</span> {
-        <span class="self">self</span>.<span class="ident">id</span>.<span class="ident">shard_id</span>(<span class="ident">shard_count</span>).<span class="kw">await</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">shard_id</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">shard_count</span>: <span class="ident">u32</span>) -&gt; <span class="ident">u32</span> {
+        <span class="self">self</span>.<span class="ident">id</span>.<span class="ident">shard_id</span>(<span class="ident">shard_count</span>)
     }
 }
 
@@ -702,6 +687,8 @@
 <span class="doccomment">/// the [`Invite`] struct.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// [Manage Guild]: Permissions::MANAGE_GUILD</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// [Discord docs](https://discord.com/developers/docs/resources/invite#invite-metadata-object) (extends [`Invite`] fields).</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Deserialize</span>, <span class="ident">Serialize</span>)]</span>
 <span class="attribute">#[<span class="ident">non_exhaustive</span>]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">RichInvite</span> {
@@ -711,7 +698,7 @@
     <span class="doccomment">/// The unique code for the invite.</span>
     <span class="kw">pub</span> <span class="ident">code</span>: <span class="ident">String</span>,
     <span class="doccomment">/// When the invite was created.</span>
-    <span class="kw">pub</span> <span class="ident">created_at</span>: <span class="ident">DateTime</span><span class="op">&lt;</span><span class="ident">Utc</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">created_at</span>: <span class="ident">Timestamp</span>,
     <span class="doccomment">/// A representation of the minimal amount of information needed about the</span>
     <span class="doccomment">/// [`Guild`] being invited to.</span>
     <span class="kw">pub</span> <span class="ident">guild</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">InviteGuild</span><span class="op">&gt;</span>,
@@ -755,8 +742,7 @@
         {
             <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">cache</span>) <span class="op">=</span> <span class="ident">cache_http</span>.<span class="ident">cache</span>() {
                 <span class="kw">let</span> <span class="ident">guild_id</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">guild</span>.<span class="ident">as_ref</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">g</span><span class="op">|</span> <span class="ident">g</span>.<span class="ident">id</span>);
-
-                <span class="ident">model_utils::user_has_perms_cache</span>(
+                <span class="ident"><span class="kw">crate</span>::utils::user_has_perms_cache</span>(
                     <span class="ident">cache</span>,
                     <span class="self">self</span>.<span class="ident">channel</span>.<span class="ident">id</span>,
                     <span class="ident">guild_id</span>,
@@ -765,7 +751,7 @@
             }
         }
 
-        <span class="ident">cache_http</span>.<span class="ident">http</span>().<span class="ident">as_ref</span>().<span class="ident">delete_invite</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">code</span>).<span class="kw">await</span>
+        <span class="ident">cache_http</span>.<span class="ident">http</span>().<span class="ident">as_ref</span>().<span class="ident">delete_invite</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">code</span>, <span class="prelude-val">None</span>).<span class="kw">await</span>
     }
 
     <span class="doccomment">/// Returns a URL to use for the invite.</span>
@@ -782,13 +768,13 @@
     <span class="doccomment">/// # let invite = from_value::&lt;RichInvite&gt;(json!({</span>
     <span class="doccomment">/// #     &quot;code&quot;: &quot;WxZumR&quot;,</span>
     <span class="doccomment">/// #     &quot;channel&quot;: {</span>
-    <span class="doccomment">/// #         &quot;id&quot;: ChannelId(1),</span>
+    <span class="doccomment">/// #         &quot;id&quot;: ChannelId::new(1),</span>
     <span class="doccomment">/// #         &quot;name&quot;: &quot;foo&quot;,</span>
     <span class="doccomment">/// #         &quot;type&quot;: ChannelType::Text,</span>
     <span class="doccomment">/// #     },</span>
     <span class="doccomment">/// #     &quot;created_at&quot;: &quot;2017-01-29T15:35:17.136000+00:00&quot;,</span>
     <span class="doccomment">/// #     &quot;guild&quot;: {</span>
-    <span class="doccomment">/// #         &quot;id&quot;: GuildId(2),</span>
+    <span class="doccomment">/// #         &quot;id&quot;: GuildId::new(2),</span>
     <span class="doccomment">/// #         &quot;icon&quot;: None::&lt;String&gt;,</span>
     <span class="doccomment">/// #         &quot;name&quot;: &quot;baz&quot;,</span>
     <span class="doccomment">/// #         &quot;splash_hash&quot;: None::&lt;String&gt;,</span>
@@ -799,7 +785,7 @@
     <span class="doccomment">/// #         &quot;avatar&quot;: None::&lt;String&gt;,</span>
     <span class="doccomment">/// #         &quot;bot&quot;: false,</span>
     <span class="doccomment">/// #         &quot;discriminator&quot;: 3,</span>
-    <span class="doccomment">/// #         &quot;id&quot;: UserId(4),</span>
+    <span class="doccomment">/// #         &quot;id&quot;: UserId::new(4),</span>
     <span class="doccomment">/// #         &quot;username&quot;: &quot;qux&quot;,</span>
     <span class="doccomment">/// #         &quot;public_flags&quot;: None::&lt;UserPublicFlags&gt;,</span>
     <span class="doccomment">/// #     },</span>
@@ -812,11 +798,13 @@
     <span class="doccomment">/// assert_eq!(invite.url(), &quot;https://discord.gg/WxZumR&quot;);</span>
     <span class="doccomment">/// # }</span>
     <span class="doccomment">/// ```</span>
+    <span class="attribute">#[<span class="ident">must_use</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">url</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">String</span> {
         <span class="macro">format!</span>(<span class="string">&quot;https://discord.gg/{}&quot;</span>, <span class="self">self</span>.<span class="ident">code</span>)
     }
 }
 
+<span class="doccomment">/// [Discord docs](https://discord.com/developers/docs/resources/invite#invite-stage-instance-object).</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Deserialize</span>, <span class="ident">Serialize</span>)]</span>
 <span class="attribute">#[<span class="ident">non_exhaustive</span>]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">InviteStageInstance</span> {
@@ -830,20 +818,18 @@
     <span class="ident">topic</span>: <span class="ident">String</span>,
 }
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">PartialEq</span>, <span class="ident">PartialOrd</span>, <span class="ident">Ord</span>)]</span>
-<span class="attribute">#[<span class="ident">non_exhaustive</span>]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">InviteTargetType</span> {
-    <span class="ident">Normal</span> <span class="op">=</span> <span class="number">0</span>,
-    <span class="ident">Stream</span> <span class="op">=</span> <span class="number">1</span>,
-    <span class="ident">EmmbeddedApplication</span> <span class="op">=</span> <span class="number">2</span>,
-    <span class="ident">Unknown</span> <span class="op">=</span> <span class="op">!</span><span class="number">0</span>,
+<span class="macro">enum_number!</span> {
+    <span class="doccomment">/// [Discord docs](https://discord.com/developers/docs/resources/invite#invite-object-invite-target-types).</span>
+    <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">Ord</span>, <span class="ident">PartialEq</span>, <span class="ident">PartialOrd</span>, <span class="ident">Deserialize</span>, <span class="ident">Serialize</span>)]</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">from</span> <span class="op">=</span> <span class="string">&quot;u8&quot;</span>, <span class="ident">into</span> <span class="op">=</span> <span class="string">&quot;u8&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">non_exhaustive</span>]</span>
+    <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">InviteTargetType</span> {
+        <span class="ident">Normal</span> <span class="op">=</span> <span class="number">0</span>,
+        <span class="ident">Stream</span> <span class="op">=</span> <span class="number">1</span>,
+        <span class="ident">EmmbeddedApplication</span> <span class="op">=</span> <span class="number">2</span>,
+        <span class="kw">_</span> =&gt; <span class="ident">Unknown</span>(<span class="ident">u8</span>),
+    }
 }
-
-<span class="macro">enum_number!</span>(<span class="ident">InviteTargetType</span> {
-    <span class="ident">Normal</span>,
-    <span class="ident">Stream</span>,
-    <span class="ident">EmmbeddedApplication</span>,
-});
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="serenity" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (777bb86bc 2022-01-20)" ></div>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="serenity" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0-nightly (10f4ce324 2022-06-22)" ></div>
 </body></html>
