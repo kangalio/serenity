@@ -617,6 +617,19 @@ async fn sub(ctx: &Context, msg: &Message, _args: Args) -> CommandResult {
 async fn eval(ctx: &Context, msg: &Message, args: Args) -> CommandResult {
     let expr = args.rest();
 
+    let result = eval_inner(expr)?;
+
+    msg.channel_id
+        .say(ctx, match result {
+            Some(x) => format!("Result: {}", x),
+            None => "No supported operation found in expression".into(),
+        })
+        .await?;
+
+    Ok(())
+}
+
+fn eval_inner(expr: &str) -> Result<Option<f64>, std::num::ParseFloatError> {
     const OPERATIONS: &[(char, fn(f64, f64) -> f64)] = &[
         ('+', |a, b| a + b),
         ('-', |a, b| a - b),
@@ -633,12 +646,16 @@ async fn eval(ctx: &Context, msg: &Message, args: Args) -> CommandResult {
         }
     }
 
-    msg.channel_id
-        .say(ctx, match result {
-            Some(x) => format!("Result: {}", x),
-            None => "No supported operation found in expression".into(),
-        })
-        .await?;
+    Ok(result)
+}
 
-    Ok(())
+#[test]
+fn test_eval() {
+    assert_eq!(eval_inner("3+4"), Ok(Some(7.0)));
+    assert_eq!(eval_inner(" 3 - 4 "), Ok(Some(-1.0)));
+    assert_eq!(eval_inner("2^ 8"), Ok(Some(256.0)));
+    assert_eq!(eval_inner("4.0/8"), Ok(Some(0.5)));
+    assert_eq!(eval_inner("0.000*2"), Ok(Some(0.0)));
+    assert_eq!(eval_inner("3|4"), Ok(None));
+    assert!(eval_inner("3,5 + 2.3").is_err());
 }
