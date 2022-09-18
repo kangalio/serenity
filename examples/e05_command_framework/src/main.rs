@@ -85,7 +85,7 @@ struct Emoji;
 // So one has to call commands in this group
 // via `~math` instead of just `~`.
 #[prefix = "math"]
-#[commands(multiply)]
+#[commands(multiply, eval)]
 struct Math;
 
 #[group]
@@ -608,6 +608,37 @@ async fn upper_command(ctx: &Context, msg: &Message, _args: Args) -> CommandResu
 #[description("This is `upper`'s sub-command.")]
 async fn sub(ctx: &Context, msg: &Message, _args: Args) -> CommandResult {
     msg.reply(&ctx.http, "This is a sub function!").await?;
+
+    Ok(())
+}
+
+#[command]
+#[description("Evaluates simple math expression with one operation and two operands")]
+async fn eval(ctx: &Context, msg: &Message, args: Args) -> CommandResult {
+    let expr = args.rest();
+
+    const OPERATIONS: &[(char, fn(f64, f64) -> f64)] = &[
+        ('+', |a, b| a + b),
+        ('-', |a, b| a - b),
+        ('*', |a, b| a * b),
+        ('/', |a, b| a / b),
+        ('^', |a, b| a.powf(b)),
+    ];
+
+    let mut result = None;
+    for &(operation_char, function) in OPERATIONS {
+        if let Some((a, b)) = expr.split_once(operation_char) {
+            result = Some(function(a.trim().parse::<f64>()?, b.trim().parse::<f64>()?));
+            break;
+        }
+    }
+
+    msg.channel_id
+        .say(ctx, match result {
+            Some(x) => format!("Result: {}", x),
+            None => "No supported operation found in expression".into(),
+        })
+        .await?;
 
     Ok(())
 }
