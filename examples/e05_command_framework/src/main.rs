@@ -615,12 +615,8 @@ async fn sub(ctx: &Context, msg: &Message, _args: Args) -> CommandResult {
 #[command]
 #[description("Evaluates simple math expression with one operation and two operands")]
 async fn eval(ctx: &Context, msg: &Message, args: Args) -> CommandResult {
-    let expr = args.rest();
-
-    let result = eval_inner(expr)?;
-
     msg.channel_id
-        .say(ctx, match result {
+        .say(ctx, match eval_inner(args.rest())? {
             Some(x) => format!("Result: {}", x),
             None => "No supported operation found in expression".into(),
         })
@@ -638,15 +634,13 @@ fn eval_inner(expr: &str) -> Result<Option<f64>, std::num::ParseFloatError> {
         ('^', |a, b| a.powf(b)),
     ];
 
-    let mut result = None;
     for &(operation_char, function) in OPERATIONS {
         if let Some((a, b)) = expr.split_once(operation_char) {
-            result = Some(function(a.trim().parse::<f64>()?, b.trim().parse::<f64>()?));
-            break;
+            return Ok(Some(function(a.trim().parse::<f64>()?, b.trim().parse::<f64>()?)));
         }
     }
 
-    Ok(result)
+    Ok(None)
 }
 
 #[test]
