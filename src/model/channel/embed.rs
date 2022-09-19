@@ -13,7 +13,6 @@ use crate::model::{Colour, Timestamp};
 ///
 /// [slack's attachments]: https://api.slack.com/docs/message-attachments
 #[derive(Clone, Debug, Deserialize, Serialize)]
-#[non_exhaustive]
 pub struct Embed {
     /// Information about the author of the embed.
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -67,6 +66,9 @@ pub struct Embed {
     /// This is present if the [`Self::kind`] is `"video"`.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub video: Option<EmbedVideo>,
+    #[doc(hidden)]
+    #[serde(default, skip)]
+    pub __non_exhaustive: (),
 }
 
 /// An author object in an embed.

@@ -18,6 +18,32 @@
 use crate::internal::prelude::*;
 use crate::model::prelude::*;
 
+pub type CreateEmbedImage = EmbedImage;
+
+impl CreateEmbedImage {
+    pub fn new(url: impl Into<String>) -> Self {
+        Self {
+            url: url.into(),
+            proxy_url: None,
+            width: None,
+            height: None,
+        }
+    }
+}
+
+pub type CreateEmbedThumbnail = EmbedThumbnail;
+
+impl CreateEmbedThumbnail {
+    pub fn new(url: impl Into<String>) -> Self {
+        Self {
+            url: url.into(),
+            proxy_url: None,
+            width: None,
+            height: None,
+        }
+    }
+}
+
 pub type CreateEmbed = Embed;
 
 impl CreateEmbed {
@@ -295,6 +321,7 @@ impl Default for CreateEmbed {
             url: None,
             provider: None,
             video: None,
+            __non_exhaustive: (),
         }
     }
 }

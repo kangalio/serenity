@@ -67,7 +67,13 @@ pub use self::create_components::{
     CreateSelectMenu,
     CreateSelectMenuOption,
 };
-pub use self::create_embed::{CreateEmbed, CreateEmbedAuthor, CreateEmbedFooter};
+pub use self::create_embed::{
+    CreateEmbed,
+    CreateEmbedAuthor,
+    CreateEmbedFooter,
+    CreateEmbedImage,
+    CreateEmbedThumbnail,
+};
 pub use self::create_interaction_response::{
     AutocompleteChoice,
     CreateAutocompleteResponse,

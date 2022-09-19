@@ -50,25 +50,28 @@ use crate::model::prelude::*;
 #[derive(Clone, Debug, Default, Serialize)]
 #[must_use]
 pub struct CreateMessage<'a> {
-    tts: bool,
-    embeds: Vec<CreateEmbed>,
-    sticker_ids: Vec<StickerId>,
+    pub tts: bool,
+    pub embeds: Vec<CreateEmbed>,
+    pub sticker_ids: Vec<StickerId>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    content: Option<String>,
+    pub content: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    allowed_mentions: Option<CreateAllowedMentions>,
+    pub allowed_mentions: Option<CreateAllowedMentions>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    message_reference: Option<MessageReference>,
+    pub message_reference: Option<MessageReference>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    components: Option<Vec<CreateActionRow>>,
+    pub components: Option<Vec<CreateActionRow>>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    flags: Option<MessageFlags>,
+    pub flags: Option<MessageFlags>,
 
     // The following fields are handled separately.
     #[serde(skip)]
-    files: Vec<AttachmentType<'a>>,
+    pub files: Vec<AttachmentType<'a>>,
     #[serde(skip)]
-    reactions: Vec<ReactionType>,
+    pub reactions: Vec<ReactionType>,
+
+    #[doc(hidden)]
+    pub __non_exhaustive: (),
 }
 
 impl<'a> CreateMessage<'a> {
