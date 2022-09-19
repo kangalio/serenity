@@ -1,8 +1,8 @@
 use std::env;
 
 use serenity::async_trait;
-use serenity::builder::{CreateEmbed, CreateEmbedFooter, CreateMessage};
-use serenity::model::channel::Message;
+use serenity::builder::{CreateEmbed, CreateEmbedFooter, CreateEmbedImage, CreateMessage};
+use serenity::model::channel::{EmbedField, Message};
 use serenity::model::gateway::Ready;
 use serenity::model::Timestamp;
 use serenity::prelude::*;
@@ -21,23 +21,27 @@ impl EventHandler for Handler {
         // This example will create a message that says "Hello, World!", with an embed that has
         // a title, description, an image, three fields, and a footer.
         let footer = CreateEmbedFooter::new("This is a footer");
-        let embed = CreateEmbed::new()
-            .title("This is a title")
-            .description("This is a description")
-            .image("attachment://ferris_eyes.png")
-            .fields(vec![
-                ("This is the first field", "This is a field body", true),
-                ("This is the second field", "Both fields are inline", true),
-            ])
-            .field("This is the third field", "This is not an inline field", false)
-            .footer(footer)
+        let embed = CreateEmbed {
+            title: Some("This is a title".into()),
+            description: Some("This is a description".into()),
+            image: Some(CreateEmbedImage::new("attachment://ferris_eyes.png")),
+            fields: vec![
+                EmbedField::new("This is the first field", "This is a field body", true),
+                EmbedField::new("This is the second field", "Both fields are inline", true),
+                EmbedField::new("This is the third field", "This is not an inline field", false),
+            ],
+            footer: Some(footer),
             // Add a timestamp for the current time
             // This also accepts a rfc3339 Timestamp
-            .timestamp(Timestamp::now());
-        let builder = CreateMessage::new()
-            .content("Hello, World!")
-            .embed(embed)
-            .add_file("./ferris_eyes.png");
+            timestamp: Some(Timestamp::now()),
+            ..Default::default()
+        };
+        let builder = CreateMessage {
+            content: Some("Hello, World!".into()),
+            embeds: vec![embed],
+            files: vec!["./ferris_eyes.png".into()],
+            ..Default::default()
+        };
         let msg = msg.channel_id.send_message(&ctx.http, builder).await;
 
         if let Err(why) = msg {
