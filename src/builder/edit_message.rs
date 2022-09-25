@@ -1,3 +1,4 @@
+use super::attachments::ExistingAttachment;
 use super::{CreateAllowedMentions, CreateAttachment, CreateComponents, CreateEmbed};
 #[cfg(feature = "http")]
 use crate::constants;
@@ -48,7 +49,7 @@ pub struct EditMessage<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     components: Option<CreateComponents>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    attachments: Option<Vec<AttachmentId>>,
+    attachments: Option<Vec<ExistingAttachment>>,
 
     #[serde(skip)]
     files: Vec<CreateAttachment<'a>>,
@@ -203,15 +204,18 @@ impl<'a> EditMessage<'a> {
     }
 
     /// Add an existing attachment by id.
-    pub fn add_existing_attachment(mut self, attachment: AttachmentId) -> Self {
-        self.attachments.get_or_insert_with(Vec::new).push(attachment);
+    pub fn add_existing_attachment(mut self, id: u64) -> Self {
+        self.attachments.get_or_insert_with(Vec::new).push(ExistingAttachment {
+            id,
+            description: None,
+        });
         self
     }
 
-    /// Remove an existing attachment by id.
-    pub fn remove_existing_attachment(mut self, attachment: AttachmentId) -> Self {
+    /// Remove an existing attachment from [`add_existing_attachment`] again.
+    pub fn remove_existing_attachment(mut self, id: u64) -> Self {
         if let Some(attachments) = &mut self.attachments {
-            if let Some(attachment_index) = attachments.iter().position(|a| *a == attachment) {
+            if let Some(attachment_index) = attachments.iter().position(|a| a.id == id) {
                 attachments.remove(attachment_index);
             };
         }

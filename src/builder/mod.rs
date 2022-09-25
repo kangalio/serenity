@@ -5,8 +5,9 @@
 //! optional, and/or sane default values for required parameters can be applied
 //! by a builder.
 
-// Option<Option<T>> is required for fields that are
+// Option<Option<T>> are required for some fields in EditXXX builders with
 // #[serde(skip_serializing_if = "Option::is_none")]
+// where "None" means "don't edit" and "Some(None)" means "edit to empty"
 #![allow(clippy::option_option)]
 
 mod create_channel;
@@ -16,6 +17,7 @@ mod create_application_command;
 mod create_application_command_permission;
 
 mod add_member;
+mod attachments;
 mod bot_auth_parameters;
 mod create_allowed_mentions;
 mod create_attachment;

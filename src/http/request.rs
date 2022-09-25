@@ -9,31 +9,26 @@ use reqwest::header::{
     CONTENT_TYPE,
     USER_AGENT,
 };
+use reqwest::multipart::Form;
 use reqwest::{Client, RequestBuilder as ReqwestRequestBuilder, Url};
 use tracing::instrument;
 
-use super::multipart::Multipart;
 use super::routing::RouteInfo;
 use super::HttpError;
 use crate::constants;
 use crate::internal::prelude::*;
 
-pub struct RequestBuilder<'a> {
-    body: Option<Vec<u8>>,
-    multipart: Option<Multipart<'a>>,
-    headers: Option<Headers>,
-    route: RouteInfo<'a>,
-}
+pub struct RequestBuilder<'a>(Request<'a>);
 
 impl<'a> RequestBuilder<'a> {
     #[must_use]
     pub const fn new(route_info: RouteInfo<'a>) -> Self {
-        Self {
+        Self(Request {
             body: None,
-            multipart: None,
+            form: None,
             headers: None,
             route: route_info,
-        }
+        })
     }
 
     #[must_use]
@@ -42,66 +37,72 @@ impl<'a> RequestBuilder<'a> {
     }
 
     pub fn body(&mut self, body: Option<Vec<u8>>) -> &mut Self {
-        self.body = body;
+        self.0.body = body;
 
         self
     }
 
-    pub fn multipart(&mut self, multipart: Option<Multipart<'a>>) -> &mut Self {
-        self.multipart = multipart;
+    pub fn form(&mut self, form: Option<&'a (dyn Fn() -> Form + Send + Sync + 'a)>) -> &mut Self {
+        self.0.form = form;
 
         self
     }
 
     pub fn headers(&mut self, headers: Option<Headers>) -> &mut Self {
-        self.headers = headers;
+        self.0.headers = headers;
 
         self
     }
 
     pub fn route(&mut self, route_info: RouteInfo<'a>) -> &mut Self {
-        self.route = route_info;
+        self.0.route = route_info;
 
         self
     }
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone)]
 pub struct Request<'a> {
     pub(super) body: Option<Vec<u8>>,
-    pub(super) multipart: Option<Multipart<'a>>,
+    // Callback, because we may need to build the form multiple times (on rate limits) and Form
+    // doesn't implement Clone
+    pub(super) form: Option<&'a (dyn Fn() -> Form + Send + Sync + 'a)>,
     pub(super) headers: Option<Headers>,
     pub(super) route: RouteInfo<'a>,
+}
+
+impl<'a> std::fmt::Debug for Request<'a> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let Self {
+            body,
+            form: _, // can't debug print closure
+            headers,
+            route,
+        } = self;
+        f.debug_struct("Request")
+            .field("body", body)
+            .field("headers", headers)
+            .field("route", route)
+            .finish()
+    }
 }
 
 impl<'a> Request<'a> {
     #[must_use]
     pub fn new(builder: RequestBuilder<'a>) -> Self {
-        let RequestBuilder {
-            body,
-            multipart,
-            headers,
-            route,
-        } = builder;
-
-        Self {
-            body,
-            multipart,
-            headers,
-            route,
-        }
+        builder.0
     }
 
     #[instrument(skip(token))]
-    pub async fn build(
-        mut self,
+    pub fn build(
+        self,
         client: &Client,
         token: &str,
         proxy: Option<&Url>,
     ) -> Result<ReqwestRequestBuilder> {
         let Request {
             body,
-            ref mut multipart,
+            form,
             headers: ref request_headers,
             route: ref route_info,
         } = self;
@@ -126,9 +127,9 @@ impl<'a> Request<'a> {
             headers.insert(CONTENT_TYPE, HeaderValue::from_static("application/json"));
         }
 
-        if let Some(multipart) = multipart {
+        if let Some(form) = form {
             // Setting multipart adds the content-length header
-            builder = builder.multipart(multipart.build_form().await?);
+            builder = builder.multipart(form());
         } else {
             let length = body
                 .as_ref()
