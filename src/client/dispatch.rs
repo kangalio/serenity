@@ -17,15 +17,6 @@ use crate::model::event::Event;
 use crate::model::guild::Member;
 #[cfg(feature = "cache")]
 use crate::model::id::GuildId;
-#[cfg(feature = "cache")]
-fn update<E: CacheUpdate>(context: &Context, event: &mut E) -> Option<E::Output> {
-    context.cache.update(event)
-}
-
-#[cfg(not(feature = "cache"))]
-fn update<E>(_: &Context, _: &mut E) -> Option<()> {
-    None
-}
 
 // Once we can use `Box` as part of a pattern, we will reconsider boxing.
 #[allow(clippy::large_enum_variant)]
@@ -114,6 +105,16 @@ impl DispatchEvent {
     }
 }
 
+#[cfg(feature = "cache")]
+fn update<E: CacheUpdate>(context: &Context, event: &mut E) -> Option<E::Output> {
+    context.cache.update(event)
+}
+
+#[cfg(not(feature = "cache"))]
+fn update<E>(_: &Context, _: &mut E) -> Option<()> {
+    None
+}
+
 pub(crate) async fn dispatch<'rec>(
     mut event: DispatchEvent,
     context: Context,
@@ -121,13 +122,35 @@ pub(crate) async fn dispatch<'rec>(
     event_handler: &'rec Option<Arc<dyn EventHandler>>,
     raw_event_handler: &'rec Option<Arc<dyn RawEventHandler>>,
 ) {
-    {
-        match (event_handler, raw_event_handler) {
-            (None, None) => {
-                event.update(&context);
+    match (event_handler, raw_event_handler) {
+        (None, None) => {
+            event.update(&context);
+
+            #[cfg(feature = "framework")]
+            if let DispatchEvent::Model(Event::MessageCreate(event)) = event {
+                if let Some(framework) = framework {
+                    let framework = Arc::clone(framework);
+
+                    spawn_named("dispatch::framework::message", async move {
+                        framework.dispatch(context, event.message).await;
+                    });
+                }
+            }
+        },
+        (Some(handler), None) => match event {
+            DispatchEvent::Model(Event::MessageCreate(mut event)) => {
+                update(&context, &mut event);
+
+                #[cfg(not(feature = "framework"))]
+                {
+                    // Avoid cloning if there will be no framework dispatch.
+                    dispatch_message(context, event.message, handler).await;
+                }
 
                 #[cfg(feature = "framework")]
-                if let DispatchEvent::Model(Event::MessageCreate(event)) = event {
+                {
+                    dispatch_message(context.clone(), event.message.clone(), handler).await;
+
                     if let Some(framework) = framework {
                         let framework = Arc::clone(framework);
 
@@ -137,10 +160,50 @@ pub(crate) async fn dispatch<'rec>(
                     }
                 }
             },
-            (Some(handler), None) => match event {
-                DispatchEvent::Model(Event::MessageCreate(mut event)) => {
-                    update(&context, &mut event);
+            other => {
+                handle_event(context, other, handler).await;
+            },
+        },
+        (None, Some(raw_handler)) => {
+            event.update(&context);
 
+            if let DispatchEvent::Model(event) = event {
+                #[cfg(not(feature = "framework"))]
+                {
+                    // No clone needed, as there will be no framework dispatch.
+                    raw_handler.raw_event(context, event).await;
+                }
+
+                #[cfg(feature = "framework")]
+                {
+                    if let Event::MessageCreate(msg_event) = &event {
+                        // Must clone in order to dispatch the framework too.
+                        let message = msg_event.message.clone();
+                        raw_handler.raw_event(context.clone(), event).await;
+
+                        if let Some(framework) = framework {
+                            let framework = Arc::clone(framework);
+
+                            spawn_named("dispatch::framework::message", async move {
+                                framework.dispatch(context, message).await;
+                            });
+                        }
+                    } else {
+                        // Avoid cloning if there will be no framework dispatch.
+                        raw_handler.raw_event(context, event).await;
+                    }
+                }
+            }
+        },
+        // We call this function again, passing `None` for each event handler
+        // and passing no framework, as we dispatch once we are done right here.
+        (Some(handler), Some(raw_handler)) => {
+            if let DispatchEvent::Model(event) = &event {
+                raw_handler.raw_event(context.clone(), event.clone()).await;
+            }
+
+            match event {
+                DispatchEvent::Model(Event::MessageCreate(event)) => {
                     #[cfg(not(feature = "framework"))]
                     {
                         // Avoid cloning if there will be no framework dispatch.
@@ -163,72 +226,8 @@ pub(crate) async fn dispatch<'rec>(
                 other => {
                     handle_event(context, other, handler).await;
                 },
-            },
-            (None, Some(raw_handler)) => {
-                event.update(&context);
-
-                if let DispatchEvent::Model(event) = event {
-                    #[cfg(not(feature = "framework"))]
-                    {
-                        // No clone needed, as there will be no framework dispatch.
-                        raw_handler.raw_event(context, event).await;
-                    }
-
-                    #[cfg(feature = "framework")]
-                    {
-                        if let Event::MessageCreate(msg_event) = &event {
-                            // Must clone in order to dispatch the framework too.
-                            let message = msg_event.message.clone();
-                            raw_handler.raw_event(context.clone(), event).await;
-
-                            if let Some(framework) = framework {
-                                let framework = Arc::clone(framework);
-
-                                spawn_named("dispatch::framework::message", async move {
-                                    framework.dispatch(context, message).await;
-                                });
-                            }
-                        } else {
-                            // Avoid cloning if there will be no framework dispatch.
-                            raw_handler.raw_event(context, event).await;
-                        }
-                    }
-                }
-            },
-            // We call this function again, passing `None` for each event handler
-            // and passing no framework, as we dispatch once we are done right here.
-            (Some(handler), Some(raw_handler)) => {
-                if let DispatchEvent::Model(event) = &event {
-                    raw_handler.raw_event(context.clone(), event.clone()).await;
-                }
-
-                match event {
-                    DispatchEvent::Model(Event::MessageCreate(event)) => {
-                        #[cfg(not(feature = "framework"))]
-                        {
-                            // Avoid cloning if there will be no framework dispatch.
-                            dispatch_message(context, event.message, handler).await;
-                        }
-
-                        #[cfg(feature = "framework")]
-                        {
-                            dispatch_message(context.clone(), event.message.clone(), handler).await;
-
-                            if let Some(framework) = framework {
-                                let framework = Arc::clone(framework);
-
-                                spawn_named("dispatch::framework::message", async move {
-                                    framework.dispatch(context, event.message).await;
-                                });
-                            }
-                        }
-                    },
-                    other => {
-                        handle_event(context, other, handler).await;
-                    },
-                }
-            },
-        }
+            }
+        },
     }
 }
 
