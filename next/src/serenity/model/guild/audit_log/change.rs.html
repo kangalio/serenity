@@ -1,10 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/model/guild/audit_log/change.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>change.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../../../storage.js"></script><script defer src="../../../../../source-script.js"></script><script defer src="../../../../../source-files.js"></script><script defer src="../../../../../main.js"></script><noscript><link rel="stylesheet" href="../../../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../../../serenity/index.html"><div class="logo-container"><img class="rust-logo" src="../../../../../rust-logo.svg" alt="logo"></div>
-        </a><h2 class="location"></h2>
-    </nav>
-    <nav class="sidebar"><a class="sidebar-logo" href="../../../../../serenity/index.html"><div class="logo-container"><img class="rust-logo" src="../../../../../rust-logo.svg" alt="logo"></div>
-        </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../../../serenity/index.html"><img class="rust-logo" src="../../../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><div id="settings-menu" tabindex="-1">
-                                <a href="../../../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../../../wheel.svg"></a></div>
-                        </div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/model/guild/audit_log/change.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>change.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../../../../normalize.css"><link rel="stylesheet" href="../../../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../../../../ayu.css" disabled><link rel="stylesheet" href="../../../../../dark.css" disabled><link rel="stylesheet" href="../../../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../../../storage.js"></script><script defer src="../../../../../source-script.js"></script><script defer src="../../../../../source-files.js"></script><script defer src="../../../../../main.js"></script><noscript><link rel="stylesheet" href="../../../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../../../serenity/index.html"><div class="logo-container"><img class="rust-logo" src="../../../../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../../../serenity/index.html"><div class="logo-container"><img class="rust-logo" src="../../../../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../../../serenity/index.html"><img class="rust-logo" src="../../../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -938,1090 +932,939 @@
 <span id="932">932</span>
 <span id="933">933</span>
 <span id="934">934</span>
-<span id="935">935</span>
-<span id="936">936</span>
-<span id="937">937</span>
-<span id="938">938</span>
-<span id="939">939</span>
-<span id="940">940</span>
-<span id="941">941</span>
-<span id="942">942</span>
-<span id="943">943</span>
-<span id="944">944</span>
-<span id="945">945</span>
-<span id="946">946</span>
-<span id="947">947</span>
-<span id="948">948</span>
-<span id="949">949</span>
-<span id="950">950</span>
-<span id="951">951</span>
-<span id="952">952</span>
-<span id="953">953</span>
-<span id="954">954</span>
-<span id="955">955</span>
-<span id="956">956</span>
-<span id="957">957</span>
-<span id="958">958</span>
-<span id="959">959</span>
-<span id="960">960</span>
-<span id="961">961</span>
-<span id="962">962</span>
-<span id="963">963</span>
-<span id="964">964</span>
-<span id="965">965</span>
-<span id="966">966</span>
-<span id="967">967</span>
-<span id="968">968</span>
-<span id="969">969</span>
-<span id="970">970</span>
-<span id="971">971</span>
-<span id="972">972</span>
-<span id="973">973</span>
-<span id="974">974</span>
-<span id="975">975</span>
-<span id="976">976</span>
-<span id="977">977</span>
-<span id="978">978</span>
-<span id="979">979</span>
-<span id="980">980</span>
-<span id="981">981</span>
-<span id="982">982</span>
-<span id="983">983</span>
-<span id="984">984</span>
-<span id="985">985</span>
-<span id="986">986</span>
-<span id="987">987</span>
-<span id="988">988</span>
-<span id="989">989</span>
-<span id="990">990</span>
-<span id="991">991</span>
-<span id="992">992</span>
-<span id="993">993</span>
-<span id="994">994</span>
-<span id="995">995</span>
-<span id="996">996</span>
-<span id="997">997</span>
-<span id="998">998</span>
-<span id="999">999</span>
-<span id="1000">1000</span>
-<span id="1001">1001</span>
-<span id="1002">1002</span>
-<span id="1003">1003</span>
-<span id="1004">1004</span>
-<span id="1005">1005</span>
-<span id="1006">1006</span>
-<span id="1007">1007</span>
-<span id="1008">1008</span>
-<span id="1009">1009</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std::borrow::Cow</span>;
-<span class="kw">use</span> <span class="ident">std::fmt</span>;
+</pre><pre class="rust"><code><span class="kw">use </span>std::borrow::Cow;
+<span class="kw">use </span>std::fmt;
 
-<span class="kw">use</span> <span class="ident">serde::de</span>::{<span class="ident">Deserialize</span>, <span class="ident">Deserializer</span>, <span class="ident">Error</span>, <span class="ident">MapAccess</span>, <span class="ident">Visitor</span>};
-<span class="kw">use</span> <span class="ident">serde::ser</span>::{<span class="ident">Serialize</span>, <span class="ident">SerializeStruct</span>, <span class="ident">Serializer</span>};
+<span class="kw">use </span>serde::de::{Deserialize, Deserializer, Error, MapAccess, Visitor};
+<span class="kw">use </span>serde::ser::{Serialize, SerializeStruct, Serializer};
 
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::json::Value</span>;
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::model::channel::PermissionOverwrite</span>;
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::model::guild::automod</span>::{<span class="ident">Action</span>, <span class="ident">EventType</span>, <span class="ident">TriggerMetadata</span>, <span class="ident">TriggerType</span>};
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::model::guild</span>::{
-    <span class="ident">DefaultMessageNotificationLevel</span>,
-    <span class="ident">ExplicitContentFilter</span>,
-    <span class="ident">MfaLevel</span>,
-    <span class="ident">VerificationLevel</span>,
+<span class="kw">use </span><span class="kw">crate</span>::json::Value;
+<span class="kw">use </span><span class="kw">crate</span>::model::channel::PermissionOverwrite;
+<span class="kw">use </span><span class="kw">crate</span>::model::guild::automod::{Action, EventType, TriggerMetadata, TriggerType};
+<span class="kw">use </span><span class="kw">crate</span>::model::guild::{
+    DefaultMessageNotificationLevel,
+    ExplicitContentFilter,
+    MfaLevel,
+    VerificationLevel,
 };
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::model::id</span>::{<span class="ident">ApplicationId</span>, <span class="ident">ChannelId</span>, <span class="ident">GenericId</span>, <span class="ident">GuildId</span>, <span class="ident">RoleId</span>, <span class="ident">UserId</span>};
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::model::sticker::StickerFormatType</span>;
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::model</span>::{<span class="ident">Permissions</span>, <span class="ident">Timestamp</span>};
+<span class="kw">use </span><span class="kw">crate</span>::model::id::{ApplicationId, ChannelId, GenericId, GuildId, RoleId, UserId};
+<span class="kw">use </span><span class="kw">crate</span>::model::sticker::StickerFormatType;
+<span class="kw">use </span><span class="kw">crate</span>::model::{Permissions, Timestamp};
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">Deserialize</span>, <span class="ident">Serialize</span>)]</span>
-<span class="attribute">#[<span class="ident">non_exhaustive</span>]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">AffectedRole</span> {
-    <span class="kw">pub</span> <span class="ident">id</span>: <span class="ident">RoleId</span>,
-    <span class="kw">pub</span> <span class="ident">name</span>: <span class="ident">String</span>,
+<span class="attribute">#[derive(Debug, PartialEq, Eq, Deserialize, Serialize)]
+#[non_exhaustive]
+</span><span class="kw">pub struct </span>AffectedRole {
+    <span class="kw">pub </span>id: RoleId,
+    <span class="kw">pub </span>name: String,
 }
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">Deserialize</span>, <span class="ident">Serialize</span>)]</span>
-<span class="attribute">#[<span class="ident">serde</span>(<span class="ident">untagged</span>)]</span>
-<span class="attribute">#[<span class="ident">non_exhaustive</span>]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">EntityType</span> {
-    <span class="ident">Int</span>(<span class="ident">u64</span>),
-    <span class="ident">Str</span>(<span class="ident">String</span>),
+<span class="attribute">#[derive(Debug, PartialEq, Eq, Deserialize, Serialize)]
+#[serde(untagged)]
+#[non_exhaustive]
+</span><span class="kw">pub enum </span>EntityType {
+    Int(u64),
+    Str(String),
 }
 
-<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">not</span>(<span class="ident">simd_json</span>), <span class="ident">allow</span>(<span class="ident">clippy::derive_partial_eq_without_eq</span>))]</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">PartialEq</span>)]</span>
-<span class="attribute">#[<span class="ident">non_exhaustive</span>]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Change</span> {
-    <span class="ident">Actions</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Action</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Action</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    },
-    <span class="doccomment">/// AFK channel was changed.</span>
-    <span class="ident">AfkChannelId</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ChannelId</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ChannelId</span><span class="op">&gt;</span>,
-    },
-    <span class="doccomment">/// AFK timeout duration was changed.</span>
-    <span class="ident">AfkTimeout</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>,
-    },
-    <span class="doccomment">/// Permission on a text or voice channel was allowed for a role.</span>
-    <span class="ident">Allow</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Permissions</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Permissions</span><span class="op">&gt;</span>,
-    },
-    <span class="doccomment">/// Application ID of the added or removed webhook or bot.</span>
-    <span class="ident">ApplicationId</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ApplicationId</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ApplicationId</span><span class="op">&gt;</span>,
-    },
-    <span class="doccomment">/// Thread is now archived/unarchived.</span>
-    <span class="ident">Archived</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span>,
-    },
-    <span class="ident">Asset</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
-    },
-    <span class="doccomment">/// Auto archive duration of a thread was changed.</span>
-    <span class="ident">AutoArchiveDuration</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>,
-    },
-    <span class="doccomment">/// Availability of a sticker was changed.</span>
-    <span class="ident">Available</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span>,
-    },
-    <span class="doccomment">/// User avatar was changed.</span>
-    <span class="ident">AvatarHash</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
-    },
-    <span class="doccomment">/// Guild banner was changed.</span>
-    <span class="ident">BannerHash</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
-    },
-    <span class="doccomment">/// Voice channel bitrate was changed.</span>
-    <span class="ident">Bitrate</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>,
-    },
-    <span class="doccomment">/// Channel for invite code or guild scheduled event was changed.</span>
-    <span class="ident">ChannelId</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ChannelId</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ChannelId</span><span class="op">&gt;</span>,
-    },
-    <span class="doccomment">/// Invite code was changed.</span>
-    <span class="ident">Code</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
-    },
-    <span class="doccomment">/// Role colour was changed.</span>
-    <span class="ident">Colour</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>,
-    },
-    <span class="doccomment">/// Member timeout state was changed.</span>
-    <span class="ident">CommunicationDisabledUntil</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Timestamp</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Timestamp</span><span class="op">&gt;</span>,
-    },
-    <span class="doccomment">/// User was server deafened/undeafened.</span>
-    <span class="ident">Deaf</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span>,
-    },
-    <span class="doccomment">/// Default auto archive duration for newly created threads was changed.</span>
-    <span class="ident">DefaultAutoArchiveDuration</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>,
-    },
-    <span class="doccomment">/// Default message notification level for a server was changed.</span>
-    <span class="ident">DefaultMessageNotifications</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">DefaultMessageNotificationLevel</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">DefaultMessageNotificationLevel</span><span class="op">&gt;</span>,
-    },
-    <span class="doccomment">/// Permission on a text or voice channel was denied for a role.</span>
-    <span class="ident">Deny</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Permissions</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Permissions</span><span class="op">&gt;</span>,
-    },
-    <span class="doccomment">/// Description for guild, sticker, or guild scheduled event was changed.</span>
-    <span class="ident">Description</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
-    },
-    <span class="doccomment">/// Guild&#39;s discovery splash was changed.</span>
-    <span class="ident">DiscoverySplashHash</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
-    },
-    <span class="ident">Enabled</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span>,
-    },
-    <span class="doccomment">/// Integration emoticons was enabled/disabled.</span>
-    <span class="ident">EnableEmoticons</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span>,
-    },
-    <span class="doccomment">/// Entity type of guild scheduled event was changed.</span>
-    <span class="ident">EntityType</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>,
-    },
-    <span class="ident">EventType</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">EventType</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">EventType</span><span class="op">&gt;</span>,
-    },
-    <span class="ident">ExemptChannels</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">ChannelId</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">ChannelId</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    },
-    <span class="ident">ExemptRoles</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">RoleId</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">RoleId</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    },
-    <span class="doccomment">/// Behavior of the expiration of an integration was changed.</span>
-    <span class="ident">ExpireBehavior</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>,
-    },
-    <span class="doccomment">/// Grace period of the expiration of an integration was changed.</span>
-    <span class="ident">ExpireGracePeriod</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>,
-    },
-    <span class="doccomment">/// Explicit content filter level of a guild was changed.</span>
-    <span class="ident">ExplicitContentFilter</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ExplicitContentFilter</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ExplicitContentFilter</span><span class="op">&gt;</span>,
-    },
-    <span class="doccomment">/// Format type of a sticker was changed.</span>
-    <span class="ident">FormatType</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">StickerFormatType</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">StickerFormatType</span><span class="op">&gt;</span>,
-    },
-    <span class="doccomment">/// Guild a sticker is in was changed.</span>
-    <span class="ident">GuildId</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">GuildId</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">GuildId</span><span class="op">&gt;</span>,
-    },
-    <span class="doccomment">/// Role is now displayed/no longer displayed separate from online users.</span>
-    <span class="ident">Hoist</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span>,
-    },
-    <span class="doccomment">/// Guild icon was changed.</span>
-    <span class="ident">IconHash</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
-    },
-    <span class="doccomment">/// Guild scheduled event cover image was changed.</span>
-    <span class="ident">ImageHash</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
-    },
-    <span class="doccomment">/// ID of the changed entity.</span>
-    <span class="ident">Id</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">GenericId</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">GenericId</span><span class="op">&gt;</span>,
-    },
-    <span class="doccomment">/// Private thread&#39;s invitable state was changed.</span>
-    <span class="ident">Invitable</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span>,
-    },
-    <span class="doccomment">/// ID of the user who created the invite.</span>
-    <span class="ident">InviterId</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">UserId</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">UserId</span><span class="op">&gt;</span>,
-    },
-    <span class="doccomment">/// Location for a guild scheduled event was changed.</span>
-    <span class="ident">Location</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
-    },
-    <span class="doccomment">/// Thread was locked/unlocked.</span>
-    <span class="ident">Locked</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span>,
-    },
-    <span class="doccomment">/// How long invite code lasts was changed.</span>
-    <span class="ident">MaxAge</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>,
-    },
-    <span class="doccomment">/// Maximum uses of an invite was changed.</span>
-    <span class="ident">MaxUses</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>,
-    },
-    <span class="doccomment">/// Whether a role can be mentioned in a message was changed.</span>
-    <span class="ident">Mentionable</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span>,
-    },
-    <span class="doccomment">/// Multi-factor authentication requirement was changed.</span>
-    <span class="ident">MfaLevel</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">MfaLevel</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">MfaLevel</span><span class="op">&gt;</span>,
-    },
-    <span class="doccomment">/// User was server muted/unmuted.</span>
-    <span class="ident">Mute</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span>,
-    },
-    <span class="doccomment">/// Name of an entity was changed.</span>
-    <span class="ident">Name</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
-    },
-    <span class="doccomment">/// Nickname of a member was changed.</span>
-    <span class="ident">Nick</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
-    },
-    <span class="doccomment">/// Channel NSFW restriction was changed.</span>
-    <span class="ident">Nsfw</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span>,
-    },
-    <span class="doccomment">/// Owner of a guild was changed.</span>
-    <span class="ident">OwnerId</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">UserId</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">UserId</span><span class="op">&gt;</span>,
-    },
-    <span class="doccomment">/// Permissions on a channel were changed.</span>
-    <span class="ident">PermissionOverwrites</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">PermissionOverwrite</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">PermissionOverwrite</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    },
-    <span class="doccomment">/// Permissions for a role were changed.</span>
-    <span class="ident">Permissions</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Permissions</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Permissions</span><span class="op">&gt;</span>,
-    },
-    <span class="doccomment">/// Channel or role position was changed.</span>
-    <span class="ident">Position</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>,
-    },
-    <span class="doccomment">/// Preferred locale of a guild was changed.</span>
-    <span class="ident">PreferredLocale</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
-    },
-    <span class="doccomment">/// Privacy level of the stage instance was changed.</span>
-    <span class="ident">PrivacyLevel</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>,
-    },
-    <span class="doccomment">/// Number of days after which inactive and role-unassigned members are kicked was changed.</span>
-    <span class="ident">PruneDeleteDays</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>,
-    },
-    <span class="doccomment">/// ID of the public updates channel was changed.</span>
-    <span class="ident">PublicUpdatesChannelId</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ChannelId</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ChannelId</span><span class="op">&gt;</span>,
-    },
-    <span class="doccomment">/// Ratelimit per user in a text channel was changed.</span>
-    <span class="ident">RateLimitPerUser</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>,
-    },
-    <span class="doccomment">/// Region of a guild was changed.</span>
-    <span class="ident">Region</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
-    },
-    <span class="doccomment">/// Role was added to a member.</span>
-    <span class="ident">RolesAdded</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">AffectedRole</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">AffectedRole</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    },
-    <span class="doccomment">/// Role was removed to a member.</span>
-    <span class="ident">RolesRemove</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">AffectedRole</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">AffectedRole</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    },
-    <span class="doccomment">/// ID of the rules channel was changed.</span>
-    <span class="ident">RulesChannelId</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ChannelId</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ChannelId</span><span class="op">&gt;</span>,
-    },
-    <span class="doccomment">/// Invite splash page artwork was changed.</span>
-    <span class="ident">SplashHash</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
-    },
-    <span class="doccomment">/// Status of guild scheduled event was changed.</span>
-    <span class="ident">Status</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>,
-    },
-    <span class="doccomment">/// ID of the system channel was changed.</span>
-    <span class="ident">SystemChannelId</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ChannelId</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ChannelId</span><span class="op">&gt;</span>,
-    },
-    <span class="doccomment">/// Related emoji of a sticker was changed.</span>
-    <span class="ident">Tags</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
-    },
-    <span class="doccomment">/// Whether an invite is temporary or never expires was changed.</span>
-    <span class="ident">Temporary</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span>,
-    },
-    <span class="doccomment">/// Topic of a text channel or stage instance was changed.</span>
-    <span class="ident">Topic</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
-    },
-    <span class="ident">TriggerMetadata</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">TriggerMetadata</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">TriggerMetadata</span><span class="op">&gt;</span>,
-    },
-    <span class="ident">TriggerType</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">TriggerType</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">TriggerType</span><span class="op">&gt;</span>,
-    },
-    <span class="doccomment">/// Type of a created entity.</span>
-    <span class="ident">Type</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">EntityType</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">EntityType</span><span class="op">&gt;</span>,
-    },
-    <span class="doccomment">/// Unicode emoji of a role icon was changed.</span>
-    <span class="ident">UnicodeEmoji</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
-    },
-    <span class="doccomment">/// Maximum number of users in a voice channel was changed.</span>
-    <span class="ident">UserLimit</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>,
-    },
-    <span class="doccomment">/// Number of uses of an invite was changed.</span>
-    <span class="ident">Uses</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>,
-    },
-    <span class="doccomment">/// Guild invite vanity url was changed.</span>
-    <span class="ident">VanityUrlCode</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
-    },
-    <span class="doccomment">/// Required verification level for new members was changed.</span>
-    <span class="ident">VerificationLevel</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">VerificationLevel</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">VerificationLevel</span><span class="op">&gt;</span>,
-    },
-    <span class="doccomment">/// Channel of the server widget was changed.</span>
-    <span class="ident">WidgetChannelId</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ChannelId</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ChannelId</span><span class="op">&gt;</span>,
-    },
-    <span class="doccomment">/// Whether a widget is enabled or not was changed.</span>
-    <span class="ident">WidgetEnabled</span> {
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span>,
-    },
-    <span class="doccomment">/// Unknown key was changed.</span>
-    <span class="ident">Other</span> {
-        <span class="ident">name</span>: <span class="ident">String</span>,
-        <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Value</span><span class="op">&gt;</span>,
-        <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Value</span><span class="op">&gt;</span>,
+<span class="attribute">#[cfg_attr(not(simd_json), allow(clippy::derive_partial_eq_without_eq))]
+#[derive(Debug, PartialEq)]
+</span><span class="comment">// serde_json&#39;s Value impls Eq, simd-json&#39;s Value doesn&#39;t
+</span><span class="attribute">#[cfg_attr(not(feature = <span class="string">&quot;simd-json&quot;</span>), derive(Eq))]
+#[non_exhaustive]
+</span><span class="kw">pub enum </span>Change {
+    Actions {
+        old: <span class="prelude-ty">Option</span>&lt;Vec&lt;Action&gt;&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;Vec&lt;Action&gt;&gt;,
+    },
+    <span class="doccomment">/// AFK channel was changed.
+    </span>AfkChannelId {
+        old: <span class="prelude-ty">Option</span>&lt;ChannelId&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;ChannelId&gt;,
+    },
+    <span class="doccomment">/// AFK timeout duration was changed.
+    </span>AfkTimeout {
+        old: <span class="prelude-ty">Option</span>&lt;u64&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;u64&gt;,
+    },
+    <span class="doccomment">/// Permission on a text or voice channel was allowed for a role.
+    </span>Allow {
+        old: <span class="prelude-ty">Option</span>&lt;Permissions&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;Permissions&gt;,
+    },
+    <span class="doccomment">/// Application ID of the added or removed webhook or bot.
+    </span>ApplicationId {
+        old: <span class="prelude-ty">Option</span>&lt;ApplicationId&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;ApplicationId&gt;,
+    },
+    <span class="doccomment">/// Thread is now archived/unarchived.
+    </span>Archived {
+        old: <span class="prelude-ty">Option</span>&lt;bool&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;bool&gt;,
+    },
+    Asset {
+        old: <span class="prelude-ty">Option</span>&lt;String&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;String&gt;,
+    },
+    <span class="doccomment">/// Auto archive duration of a thread was changed.
+    </span>AutoArchiveDuration {
+        old: <span class="prelude-ty">Option</span>&lt;u64&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;u64&gt;,
+    },
+    <span class="doccomment">/// Availability of a sticker was changed.
+    </span>Available {
+        old: <span class="prelude-ty">Option</span>&lt;bool&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;bool&gt;,
+    },
+    <span class="doccomment">/// User avatar was changed.
+    </span>AvatarHash {
+        old: <span class="prelude-ty">Option</span>&lt;String&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;String&gt;,
+    },
+    <span class="doccomment">/// Guild banner was changed.
+    </span>BannerHash {
+        old: <span class="prelude-ty">Option</span>&lt;String&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;String&gt;,
+    },
+    <span class="doccomment">/// Voice channel bitrate was changed.
+    </span>Bitrate {
+        old: <span class="prelude-ty">Option</span>&lt;u32&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;u32&gt;,
+    },
+    <span class="doccomment">/// Channel for invite code or guild scheduled event was changed.
+    </span>ChannelId {
+        old: <span class="prelude-ty">Option</span>&lt;ChannelId&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;ChannelId&gt;,
+    },
+    <span class="doccomment">/// Invite code was changed.
+    </span>Code {
+        old: <span class="prelude-ty">Option</span>&lt;String&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;String&gt;,
+    },
+    <span class="doccomment">/// Role colour was changed.
+    </span>Colour {
+        old: <span class="prelude-ty">Option</span>&lt;u64&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;u64&gt;,
+    },
+    <span class="doccomment">/// Member timeout state was changed.
+    </span>CommunicationDisabledUntil {
+        old: <span class="prelude-ty">Option</span>&lt;Timestamp&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;Timestamp&gt;,
+    },
+    <span class="doccomment">/// User was server deafened/undeafened.
+    </span>Deaf {
+        old: <span class="prelude-ty">Option</span>&lt;bool&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;bool&gt;,
+    },
+    <span class="doccomment">/// Default auto archive duration for newly created threads was changed.
+    </span>DefaultAutoArchiveDuration {
+        old: <span class="prelude-ty">Option</span>&lt;u64&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;u64&gt;,
+    },
+    <span class="doccomment">/// Default message notification level for a server was changed.
+    </span>DefaultMessageNotifications {
+        old: <span class="prelude-ty">Option</span>&lt;DefaultMessageNotificationLevel&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;DefaultMessageNotificationLevel&gt;,
+    },
+    <span class="doccomment">/// Permission on a text or voice channel was denied for a role.
+    </span>Deny {
+        old: <span class="prelude-ty">Option</span>&lt;Permissions&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;Permissions&gt;,
+    },
+    <span class="doccomment">/// Description for guild, sticker, or guild scheduled event was changed.
+    </span>Description {
+        old: <span class="prelude-ty">Option</span>&lt;String&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;String&gt;,
+    },
+    <span class="doccomment">/// Guild&#39;s discovery splash was changed.
+    </span>DiscoverySplashHash {
+        old: <span class="prelude-ty">Option</span>&lt;String&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;String&gt;,
+    },
+    Enabled {
+        old: <span class="prelude-ty">Option</span>&lt;bool&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;bool&gt;,
+    },
+    <span class="doccomment">/// Integration emoticons was enabled/disabled.
+    </span>EnableEmoticons {
+        old: <span class="prelude-ty">Option</span>&lt;bool&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;bool&gt;,
+    },
+    <span class="doccomment">/// Entity type of guild scheduled event was changed.
+    </span>EntityType {
+        old: <span class="prelude-ty">Option</span>&lt;u64&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;u64&gt;,
+    },
+    EventType {
+        old: <span class="prelude-ty">Option</span>&lt;EventType&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;EventType&gt;,
+    },
+    ExemptChannels {
+        old: <span class="prelude-ty">Option</span>&lt;Vec&lt;ChannelId&gt;&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;Vec&lt;ChannelId&gt;&gt;,
+    },
+    ExemptRoles {
+        old: <span class="prelude-ty">Option</span>&lt;Vec&lt;RoleId&gt;&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;Vec&lt;RoleId&gt;&gt;,
+    },
+    <span class="doccomment">/// Behavior of the expiration of an integration was changed.
+    </span>ExpireBehavior {
+        old: <span class="prelude-ty">Option</span>&lt;u64&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;u64&gt;,
+    },
+    <span class="doccomment">/// Grace period of the expiration of an integration was changed.
+    </span>ExpireGracePeriod {
+        old: <span class="prelude-ty">Option</span>&lt;u64&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;u64&gt;,
+    },
+    <span class="doccomment">/// Explicit content filter level of a guild was changed.
+    </span>ExplicitContentFilter {
+        old: <span class="prelude-ty">Option</span>&lt;ExplicitContentFilter&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;ExplicitContentFilter&gt;,
+    },
+    <span class="doccomment">/// Format type of a sticker was changed.
+    </span>FormatType {
+        old: <span class="prelude-ty">Option</span>&lt;StickerFormatType&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;StickerFormatType&gt;,
+    },
+    <span class="doccomment">/// Guild a sticker is in was changed.
+    </span>GuildId {
+        old: <span class="prelude-ty">Option</span>&lt;GuildId&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;GuildId&gt;,
+    },
+    <span class="doccomment">/// Role is now displayed/no longer displayed separate from online users.
+    </span>Hoist {
+        old: <span class="prelude-ty">Option</span>&lt;bool&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;bool&gt;,
+    },
+    <span class="doccomment">/// Guild icon was changed.
+    </span>IconHash {
+        old: <span class="prelude-ty">Option</span>&lt;String&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;String&gt;,
+    },
+    <span class="doccomment">/// Guild scheduled event cover image was changed.
+    </span>ImageHash {
+        old: <span class="prelude-ty">Option</span>&lt;String&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;String&gt;,
+    },
+    <span class="doccomment">/// ID of the changed entity.
+    </span>Id {
+        old: <span class="prelude-ty">Option</span>&lt;GenericId&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;GenericId&gt;,
+    },
+    <span class="doccomment">/// Private thread&#39;s invitable state was changed.
+    </span>Invitable {
+        old: <span class="prelude-ty">Option</span>&lt;bool&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;bool&gt;,
+    },
+    <span class="doccomment">/// ID of the user who created the invite.
+    </span>InviterId {
+        old: <span class="prelude-ty">Option</span>&lt;UserId&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;UserId&gt;,
+    },
+    <span class="doccomment">/// Location for a guild scheduled event was changed.
+    </span>Location {
+        old: <span class="prelude-ty">Option</span>&lt;String&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;String&gt;,
+    },
+    <span class="doccomment">/// Thread was locked/unlocked.
+    </span>Locked {
+        old: <span class="prelude-ty">Option</span>&lt;bool&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;bool&gt;,
+    },
+    <span class="doccomment">/// How long invite code lasts was changed.
+    </span>MaxAge {
+        old: <span class="prelude-ty">Option</span>&lt;u64&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;u64&gt;,
+    },
+    <span class="doccomment">/// Maximum uses of an invite was changed.
+    </span>MaxUses {
+        old: <span class="prelude-ty">Option</span>&lt;u64&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;u64&gt;,
+    },
+    <span class="doccomment">/// Whether a role can be mentioned in a message was changed.
+    </span>Mentionable {
+        old: <span class="prelude-ty">Option</span>&lt;bool&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;bool&gt;,
+    },
+    <span class="doccomment">/// Multi-factor authentication requirement was changed.
+    </span>MfaLevel {
+        old: <span class="prelude-ty">Option</span>&lt;MfaLevel&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;MfaLevel&gt;,
+    },
+    <span class="doccomment">/// User was server muted/unmuted.
+    </span>Mute {
+        old: <span class="prelude-ty">Option</span>&lt;bool&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;bool&gt;,
+    },
+    <span class="doccomment">/// Name of an entity was changed.
+    </span>Name {
+        old: <span class="prelude-ty">Option</span>&lt;String&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;String&gt;,
+    },
+    <span class="doccomment">/// Nickname of a member was changed.
+    </span>Nick {
+        old: <span class="prelude-ty">Option</span>&lt;String&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;String&gt;,
+    },
+    <span class="doccomment">/// Channel NSFW restriction was changed.
+    </span>Nsfw {
+        old: <span class="prelude-ty">Option</span>&lt;bool&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;bool&gt;,
+    },
+    <span class="doccomment">/// Owner of a guild was changed.
+    </span>OwnerId {
+        old: <span class="prelude-ty">Option</span>&lt;UserId&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;UserId&gt;,
+    },
+    <span class="doccomment">/// Permissions on a channel were changed.
+    </span>PermissionOverwrites {
+        old: <span class="prelude-ty">Option</span>&lt;Vec&lt;PermissionOverwrite&gt;&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;Vec&lt;PermissionOverwrite&gt;&gt;,
+    },
+    <span class="doccomment">/// Permissions for a role were changed.
+    </span>Permissions {
+        old: <span class="prelude-ty">Option</span>&lt;Permissions&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;Permissions&gt;,
+    },
+    <span class="doccomment">/// Channel or role position was changed.
+    </span>Position {
+        old: <span class="prelude-ty">Option</span>&lt;u32&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;u32&gt;,
+    },
+    <span class="doccomment">/// Preferred locale of a guild was changed.
+    </span>PreferredLocale {
+        old: <span class="prelude-ty">Option</span>&lt;String&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;String&gt;,
+    },
+    <span class="doccomment">/// Privacy level of the stage instance was changed.
+    </span>PrivacyLevel {
+        old: <span class="prelude-ty">Option</span>&lt;u64&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;u64&gt;,
+    },
+    <span class="doccomment">/// Number of days after which inactive and role-unassigned members are kicked was changed.
+    </span>PruneDeleteDays {
+        old: <span class="prelude-ty">Option</span>&lt;u64&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;u64&gt;,
+    },
+    <span class="doccomment">/// ID of the public updates channel was changed.
+    </span>PublicUpdatesChannelId {
+        old: <span class="prelude-ty">Option</span>&lt;ChannelId&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;ChannelId&gt;,
+    },
+    <span class="doccomment">/// Ratelimit per user in a text channel was changed.
+    </span>RateLimitPerUser {
+        old: <span class="prelude-ty">Option</span>&lt;u64&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;u64&gt;,
+    },
+    <span class="doccomment">/// Region of a guild was changed.
+    </span>Region {
+        old: <span class="prelude-ty">Option</span>&lt;String&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;String&gt;,
+    },
+    <span class="doccomment">/// Role was added to a member.
+    </span>RolesAdded {
+        old: <span class="prelude-ty">Option</span>&lt;Vec&lt;AffectedRole&gt;&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;Vec&lt;AffectedRole&gt;&gt;,
+    },
+    <span class="doccomment">/// Role was removed to a member.
+    </span>RolesRemove {
+        old: <span class="prelude-ty">Option</span>&lt;Vec&lt;AffectedRole&gt;&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;Vec&lt;AffectedRole&gt;&gt;,
+    },
+    <span class="doccomment">/// ID of the rules channel was changed.
+    </span>RulesChannelId {
+        old: <span class="prelude-ty">Option</span>&lt;ChannelId&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;ChannelId&gt;,
+    },
+    <span class="doccomment">/// Invite splash page artwork was changed.
+    </span>SplashHash {
+        old: <span class="prelude-ty">Option</span>&lt;String&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;String&gt;,
+    },
+    <span class="doccomment">/// Status of guild scheduled event was changed.
+    </span>Status {
+        old: <span class="prelude-ty">Option</span>&lt;u64&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;u64&gt;,
+    },
+    <span class="doccomment">/// ID of the system channel was changed.
+    </span>SystemChannelId {
+        old: <span class="prelude-ty">Option</span>&lt;ChannelId&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;ChannelId&gt;,
+    },
+    <span class="doccomment">/// Related emoji of a sticker was changed.
+    </span>Tags {
+        old: <span class="prelude-ty">Option</span>&lt;String&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;String&gt;,
+    },
+    <span class="doccomment">/// Whether an invite is temporary or never expires was changed.
+    </span>Temporary {
+        old: <span class="prelude-ty">Option</span>&lt;bool&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;bool&gt;,
+    },
+    <span class="doccomment">/// Topic of a text channel or stage instance was changed.
+    </span>Topic {
+        old: <span class="prelude-ty">Option</span>&lt;String&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;String&gt;,
+    },
+    TriggerMetadata {
+        old: <span class="prelude-ty">Option</span>&lt;TriggerMetadata&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;TriggerMetadata&gt;,
+    },
+    TriggerType {
+        old: <span class="prelude-ty">Option</span>&lt;TriggerType&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;TriggerType&gt;,
+    },
+    <span class="doccomment">/// Type of a created entity.
+    </span>Type {
+        old: <span class="prelude-ty">Option</span>&lt;EntityType&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;EntityType&gt;,
+    },
+    <span class="doccomment">/// Unicode emoji of a role icon was changed.
+    </span>UnicodeEmoji {
+        old: <span class="prelude-ty">Option</span>&lt;String&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;String&gt;,
+    },
+    <span class="doccomment">/// Maximum number of users in a voice channel was changed.
+    </span>UserLimit {
+        old: <span class="prelude-ty">Option</span>&lt;u64&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;u64&gt;,
+    },
+    <span class="doccomment">/// Number of uses of an invite was changed.
+    </span>Uses {
+        old: <span class="prelude-ty">Option</span>&lt;u64&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;u64&gt;,
+    },
+    <span class="doccomment">/// Guild invite vanity url was changed.
+    </span>VanityUrlCode {
+        old: <span class="prelude-ty">Option</span>&lt;String&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;String&gt;,
+    },
+    <span class="doccomment">/// Required verification level for new members was changed.
+    </span>VerificationLevel {
+        old: <span class="prelude-ty">Option</span>&lt;VerificationLevel&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;VerificationLevel&gt;,
+    },
+    <span class="doccomment">/// Channel of the server widget was changed.
+    </span>WidgetChannelId {
+        old: <span class="prelude-ty">Option</span>&lt;ChannelId&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;ChannelId&gt;,
+    },
+    <span class="doccomment">/// Whether a widget is enabled or not was changed.
+    </span>WidgetEnabled {
+        old: <span class="prelude-ty">Option</span>&lt;bool&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;bool&gt;,
+    },
+    <span class="doccomment">/// Unknown key was changed.
+    </span>Other {
+        name: String,
+        old: <span class="prelude-ty">Option</span>&lt;Value&gt;,
+        new: <span class="prelude-ty">Option</span>&lt;Value&gt;,
     },
 }
 
-<span class="kw">impl</span> <span class="ident">Change</span> {
-    <span class="attribute">#[<span class="ident">must_use</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">key</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">str</span><span class="op">&gt;</span> {
-        <span class="macro">macro_rules!</span> <span class="ident">variant_keys</span> {
-            ($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">Variant</span>:<span class="ident">ident</span>: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">key</span>:<span class="ident">literal</span>,)<span class="kw-2">*</span>) =&gt; {
-                <span class="kw">match</span> <span class="self">self</span> {
-                    $(<span class="self">Self</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">Variant</span> { .. } =&gt; <span class="ident">Cow::from</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">key</span>),)<span class="op">*</span>
-                    <span class="ident"><span class="self">Self</span>::Other</span> { <span class="ident">name</span>, .. } =&gt; <span class="ident">Cow::from</span>(<span class="ident">name</span>),
+<span class="kw">impl </span>Change {
+    <span class="attribute">#[must_use]
+    </span><span class="kw">pub fn </span>key(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Cow&lt;<span class="lifetime">&#39;_</span>, str&gt; {
+        <span class="macro">macro_rules! </span>variant_keys {
+            ($(<span class="macro-nonterminal">$Variant</span>:ident: <span class="macro-nonterminal">$key</span>:literal,)<span class="kw-2">*</span>) =&gt; {
+                <span class="kw">match </span><span class="self">self </span>{
+                    $(<span class="self">Self</span>::<span class="macro-nonterminal">$Variant </span>{ .. } =&gt; Cow::from(<span class="macro-nonterminal">$key</span>),)*
+                    <span class="self">Self</span>::Other { name, .. } =&gt; Cow::from(name),
                 }
             }
         }
 
-        <span class="macro">variant_keys!</span> {
-            <span class="ident">Actions</span>: <span class="string">&quot;actions&quot;</span>,
-            <span class="ident">AfkChannelId</span>: <span class="string">&quot;afk_channel_id&quot;</span>,
-            <span class="ident">AfkTimeout</span>: <span class="string">&quot;afk_timeout&quot;</span>,
-            <span class="ident">Allow</span>: <span class="string">&quot;allow&quot;</span>,
-            <span class="ident">ApplicationId</span>: <span class="string">&quot;application_id&quot;</span>,
-            <span class="ident">Archived</span>: <span class="string">&quot;archived&quot;</span>,
-            <span class="ident">Asset</span>: <span class="string">&quot;asset&quot;</span>,
-            <span class="ident">AutoArchiveDuration</span>: <span class="string">&quot;auto_archive_duration&quot;</span>,
-            <span class="ident">Available</span>: <span class="string">&quot;available&quot;</span>,
-            <span class="ident">AvatarHash</span>: <span class="string">&quot;avatar_hash&quot;</span>,
-            <span class="ident">BannerHash</span>: <span class="string">&quot;banner_hash&quot;</span>,
-            <span class="ident">Bitrate</span>: <span class="string">&quot;bitrate&quot;</span>,
-            <span class="ident">ChannelId</span>: <span class="string">&quot;channel_id&quot;</span>,
-            <span class="ident">Code</span>: <span class="string">&quot;code&quot;</span>,
-            <span class="ident">Colour</span>: <span class="string">&quot;color&quot;</span>,
-            <span class="ident">CommunicationDisabledUntil</span>: <span class="string">&quot;communication_disabled_until&quot;</span>,
-            <span class="ident">Deaf</span>: <span class="string">&quot;deaf&quot;</span>,
-            <span class="ident">DefaultAutoArchiveDuration</span>: <span class="string">&quot;default_auto_archive_duration&quot;</span>,
-            <span class="ident">DefaultMessageNotifications</span>: <span class="string">&quot;default_message_notifications&quot;</span>,
-            <span class="ident">Deny</span>: <span class="string">&quot;deny&quot;</span>,
-            <span class="ident">Description</span>: <span class="string">&quot;description&quot;</span>,
-            <span class="ident">DiscoverySplashHash</span>: <span class="string">&quot;discovery_splash_hash&quot;</span>,
-            <span class="ident">Enabled</span>: <span class="string">&quot;enabled&quot;</span>,
-            <span class="ident">EnableEmoticons</span>: <span class="string">&quot;enable_emoticons&quot;</span>,
-            <span class="ident">EntityType</span>: <span class="string">&quot;entity_type&quot;</span>,
-            <span class="ident">EventType</span>: <span class="string">&quot;event_type&quot;</span>,
-            <span class="ident">ExemptChannels</span>: <span class="string">&quot;exempt_channels&quot;</span>,
-            <span class="ident">ExemptRoles</span>: <span class="string">&quot;exempt_roles&quot;</span>,
-            <span class="ident">ExpireBehavior</span>: <span class="string">&quot;expire_behavior&quot;</span>,
-            <span class="ident">ExpireGracePeriod</span>: <span class="string">&quot;expire_grace_period&quot;</span>,
-            <span class="ident">ExplicitContentFilter</span>: <span class="string">&quot;explicit_content_filter&quot;</span>,
-            <span class="ident">FormatType</span>: <span class="string">&quot;format_type&quot;</span>,
-            <span class="ident">GuildId</span>: <span class="string">&quot;guild_id&quot;</span>,
-            <span class="ident">Hoist</span>: <span class="string">&quot;hoist&quot;</span>,
-            <span class="ident">IconHash</span>: <span class="string">&quot;icon_hash&quot;</span>,
-            <span class="ident">ImageHash</span>: <span class="string">&quot;image_hash&quot;</span>,
-            <span class="ident">Id</span>: <span class="string">&quot;id&quot;</span>,
-            <span class="ident">Invitable</span>: <span class="string">&quot;invitable&quot;</span>,
-            <span class="ident">InviterId</span>: <span class="string">&quot;inviter_id&quot;</span>,
-            <span class="ident">Location</span>: <span class="string">&quot;location&quot;</span>,
-            <span class="ident">Locked</span>: <span class="string">&quot;locked&quot;</span>,
-            <span class="ident">MaxAge</span>: <span class="string">&quot;max_age&quot;</span>,
-            <span class="ident">MaxUses</span>: <span class="string">&quot;max_uses&quot;</span>,
-            <span class="ident">Mentionable</span>: <span class="string">&quot;mentionable&quot;</span>,
-            <span class="ident">MfaLevel</span>: <span class="string">&quot;mfa_level&quot;</span>,
-            <span class="ident">Mute</span>: <span class="string">&quot;mute&quot;</span>,
-            <span class="ident">Name</span>: <span class="string">&quot;name&quot;</span>,
-            <span class="ident">Nick</span>: <span class="string">&quot;nick&quot;</span>,
-            <span class="ident">Nsfw</span>: <span class="string">&quot;nsfw&quot;</span>,
-            <span class="ident">OwnerId</span>: <span class="string">&quot;owner_id&quot;</span>,
-            <span class="ident">PermissionOverwrites</span>: <span class="string">&quot;permission_overwrites&quot;</span>,
-            <span class="ident">Permissions</span>: <span class="string">&quot;permissions&quot;</span>,
-            <span class="ident">Position</span>: <span class="string">&quot;position&quot;</span>,
-            <span class="ident">PreferredLocale</span>: <span class="string">&quot;preferred_locale&quot;</span>,
-            <span class="ident">PrivacyLevel</span>: <span class="string">&quot;privacy_level&quot;</span>,
-            <span class="ident">PruneDeleteDays</span>: <span class="string">&quot;prune_delete_days&quot;</span>,
-            <span class="ident">PublicUpdatesChannelId</span>: <span class="string">&quot;public_updates_channel_id&quot;</span>,
-            <span class="ident">RateLimitPerUser</span>: <span class="string">&quot;rate_limit_per_user&quot;</span>,
-            <span class="ident">Region</span>: <span class="string">&quot;region&quot;</span>,
-            <span class="ident">RolesAdded</span>: <span class="string">&quot;$add&quot;</span>,
-            <span class="ident">RolesRemove</span>: <span class="string">&quot;$remove&quot;</span>,
-            <span class="ident">RulesChannelId</span>: <span class="string">&quot;rules_channel_id&quot;</span>,
-            <span class="ident">SplashHash</span>: <span class="string">&quot;splash_hash&quot;</span>,
-            <span class="ident">Status</span>: <span class="string">&quot;status&quot;</span>,
-            <span class="ident">SystemChannelId</span>: <span class="string">&quot;system_channel_id&quot;</span>,
-            <span class="ident">Tags</span>: <span class="string">&quot;tags&quot;</span>,
-            <span class="ident">Temporary</span>: <span class="string">&quot;temporary&quot;</span>,
-            <span class="ident">Topic</span>: <span class="string">&quot;topic&quot;</span>,
-            <span class="ident">TriggerMetadata</span>: <span class="string">&quot;trigger_metadata&quot;</span>,
-            <span class="ident">TriggerType</span>: <span class="string">&quot;trigger_type&quot;</span>,
-            <span class="ident">Type</span>: <span class="string">&quot;type&quot;</span>,
-            <span class="ident">UnicodeEmoji</span>: <span class="string">&quot;unicode_emoji&quot;</span>,
-            <span class="ident">UserLimit</span>: <span class="string">&quot;user_limit&quot;</span>,
-            <span class="ident">Uses</span>: <span class="string">&quot;uses&quot;</span>,
-            <span class="ident">VanityUrlCode</span>: <span class="string">&quot;vanity_url_code&quot;</span>,
-            <span class="ident">VerificationLevel</span>: <span class="string">&quot;verification_level&quot;</span>,
-            <span class="ident">WidgetChannelId</span>: <span class="string">&quot;widget_channel_id&quot;</span>,
-            <span class="ident">WidgetEnabled</span>: <span class="string">&quot;widget_enabled&quot;</span>,
+        <span class="macro">variant_keys! </span>{
+            Actions: <span class="string">&quot;actions&quot;</span>,
+            AfkChannelId: <span class="string">&quot;afk_channel_id&quot;</span>,
+            AfkTimeout: <span class="string">&quot;afk_timeout&quot;</span>,
+            Allow: <span class="string">&quot;allow&quot;</span>,
+            ApplicationId: <span class="string">&quot;application_id&quot;</span>,
+            Archived: <span class="string">&quot;archived&quot;</span>,
+            Asset: <span class="string">&quot;asset&quot;</span>,
+            AutoArchiveDuration: <span class="string">&quot;auto_archive_duration&quot;</span>,
+            Available: <span class="string">&quot;available&quot;</span>,
+            AvatarHash: <span class="string">&quot;avatar_hash&quot;</span>,
+            BannerHash: <span class="string">&quot;banner_hash&quot;</span>,
+            Bitrate: <span class="string">&quot;bitrate&quot;</span>,
+            ChannelId: <span class="string">&quot;channel_id&quot;</span>,
+            Code: <span class="string">&quot;code&quot;</span>,
+            Colour: <span class="string">&quot;color&quot;</span>,
+            CommunicationDisabledUntil: <span class="string">&quot;communication_disabled_until&quot;</span>,
+            Deaf: <span class="string">&quot;deaf&quot;</span>,
+            DefaultAutoArchiveDuration: <span class="string">&quot;default_auto_archive_duration&quot;</span>,
+            DefaultMessageNotifications: <span class="string">&quot;default_message_notifications&quot;</span>,
+            Deny: <span class="string">&quot;deny&quot;</span>,
+            Description: <span class="string">&quot;description&quot;</span>,
+            DiscoverySplashHash: <span class="string">&quot;discovery_splash_hash&quot;</span>,
+            Enabled: <span class="string">&quot;enabled&quot;</span>,
+            EnableEmoticons: <span class="string">&quot;enable_emoticons&quot;</span>,
+            EntityType: <span class="string">&quot;entity_type&quot;</span>,
+            EventType: <span class="string">&quot;event_type&quot;</span>,
+            ExemptChannels: <span class="string">&quot;exempt_channels&quot;</span>,
+            ExemptRoles: <span class="string">&quot;exempt_roles&quot;</span>,
+            ExpireBehavior: <span class="string">&quot;expire_behavior&quot;</span>,
+            ExpireGracePeriod: <span class="string">&quot;expire_grace_period&quot;</span>,
+            ExplicitContentFilter: <span class="string">&quot;explicit_content_filter&quot;</span>,
+            FormatType: <span class="string">&quot;format_type&quot;</span>,
+            GuildId: <span class="string">&quot;guild_id&quot;</span>,
+            Hoist: <span class="string">&quot;hoist&quot;</span>,
+            IconHash: <span class="string">&quot;icon_hash&quot;</span>,
+            ImageHash: <span class="string">&quot;image_hash&quot;</span>,
+            Id: <span class="string">&quot;id&quot;</span>,
+            Invitable: <span class="string">&quot;invitable&quot;</span>,
+            InviterId: <span class="string">&quot;inviter_id&quot;</span>,
+            Location: <span class="string">&quot;location&quot;</span>,
+            Locked: <span class="string">&quot;locked&quot;</span>,
+            MaxAge: <span class="string">&quot;max_age&quot;</span>,
+            MaxUses: <span class="string">&quot;max_uses&quot;</span>,
+            Mentionable: <span class="string">&quot;mentionable&quot;</span>,
+            MfaLevel: <span class="string">&quot;mfa_level&quot;</span>,
+            Mute: <span class="string">&quot;mute&quot;</span>,
+            Name: <span class="string">&quot;name&quot;</span>,
+            Nick: <span class="string">&quot;nick&quot;</span>,
+            Nsfw: <span class="string">&quot;nsfw&quot;</span>,
+            OwnerId: <span class="string">&quot;owner_id&quot;</span>,
+            PermissionOverwrites: <span class="string">&quot;permission_overwrites&quot;</span>,
+            Permissions: <span class="string">&quot;permissions&quot;</span>,
+            Position: <span class="string">&quot;position&quot;</span>,
+            PreferredLocale: <span class="string">&quot;preferred_locale&quot;</span>,
+            PrivacyLevel: <span class="string">&quot;privacy_level&quot;</span>,
+            PruneDeleteDays: <span class="string">&quot;prune_delete_days&quot;</span>,
+            PublicUpdatesChannelId: <span class="string">&quot;public_updates_channel_id&quot;</span>,
+            RateLimitPerUser: <span class="string">&quot;rate_limit_per_user&quot;</span>,
+            Region: <span class="string">&quot;region&quot;</span>,
+            RolesAdded: <span class="string">&quot;$add&quot;</span>,
+            RolesRemove: <span class="string">&quot;$remove&quot;</span>,
+            RulesChannelId: <span class="string">&quot;rules_channel_id&quot;</span>,
+            SplashHash: <span class="string">&quot;splash_hash&quot;</span>,
+            Status: <span class="string">&quot;status&quot;</span>,
+            SystemChannelId: <span class="string">&quot;system_channel_id&quot;</span>,
+            Tags: <span class="string">&quot;tags&quot;</span>,
+            Temporary: <span class="string">&quot;temporary&quot;</span>,
+            Topic: <span class="string">&quot;topic&quot;</span>,
+            TriggerMetadata: <span class="string">&quot;trigger_metadata&quot;</span>,
+            TriggerType: <span class="string">&quot;trigger_type&quot;</span>,
+            Type: <span class="string">&quot;type&quot;</span>,
+            UnicodeEmoji: <span class="string">&quot;unicode_emoji&quot;</span>,
+            UserLimit: <span class="string">&quot;user_limit&quot;</span>,
+            Uses: <span class="string">&quot;uses&quot;</span>,
+            VanityUrlCode: <span class="string">&quot;vanity_url_code&quot;</span>,
+            VerificationLevel: <span class="string">&quot;verification_level&quot;</span>,
+            WidgetChannelId: <span class="string">&quot;widget_channel_id&quot;</span>,
+            WidgetEnabled: <span class="string">&quot;widget_enabled&quot;</span>,
         }
     }
 }
 
-<span class="kw">impl</span> <span class="ident">Serialize</span> <span class="kw">for</span> <span class="ident">Change</span> {
-    <span class="kw">fn</span> <span class="ident">serialize</span><span class="op">&lt;</span><span class="ident">S</span>: <span class="ident">Serializer</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">serializer</span>: <span class="ident">S</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">S::Ok</span>, <span class="ident">S::Error</span><span class="op">&gt;</span> {
-        <span class="macro">macro_rules!</span> <span class="ident">serialize_variants</span> {
-            (<span class="ident">__impl</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">key</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">old</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">new</span>:<span class="ident">expr</span>) =&gt; {{
-                <span class="kw">let</span> <span class="ident">len</span> <span class="op">=</span> <span class="number">1</span> <span class="op">+</span> <span class="ident">usize::from</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">old</span>.<span class="ident">is_some</span>()) <span class="op">+</span> <span class="ident">usize::from</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">new</span>.<span class="ident">is_some</span>());
-                <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">serializer</span>.<span class="ident">serialize_struct</span>(<span class="string">&quot;Change&quot;</span>, <span class="ident">len</span>)<span class="question-mark">?</span>;
-                <span class="ident">s</span>.<span class="ident">serialize_field</span>(<span class="string">&quot;key&quot;</span>, <span class="kw-2">&amp;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">key</span>)<span class="question-mark">?</span>;
-                <span class="kw">if</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">old</span>.<span class="ident">is_some</span>() {
-                    <span class="ident">s</span>.<span class="ident">serialize_field</span>(<span class="string">&quot;old_value&quot;</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">old</span>)<span class="question-mark">?</span>;
-                } <span class="kw">else</span> {
-                    <span class="ident">s</span>.<span class="ident">skip_field</span>(<span class="string">&quot;old_value&quot;</span>)<span class="question-mark">?</span>;
+<span class="kw">impl </span>Serialize <span class="kw">for </span>Change {
+    <span class="kw">fn </span>serialize&lt;S: Serializer&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, serializer: S) -&gt; <span class="prelude-ty">Result</span>&lt;S::Ok, S::Error&gt; {
+        <span class="macro">macro_rules! </span>serialize_variants {
+            (__impl <span class="macro-nonterminal">$key</span>:expr, <span class="macro-nonterminal">$old</span>:expr, <span class="macro-nonterminal">$new</span>:expr) =&gt; {{
+                <span class="kw">let </span>len = <span class="number">1 </span>+ usize::from(<span class="macro-nonterminal">$old</span>.is_some()) + usize::from(<span class="macro-nonterminal">$new</span>.is_some());
+                <span class="kw">let </span><span class="kw-2">mut </span>s = serializer.serialize_struct(<span class="string">&quot;Change&quot;</span>, len)<span class="question-mark">?</span>;
+                s.serialize_field(<span class="string">&quot;key&quot;</span>, <span class="kw-2">&amp;</span><span class="macro-nonterminal">$key</span>)<span class="question-mark">?</span>;
+                <span class="kw">if </span><span class="macro-nonterminal">$old</span>.is_some() {
+                    s.serialize_field(<span class="string">&quot;old_value&quot;</span>, <span class="macro-nonterminal">$old</span>)<span class="question-mark">?</span>;
+                } <span class="kw">else </span>{
+                    s.skip_field(<span class="string">&quot;old_value&quot;</span>)<span class="question-mark">?</span>;
                 }
-                <span class="kw">if</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">new</span>.<span class="ident">is_some</span>() {
-                    <span class="ident">s</span>.<span class="ident">serialize_field</span>(<span class="string">&quot;new_value&quot;</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">new</span>)<span class="question-mark">?</span>;
-                } <span class="kw">else</span> {
-                    <span class="ident">s</span>.<span class="ident">skip_field</span>(<span class="string">&quot;new_value&quot;</span>)<span class="question-mark">?</span>;
+                <span class="kw">if </span><span class="macro-nonterminal">$new</span>.is_some() {
+                    s.serialize_field(<span class="string">&quot;new_value&quot;</span>, <span class="macro-nonterminal">$new</span>)<span class="question-mark">?</span>;
+                } <span class="kw">else </span>{
+                    s.skip_field(<span class="string">&quot;new_value&quot;</span>)<span class="question-mark">?</span>;
                 }
-                <span class="ident">s</span>.<span class="ident">end</span>()
+                s.end()
             }};
-            ($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">Variant</span>:<span class="ident">ident</span>: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">key</span>:<span class="ident">literal</span>,)<span class="kw-2">*</span>) =&gt; {
-                <span class="kw">match</span> <span class="self">self</span> {
-                    $(<span class="self">Self</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">Variant</span> { <span class="ident">old</span>, <span class="ident">new</span> } =&gt; {
-                        <span class="macro">serialize_variants!</span>(<span class="ident">__impl</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">key</span>, <span class="ident">old</span>, <span class="ident">new</span>)
-                    },)<span class="op">*</span>
-                    <span class="ident"><span class="self">Self</span>::Other</span> { <span class="ident">name</span>, <span class="ident">old</span>, <span class="ident">new</span> } =&gt; {
-                        <span class="macro">serialize_variants!</span>(<span class="ident">__impl</span> <span class="ident">name</span>, <span class="ident">old</span>, <span class="ident">new</span>)
+            ($(<span class="macro-nonterminal">$Variant</span>:ident: <span class="macro-nonterminal">$key</span>:literal,)<span class="kw-2">*</span>) =&gt; {
+                <span class="kw">match </span><span class="self">self </span>{
+                    $(<span class="self">Self</span>::<span class="macro-nonterminal">$Variant </span>{ old, new } =&gt; {
+                        <span class="macro">serialize_variants!</span>(__impl <span class="macro-nonterminal">$key</span>, old, new)
+                    },)*
+                    <span class="self">Self</span>::Other { name, old, new } =&gt; {
+                        <span class="macro">serialize_variants!</span>(__impl name, old, new)
                     },
                 }
             };
         }
 
-        <span class="macro">serialize_variants!</span> {
-            <span class="ident">Actions</span>: <span class="string">&quot;actions&quot;</span>,
-            <span class="ident">AfkChannelId</span>: <span class="string">&quot;afk_channel_id&quot;</span>,
-            <span class="ident">AfkTimeout</span>: <span class="string">&quot;afk_timeout&quot;</span>,
-            <span class="ident">Allow</span>: <span class="string">&quot;allow&quot;</span>,
-            <span class="ident">ApplicationId</span>: <span class="string">&quot;application_id&quot;</span>,
-            <span class="ident">Archived</span>: <span class="string">&quot;archived&quot;</span>,
-            <span class="ident">Asset</span>: <span class="string">&quot;asset&quot;</span>,
-            <span class="ident">AutoArchiveDuration</span>: <span class="string">&quot;auto_archive_duration&quot;</span>,
-            <span class="ident">Available</span>: <span class="string">&quot;available&quot;</span>,
-            <span class="ident">AvatarHash</span>: <span class="string">&quot;avatar_hash&quot;</span>,
-            <span class="ident">BannerHash</span>: <span class="string">&quot;banner_hash&quot;</span>,
-            <span class="ident">Bitrate</span>: <span class="string">&quot;bitrate&quot;</span>,
-            <span class="ident">ChannelId</span>: <span class="string">&quot;channel_id&quot;</span>,
-            <span class="ident">Code</span>: <span class="string">&quot;code&quot;</span>,
-            <span class="ident">Colour</span>: <span class="string">&quot;color&quot;</span>,
-            <span class="ident">CommunicationDisabledUntil</span>: <span class="string">&quot;communication_disabled_until&quot;</span>,
-            <span class="ident">Deaf</span>: <span class="string">&quot;deaf&quot;</span>,
-            <span class="ident">DefaultAutoArchiveDuration</span>: <span class="string">&quot;default_auto_archive_duration&quot;</span>,
-            <span class="ident">DefaultMessageNotifications</span>: <span class="string">&quot;default_message_notifications&quot;</span>,
-            <span class="ident">Deny</span>: <span class="string">&quot;deny&quot;</span>,
-            <span class="ident">Description</span>: <span class="string">&quot;description&quot;</span>,
-            <span class="ident">DiscoverySplashHash</span>: <span class="string">&quot;discovery_splash_hash&quot;</span>,
-            <span class="ident">Enabled</span>: <span class="string">&quot;enabled&quot;</span>,
-            <span class="ident">EnableEmoticons</span>: <span class="string">&quot;enable_emoticons&quot;</span>,
-            <span class="ident">EntityType</span>: <span class="string">&quot;entity_type&quot;</span>,
-            <span class="ident">EventType</span>: <span class="string">&quot;event_type&quot;</span>,
-            <span class="ident">ExemptChannels</span>: <span class="string">&quot;exempt_channels&quot;</span>,
-            <span class="ident">ExemptRoles</span>: <span class="string">&quot;exempt_roles&quot;</span>,
-            <span class="ident">ExpireBehavior</span>: <span class="string">&quot;expire_behavior&quot;</span>,
-            <span class="ident">ExpireGracePeriod</span>: <span class="string">&quot;expire_grace_period&quot;</span>,
-            <span class="ident">ExplicitContentFilter</span>: <span class="string">&quot;explicit_content_filter&quot;</span>,
-            <span class="ident">FormatType</span>: <span class="string">&quot;format_type&quot;</span>,
-            <span class="ident">GuildId</span>: <span class="string">&quot;guild_id&quot;</span>,
-            <span class="ident">Hoist</span>: <span class="string">&quot;hoist&quot;</span>,
-            <span class="ident">IconHash</span>: <span class="string">&quot;icon_hash&quot;</span>,
-            <span class="ident">ImageHash</span>: <span class="string">&quot;image_hash&quot;</span>,
-            <span class="ident">Id</span>: <span class="string">&quot;id&quot;</span>,
-            <span class="ident">Invitable</span>: <span class="string">&quot;invitable&quot;</span>,
-            <span class="ident">InviterId</span>: <span class="string">&quot;inviter_id&quot;</span>,
-            <span class="ident">Location</span>: <span class="string">&quot;location&quot;</span>,
-            <span class="ident">Locked</span>: <span class="string">&quot;locked&quot;</span>,
-            <span class="ident">MaxAge</span>: <span class="string">&quot;max_age&quot;</span>,
-            <span class="ident">MaxUses</span>: <span class="string">&quot;max_uses&quot;</span>,
-            <span class="ident">Mentionable</span>: <span class="string">&quot;mentionable&quot;</span>,
-            <span class="ident">MfaLevel</span>: <span class="string">&quot;mfa_level&quot;</span>,
-            <span class="ident">Mute</span>: <span class="string">&quot;mute&quot;</span>,
-            <span class="ident">Name</span>: <span class="string">&quot;name&quot;</span>,
-            <span class="ident">Nick</span>: <span class="string">&quot;nick&quot;</span>,
-            <span class="ident">Nsfw</span>: <span class="string">&quot;nsfw&quot;</span>,
-            <span class="ident">OwnerId</span>: <span class="string">&quot;owner_id&quot;</span>,
-            <span class="ident">PermissionOverwrites</span>: <span class="string">&quot;permission_overwrites&quot;</span>,
-            <span class="ident">Permissions</span>: <span class="string">&quot;permissions&quot;</span>,
-            <span class="ident">Position</span>: <span class="string">&quot;position&quot;</span>,
-            <span class="ident">PreferredLocale</span>: <span class="string">&quot;preferred_locale&quot;</span>,
-            <span class="ident">PrivacyLevel</span>: <span class="string">&quot;privacy_level&quot;</span>,
-            <span class="ident">PruneDeleteDays</span>: <span class="string">&quot;prune_delete_days&quot;</span>,
-            <span class="ident">PublicUpdatesChannelId</span>: <span class="string">&quot;public_updates_channel_id&quot;</span>,
-            <span class="ident">RateLimitPerUser</span>: <span class="string">&quot;rate_limit_per_user&quot;</span>,
-            <span class="ident">Region</span>: <span class="string">&quot;region&quot;</span>,
-            <span class="ident">RolesAdded</span>: <span class="string">&quot;$add&quot;</span>,
-            <span class="ident">RolesRemove</span>: <span class="string">&quot;$remove&quot;</span>,
-            <span class="ident">RulesChannelId</span>: <span class="string">&quot;rules_channel_id&quot;</span>,
-            <span class="ident">SplashHash</span>: <span class="string">&quot;splash_hash&quot;</span>,
-            <span class="ident">Status</span>: <span class="string">&quot;status&quot;</span>,
-            <span class="ident">SystemChannelId</span>: <span class="string">&quot;system_channel_id&quot;</span>,
-            <span class="ident">Tags</span>: <span class="string">&quot;tags&quot;</span>,
-            <span class="ident">Temporary</span>: <span class="string">&quot;temporary&quot;</span>,
-            <span class="ident">Topic</span>: <span class="string">&quot;topic&quot;</span>,
-            <span class="ident">TriggerMetadata</span>: <span class="string">&quot;trigger_metadata&quot;</span>,
-            <span class="ident">TriggerType</span>: <span class="string">&quot;trigger_type&quot;</span>,
-            <span class="ident">Type</span>: <span class="string">&quot;type&quot;</span>,
-            <span class="ident">UnicodeEmoji</span>: <span class="string">&quot;unicode_emoji&quot;</span>,
-            <span class="ident">UserLimit</span>: <span class="string">&quot;user_limit&quot;</span>,
-            <span class="ident">Uses</span>: <span class="string">&quot;uses&quot;</span>,
-            <span class="ident">VanityUrlCode</span>: <span class="string">&quot;vanity_url_code&quot;</span>,
-            <span class="ident">VerificationLevel</span>: <span class="string">&quot;verification_level&quot;</span>,
-            <span class="ident">WidgetChannelId</span>: <span class="string">&quot;widget_channel_id&quot;</span>,
-            <span class="ident">WidgetEnabled</span>: <span class="string">&quot;widget_enabled&quot;</span>,
+        <span class="macro">serialize_variants! </span>{
+            Actions: <span class="string">&quot;actions&quot;</span>,
+            AfkChannelId: <span class="string">&quot;afk_channel_id&quot;</span>,
+            AfkTimeout: <span class="string">&quot;afk_timeout&quot;</span>,
+            Allow: <span class="string">&quot;allow&quot;</span>,
+            ApplicationId: <span class="string">&quot;application_id&quot;</span>,
+            Archived: <span class="string">&quot;archived&quot;</span>,
+            Asset: <span class="string">&quot;asset&quot;</span>,
+            AutoArchiveDuration: <span class="string">&quot;auto_archive_duration&quot;</span>,
+            Available: <span class="string">&quot;available&quot;</span>,
+            AvatarHash: <span class="string">&quot;avatar_hash&quot;</span>,
+            BannerHash: <span class="string">&quot;banner_hash&quot;</span>,
+            Bitrate: <span class="string">&quot;bitrate&quot;</span>,
+            ChannelId: <span class="string">&quot;channel_id&quot;</span>,
+            Code: <span class="string">&quot;code&quot;</span>,
+            Colour: <span class="string">&quot;color&quot;</span>,
+            CommunicationDisabledUntil: <span class="string">&quot;communication_disabled_until&quot;</span>,
+            Deaf: <span class="string">&quot;deaf&quot;</span>,
+            DefaultAutoArchiveDuration: <span class="string">&quot;default_auto_archive_duration&quot;</span>,
+            DefaultMessageNotifications: <span class="string">&quot;default_message_notifications&quot;</span>,
+            Deny: <span class="string">&quot;deny&quot;</span>,
+            Description: <span class="string">&quot;description&quot;</span>,
+            DiscoverySplashHash: <span class="string">&quot;discovery_splash_hash&quot;</span>,
+            Enabled: <span class="string">&quot;enabled&quot;</span>,
+            EnableEmoticons: <span class="string">&quot;enable_emoticons&quot;</span>,
+            EntityType: <span class="string">&quot;entity_type&quot;</span>,
+            EventType: <span class="string">&quot;event_type&quot;</span>,
+            ExemptChannels: <span class="string">&quot;exempt_channels&quot;</span>,
+            ExemptRoles: <span class="string">&quot;exempt_roles&quot;</span>,
+            ExpireBehavior: <span class="string">&quot;expire_behavior&quot;</span>,
+            ExpireGracePeriod: <span class="string">&quot;expire_grace_period&quot;</span>,
+            ExplicitContentFilter: <span class="string">&quot;explicit_content_filter&quot;</span>,
+            FormatType: <span class="string">&quot;format_type&quot;</span>,
+            GuildId: <span class="string">&quot;guild_id&quot;</span>,
+            Hoist: <span class="string">&quot;hoist&quot;</span>,
+            IconHash: <span class="string">&quot;icon_hash&quot;</span>,
+            ImageHash: <span class="string">&quot;image_hash&quot;</span>,
+            Id: <span class="string">&quot;id&quot;</span>,
+            Invitable: <span class="string">&quot;invitable&quot;</span>,
+            InviterId: <span class="string">&quot;inviter_id&quot;</span>,
+            Location: <span class="string">&quot;location&quot;</span>,
+            Locked: <span class="string">&quot;locked&quot;</span>,
+            MaxAge: <span class="string">&quot;max_age&quot;</span>,
+            MaxUses: <span class="string">&quot;max_uses&quot;</span>,
+            Mentionable: <span class="string">&quot;mentionable&quot;</span>,
+            MfaLevel: <span class="string">&quot;mfa_level&quot;</span>,
+            Mute: <span class="string">&quot;mute&quot;</span>,
+            Name: <span class="string">&quot;name&quot;</span>,
+            Nick: <span class="string">&quot;nick&quot;</span>,
+            Nsfw: <span class="string">&quot;nsfw&quot;</span>,
+            OwnerId: <span class="string">&quot;owner_id&quot;</span>,
+            PermissionOverwrites: <span class="string">&quot;permission_overwrites&quot;</span>,
+            Permissions: <span class="string">&quot;permissions&quot;</span>,
+            Position: <span class="string">&quot;position&quot;</span>,
+            PreferredLocale: <span class="string">&quot;preferred_locale&quot;</span>,
+            PrivacyLevel: <span class="string">&quot;privacy_level&quot;</span>,
+            PruneDeleteDays: <span class="string">&quot;prune_delete_days&quot;</span>,
+            PublicUpdatesChannelId: <span class="string">&quot;public_updates_channel_id&quot;</span>,
+            RateLimitPerUser: <span class="string">&quot;rate_limit_per_user&quot;</span>,
+            Region: <span class="string">&quot;region&quot;</span>,
+            RolesAdded: <span class="string">&quot;$add&quot;</span>,
+            RolesRemove: <span class="string">&quot;$remove&quot;</span>,
+            RulesChannelId: <span class="string">&quot;rules_channel_id&quot;</span>,
+            SplashHash: <span class="string">&quot;splash_hash&quot;</span>,
+            Status: <span class="string">&quot;status&quot;</span>,
+            SystemChannelId: <span class="string">&quot;system_channel_id&quot;</span>,
+            Tags: <span class="string">&quot;tags&quot;</span>,
+            Temporary: <span class="string">&quot;temporary&quot;</span>,
+            Topic: <span class="string">&quot;topic&quot;</span>,
+            TriggerMetadata: <span class="string">&quot;trigger_metadata&quot;</span>,
+            TriggerType: <span class="string">&quot;trigger_type&quot;</span>,
+            Type: <span class="string">&quot;type&quot;</span>,
+            UnicodeEmoji: <span class="string">&quot;unicode_emoji&quot;</span>,
+            UserLimit: <span class="string">&quot;user_limit&quot;</span>,
+            Uses: <span class="string">&quot;uses&quot;</span>,
+            VanityUrlCode: <span class="string">&quot;vanity_url_code&quot;</span>,
+            VerificationLevel: <span class="string">&quot;verification_level&quot;</span>,
+            WidgetChannelId: <span class="string">&quot;widget_channel_id&quot;</span>,
+            WidgetEnabled: <span class="string">&quot;widget_enabled&quot;</span>,
         }
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;de</span><span class="op">&gt;</span> <span class="ident">Deserialize</span><span class="op">&lt;</span><span class="lifetime">&#39;de</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Change</span> {
-    <span class="kw">fn</span> <span class="ident">deserialize</span><span class="op">&lt;</span><span class="ident">D</span>: <span class="ident">Deserializer</span><span class="op">&lt;</span><span class="lifetime">&#39;de</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">deserializer</span>: <span class="ident">D</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">D::Error</span><span class="op">&gt;</span> {
-        <span class="ident">deserializer</span>.<span class="ident">deserialize_any</span>(<span class="ident">ChangeVisitor</span>)
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;de</span>&gt; Deserialize&lt;<span class="lifetime">&#39;de</span>&gt; <span class="kw">for </span>Change {
+    <span class="kw">fn </span>deserialize&lt;D: Deserializer&lt;<span class="lifetime">&#39;de</span>&gt;&gt;(deserializer: D) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, D::Error&gt; {
+        deserializer.deserialize_any(ChangeVisitor)
     }
 }
 
-<span class="kw">struct</span> <span class="ident">ChangeVisitor</span>;
+<span class="kw">struct </span>ChangeVisitor;
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;de</span><span class="op">&gt;</span> <span class="ident">Visitor</span><span class="op">&lt;</span><span class="lifetime">&#39;de</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">ChangeVisitor</span> {
-    <span class="kw">type</span> <span class="ident">Value</span> <span class="op">=</span> <span class="ident">Change</span>;
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;de</span>&gt; Visitor&lt;<span class="lifetime">&#39;de</span>&gt; <span class="kw">for </span>ChangeVisitor {
+    <span class="kw">type </span>Value = Change;
 
-    <span class="kw">fn</span> <span class="ident">expecting</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">formatter</span>: <span class="kw-2">&amp;mut</span> <span class="ident">fmt::Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="ident">fmt::Result</span> {
-        <span class="ident">formatter</span>.<span class="ident">write_str</span>(<span class="string">&quot;Change enum&quot;</span>)
+    <span class="kw">fn </span>expecting(<span class="kw-2">&amp;</span><span class="self">self</span>, formatter: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; fmt::Result {
+        formatter.write_str(<span class="string">&quot;Change enum&quot;</span>)
     }
 
-    <span class="kw">fn</span> <span class="ident">visit_map</span><span class="op">&lt;</span><span class="ident">A</span>: <span class="ident">MapAccess</span><span class="op">&lt;</span><span class="lifetime">&#39;de</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="kw-2">mut</span> <span class="ident">map</span>: <span class="ident">A</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Change</span>, <span class="ident">A::Error</span><span class="op">&gt;</span> {
-        <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Deserialize</span>)]</span>
-        <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">field_identifier</span>, <span class="ident">rename_all</span> <span class="op">=</span> <span class="string">&quot;snake_case&quot;</span>)]</span>
-        <span class="kw">enum</span> <span class="ident">Field</span> {
-            <span class="ident">Key</span>,
-            <span class="ident">OldValue</span>,
-            <span class="ident">NewValue</span>,
+    <span class="kw">fn </span>visit_map&lt;A: MapAccess&lt;<span class="lifetime">&#39;de</span>&gt;&gt;(<span class="self">self</span>, <span class="kw-2">mut </span>map: A) -&gt; <span class="prelude-ty">Result</span>&lt;Change, A::Error&gt; {
+        <span class="attribute">#[derive(Deserialize)]
+        #[serde(field_identifier, rename_all = <span class="string">&quot;snake_case&quot;</span>)]
+        </span><span class="kw">enum </span>Field {
+            Key,
+            OldValue,
+            NewValue,
         }
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">key</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">MaybeUnknown</span><span class="op">&lt;</span><span class="ident">Key</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">=</span> <span class="prelude-val">None</span>;
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">old</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">serde_value::Value</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">=</span> <span class="prelude-val">None</span>;
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">new</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">serde_value::Value</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">=</span> <span class="prelude-val">None</span>;
+        <span class="kw">let </span><span class="kw-2">mut </span>key: <span class="prelude-ty">Option</span>&lt;MaybeUnknown&lt;Key&gt;&gt; = <span class="prelude-val">None</span>;
+        <span class="kw">let </span><span class="kw-2">mut </span>old: <span class="prelude-ty">Option</span>&lt;<span class="prelude-ty">Option</span>&lt;serde_value::Value&gt;&gt; = <span class="prelude-val">None</span>;
+        <span class="kw">let </span><span class="kw-2">mut </span>new: <span class="prelude-ty">Option</span>&lt;<span class="prelude-ty">Option</span>&lt;serde_value::Value&gt;&gt; = <span class="prelude-val">None</span>;
 
-        <span class="kw">while</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">k</span>) <span class="op">=</span> <span class="ident">map</span>.<span class="ident">next_key</span>()<span class="question-mark">?</span> {
-            <span class="kw">match</span> <span class="ident">k</span> {
-                <span class="ident">Field::Key</span> =&gt; {
-                    <span class="kw">if</span> <span class="ident">key</span>.<span class="ident">is_some</span>() {
-                        <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error::duplicate_field</span>(<span class="string">&quot;key&quot;</span>));
+        <span class="kw">while let </span><span class="prelude-val">Some</span>(k) = map.next_key()<span class="question-mark">? </span>{
+            <span class="kw">match </span>k {
+                Field::Key =&gt; {
+                    <span class="kw">if </span>key.is_some() {
+                        <span class="kw">return </span><span class="prelude-val">Err</span>(Error::duplicate_field(<span class="string">&quot;key&quot;</span>));
                     }
-                    <span class="ident">key</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">map</span>.<span class="ident">next_value</span>()<span class="question-mark">?</span>);
+                    key = <span class="prelude-val">Some</span>(map.next_value()<span class="question-mark">?</span>);
                 },
-                <span class="ident">Field::OldValue</span> =&gt; {
-                    <span class="kw">if</span> <span class="ident">old</span>.<span class="ident">is_some</span>() {
-                        <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error::duplicate_field</span>(<span class="string">&quot;old_value&quot;</span>));
+                Field::OldValue =&gt; {
+                    <span class="kw">if </span>old.is_some() {
+                        <span class="kw">return </span><span class="prelude-val">Err</span>(Error::duplicate_field(<span class="string">&quot;old_value&quot;</span>));
                     }
-                    <span class="ident">old</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">map</span>.<span class="ident">next_value</span>()<span class="question-mark">?</span>);
+                    old = <span class="prelude-val">Some</span>(map.next_value()<span class="question-mark">?</span>);
                 },
-                <span class="ident">Field::NewValue</span> =&gt; {
-                    <span class="kw">if</span> <span class="ident">new</span>.<span class="ident">is_some</span>() {
-                        <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error::duplicate_field</span>(<span class="string">&quot;new_value&quot;</span>));
+                Field::NewValue =&gt; {
+                    <span class="kw">if </span>new.is_some() {
+                        <span class="kw">return </span><span class="prelude-val">Err</span>(Error::duplicate_field(<span class="string">&quot;new_value&quot;</span>));
                     }
-                    <span class="ident">new</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">map</span>.<span class="ident">next_value</span>()<span class="question-mark">?</span>);
+                    new = <span class="prelude-val">Some</span>(map.next_value()<span class="question-mark">?</span>);
                 },
             }
         }
 
-        <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="ident">key</span>.<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">Error::missing_field</span>(<span class="string">&quot;key&quot;</span>))<span class="question-mark">?</span>;
-        <span class="kw">let</span> <span class="ident">old</span> <span class="op">=</span> <span class="ident">old</span>.<span class="ident">unwrap_or_default</span>();
-        <span class="kw">let</span> <span class="ident">new</span> <span class="op">=</span> <span class="ident">new</span>.<span class="ident">unwrap_or_default</span>();
+        <span class="kw">let </span>key = key.ok_or_else(|| Error::missing_field(<span class="string">&quot;key&quot;</span>))<span class="question-mark">?</span>;
+        <span class="kw">let </span>old = old.unwrap_or_default();
+        <span class="kw">let </span>new = new.unwrap_or_default();
 
-        <span class="macro">macro_rules!</span> <span class="ident">deserialize_variants</span> {
-            ($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">Variant</span>:<span class="ident">ident</span>: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">Type</span>:<span class="ident">ty</span>,)<span class="kw-2">*</span>) =&gt; {
-                <span class="kw">match</span> <span class="ident">key</span> {
-                    $(<span class="ident">MaybeUnknown::Known</span>(<span class="ident">Key</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">Variant</span>) =&gt; <span class="ident">Change</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">Variant</span> {
-                        <span class="ident">old</span>: <span class="ident">old</span>.<span class="ident">map</span>(<span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">Type</span><span class="op">&gt;</span><span class="ident">::deserialize</span>).<span class="ident">transpose</span>().<span class="ident">map_err</span>(<span class="ident">Error::custom</span>)<span class="question-mark">?</span>,
-                        <span class="ident">new</span>: <span class="ident">new</span>.<span class="ident">map</span>(<span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">Type</span><span class="op">&gt;</span><span class="ident">::deserialize</span>).<span class="ident">transpose</span>().<span class="ident">map_err</span>(<span class="ident">Error::custom</span>)<span class="question-mark">?</span>,
-                    },)<span class="op">*</span>
-                    <span class="ident">MaybeUnknown::Unknown</span>(<span class="ident">name</span>) =&gt; <span class="ident">Change::Other</span> {
-                        <span class="ident">name</span>,
-                        <span class="ident">old</span>: <span class="ident">old</span>.<span class="ident">map</span>(<span class="ident">Value::deserialize</span>).<span class="ident">transpose</span>().<span class="ident">map_err</span>(<span class="ident">Error::custom</span>)<span class="question-mark">?</span>,
-                        <span class="ident">new</span>: <span class="ident">new</span>.<span class="ident">map</span>(<span class="ident">Value::deserialize</span>).<span class="ident">transpose</span>().<span class="ident">map_err</span>(<span class="ident">Error::custom</span>)<span class="question-mark">?</span>,
+        <span class="macro">macro_rules! </span>deserialize_variants {
+            ($(<span class="macro-nonterminal">$Variant</span>:ident: <span class="macro-nonterminal">$Type</span>:ty,)<span class="kw-2">*</span>) =&gt; {
+                <span class="kw">match </span>key {
+                    $(MaybeUnknown::Known(Key::<span class="macro-nonterminal">$Variant</span>) =&gt; Change::<span class="macro-nonterminal">$Variant </span>{
+                        old: old.map(&lt;<span class="macro-nonterminal">$Type</span>&gt;::deserialize).transpose().map_err(Error::custom)<span class="question-mark">?</span>,
+                        new: new.map(&lt;<span class="macro-nonterminal">$Type</span>&gt;::deserialize).transpose().map_err(Error::custom)<span class="question-mark">?</span>,
+                    },)*
+                    MaybeUnknown::Unknown(name) =&gt; Change::Other {
+                        name,
+                        old: old.map(Value::deserialize).transpose().map_err(Error::custom)<span class="question-mark">?</span>,
+                        new: new.map(Value::deserialize).transpose().map_err(Error::custom)<span class="question-mark">?</span>,
                     },
                 }
             };
         }
 
-        <span class="kw">let</span> <span class="ident">change</span> <span class="op">=</span> <span class="macro">deserialize_variants!</span> {
-            <span class="ident">Actions</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Action</span><span class="op">&gt;</span>,
-            <span class="ident">AfkChannelId</span>: <span class="ident">ChannelId</span>,
-            <span class="ident">AfkTimeout</span>: <span class="ident">u64</span>,
-            <span class="ident">Allow</span>: <span class="ident">Permissions</span>,
-            <span class="ident">ApplicationId</span>: <span class="ident">ApplicationId</span>,
-            <span class="ident">Archived</span>: <span class="ident">bool</span>,
-            <span class="ident">Asset</span>: <span class="ident">String</span>,
-            <span class="ident">AutoArchiveDuration</span>: <span class="ident">u64</span>,
-            <span class="ident">Available</span>: <span class="ident">bool</span>,
-            <span class="ident">AvatarHash</span>: <span class="ident">String</span>,
-            <span class="ident">BannerHash</span>: <span class="ident">String</span>,
-            <span class="ident">Bitrate</span>: <span class="ident">u64</span>,
-            <span class="ident">ChannelId</span>: <span class="ident">ChannelId</span>,
-            <span class="ident">Code</span>: <span class="ident">String</span>,
-            <span class="ident">Colour</span>: <span class="ident">u64</span>,
-            <span class="ident">CommunicationDisabledUntil</span>: <span class="ident">Timestamp</span>,
-            <span class="ident">Deaf</span>: <span class="ident">bool</span>,
-            <span class="ident">DefaultAutoArchiveDuration</span>: <span class="ident">u64</span>,
-            <span class="ident">DefaultMessageNotifications</span>: <span class="ident">DefaultMessageNotificationLevel</span>,
-            <span class="ident">Deny</span>: <span class="ident">Permissions</span>,
-            <span class="ident">Description</span>: <span class="ident">String</span>,
-            <span class="ident">DiscoverySplashHash</span>: <span class="ident">String</span>,
-            <span class="ident">Enabled</span>: <span class="ident">bool</span>,
-            <span class="ident">EnableEmoticons</span>: <span class="ident">bool</span>,
-            <span class="ident">EntityType</span>: <span class="ident">u64</span>,
-            <span class="ident">EventType</span>: <span class="ident">EventType</span>,
-            <span class="ident">ExemptChannels</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">ChannelId</span><span class="op">&gt;</span>,
-            <span class="ident">ExemptRoles</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">RoleId</span><span class="op">&gt;</span>,
-            <span class="ident">ExpireBehavior</span>: <span class="ident">u64</span>,
-            <span class="ident">ExpireGracePeriod</span>: <span class="ident">u64</span>,
-            <span class="ident">ExplicitContentFilter</span>: <span class="ident">ExplicitContentFilter</span>,
-            <span class="ident">FormatType</span>: <span class="ident">StickerFormatType</span>,
-            <span class="ident">GuildId</span>: <span class="ident">GuildId</span>,
-            <span class="ident">Hoist</span>: <span class="ident">bool</span>,
-            <span class="ident">IconHash</span>: <span class="ident">String</span>,
-            <span class="ident">ImageHash</span>: <span class="ident">String</span>,
-            <span class="ident">Id</span>: <span class="ident">GenericId</span>,
-            <span class="ident">Invitable</span>: <span class="ident">bool</span>,
-            <span class="ident">InviterId</span>: <span class="ident">UserId</span>,
-            <span class="ident">Location</span>: <span class="ident">String</span>,
-            <span class="ident">Locked</span>: <span class="ident">bool</span>,
-            <span class="ident">MaxAge</span>: <span class="ident">u64</span>,
-            <span class="ident">MaxUses</span>: <span class="ident">u64</span>,
-            <span class="ident">Mentionable</span>: <span class="ident">bool</span>,
-            <span class="ident">MfaLevel</span>: <span class="ident">MfaLevel</span>,
-            <span class="ident">Mute</span>: <span class="ident">bool</span>,
-            <span class="ident">Name</span>: <span class="ident">String</span>,
-            <span class="ident">Nick</span>: <span class="ident">String</span>,
-            <span class="ident">Nsfw</span>: <span class="ident">bool</span>,
-            <span class="ident">OwnerId</span>: <span class="ident">UserId</span>,
-            <span class="ident">PermissionOverwrites</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">PermissionOverwrite</span><span class="op">&gt;</span>,
-            <span class="ident">Permissions</span>: <span class="ident">Permissions</span>,
-            <span class="ident">Position</span>: <span class="ident">u64</span>,
-            <span class="ident">PreferredLocale</span>: <span class="ident">String</span>,
-            <span class="ident">PrivacyLevel</span>: <span class="ident">u64</span>,
-            <span class="ident">PruneDeleteDays</span>: <span class="ident">u64</span>,
-            <span class="ident">PublicUpdatesChannelId</span>: <span class="ident">ChannelId</span>,
-            <span class="ident">RateLimitPerUser</span>: <span class="ident">u64</span>,
-            <span class="ident">Region</span>: <span class="ident">String</span>,
-            <span class="ident">RolesAdded</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">AffectedRole</span><span class="op">&gt;</span>,
-            <span class="ident">RolesRemove</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">AffectedRole</span><span class="op">&gt;</span>,
-            <span class="ident">RulesChannelId</span>: <span class="ident">ChannelId</span>,
-            <span class="ident">SplashHash</span>: <span class="ident">String</span>,
-            <span class="ident">Status</span>: <span class="ident">u64</span>,
-            <span class="ident">SystemChannelId</span>: <span class="ident">ChannelId</span>,
-            <span class="ident">Tags</span>: <span class="ident">String</span>,
-            <span class="ident">Temporary</span>: <span class="ident">bool</span>,
-            <span class="ident">Topic</span>: <span class="ident">String</span>,
-            <span class="ident">TriggerMetadata</span>: <span class="ident">TriggerMetadata</span>,
-            <span class="ident">TriggerType</span>: <span class="ident">TriggerType</span>,
-            <span class="ident">Type</span>: <span class="ident">EntityType</span>,
-            <span class="ident">UnicodeEmoji</span>: <span class="ident">String</span>,
-            <span class="ident">UserLimit</span>: <span class="ident">u64</span>,
-            <span class="ident">Uses</span>: <span class="ident">u64</span>,
-            <span class="ident">VanityUrlCode</span>: <span class="ident">String</span>,
-            <span class="ident">VerificationLevel</span>: <span class="ident">VerificationLevel</span>,
-            <span class="ident">WidgetChannelId</span>: <span class="ident">ChannelId</span>,
-            <span class="ident">WidgetEnabled</span>: <span class="ident">bool</span>,
+        <span class="kw">let </span>change = <span class="macro">deserialize_variants! </span>{
+            Actions: Vec&lt;Action&gt;,
+            AfkChannelId: ChannelId,
+            AfkTimeout: u64,
+            Allow: Permissions,
+            ApplicationId: ApplicationId,
+            Archived: bool,
+            Asset: String,
+            AutoArchiveDuration: u64,
+            Available: bool,
+            AvatarHash: String,
+            BannerHash: String,
+            Bitrate: u32,
+            ChannelId: ChannelId,
+            Code: String,
+            Colour: u64,
+            CommunicationDisabledUntil: Timestamp,
+            Deaf: bool,
+            DefaultAutoArchiveDuration: u64,
+            DefaultMessageNotifications: DefaultMessageNotificationLevel,
+            Deny: Permissions,
+            Description: String,
+            DiscoverySplashHash: String,
+            Enabled: bool,
+            EnableEmoticons: bool,
+            EntityType: u64,
+            EventType: EventType,
+            ExemptChannels: Vec&lt;ChannelId&gt;,
+            ExemptRoles: Vec&lt;RoleId&gt;,
+            ExpireBehavior: u64,
+            ExpireGracePeriod: u64,
+            ExplicitContentFilter: ExplicitContentFilter,
+            FormatType: StickerFormatType,
+            GuildId: GuildId,
+            Hoist: bool,
+            IconHash: String,
+            ImageHash: String,
+            Id: GenericId,
+            Invitable: bool,
+            InviterId: UserId,
+            Location: String,
+            Locked: bool,
+            MaxAge: u64,
+            MaxUses: u64,
+            Mentionable: bool,
+            MfaLevel: MfaLevel,
+            Mute: bool,
+            Name: String,
+            Nick: String,
+            Nsfw: bool,
+            OwnerId: UserId,
+            PermissionOverwrites: Vec&lt;PermissionOverwrite&gt;,
+            Permissions: Permissions,
+            Position: u32,
+            PreferredLocale: String,
+            PrivacyLevel: u64,
+            PruneDeleteDays: u64,
+            PublicUpdatesChannelId: ChannelId,
+            RateLimitPerUser: u64,
+            Region: String,
+            RolesAdded: Vec&lt;AffectedRole&gt;,
+            RolesRemove: Vec&lt;AffectedRole&gt;,
+            RulesChannelId: ChannelId,
+            SplashHash: String,
+            Status: u64,
+            SystemChannelId: ChannelId,
+            Tags: String,
+            Temporary: bool,
+            Topic: String,
+            TriggerMetadata: TriggerMetadata,
+            TriggerType: TriggerType,
+            Type: EntityType,
+            UnicodeEmoji: String,
+            UserLimit: u64,
+            Uses: u64,
+            VanityUrlCode: String,
+            VerificationLevel: VerificationLevel,
+            WidgetChannelId: ChannelId,
+            WidgetEnabled: bool,
         };
 
-        <span class="prelude-val">Ok</span>(<span class="ident">change</span>)
+        <span class="prelude-val">Ok</span>(change)
     }
 }
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Deserialize</span>)]</span>
-<span class="attribute">#[<span class="ident">serde</span>(<span class="ident">untagged</span>)]</span>
-<span class="kw">enum</span> <span class="ident">MaybeUnknown</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-    <span class="ident">Known</span>(<span class="ident">T</span>),
-    <span class="ident">Unknown</span>(<span class="ident">String</span>),
+<span class="attribute">#[derive(Deserialize)]
+#[serde(untagged)]
+</span><span class="kw">enum </span>MaybeUnknown&lt;T&gt; {
+    Known(T),
+    Unknown(String),
 }
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Deserialize</span>)]</span>
-<span class="attribute">#[<span class="ident">serde</span>(<span class="ident">field_identifier</span>, <span class="ident">rename_all</span> <span class="op">=</span> <span class="string">&quot;snake_case&quot;</span>)]</span>
-<span class="kw">enum</span> <span class="ident">Key</span> {
-    <span class="ident">Actions</span>,
-    <span class="ident">AfkChannelId</span>,
-    <span class="ident">AfkTimeout</span>,
-    <span class="ident">Allow</span>,
-    <span class="ident">ApplicationId</span>,
-    <span class="ident">Archived</span>,
-    <span class="ident">Asset</span>,
-    <span class="ident">AutoArchiveDuration</span>,
-    <span class="ident">Available</span>,
-    <span class="ident">AvatarHash</span>,
-    <span class="ident">BannerHash</span>,
-    <span class="ident">Bitrate</span>,
-    <span class="ident">ChannelId</span>,
-    <span class="ident">Code</span>,
-    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;color&quot;</span>)]</span>
-    <span class="ident">Colour</span>,
-    <span class="ident">CommunicationDisabledUntil</span>,
-    <span class="ident">Deaf</span>,
-    <span class="ident">DefaultAutoArchiveDuration</span>,
-    <span class="ident">DefaultMessageNotifications</span>,
-    <span class="ident">Deny</span>,
-    <span class="ident">Description</span>,
-    <span class="ident">DiscoverySplashHash</span>,
-    <span class="ident">Enabled</span>,
-    <span class="ident">EnableEmoticons</span>,
-    <span class="ident">EntityType</span>,
-    <span class="ident">EventType</span>,
-    <span class="ident">ExemptChannels</span>,
-    <span class="ident">ExemptRoles</span>,
-    <span class="ident">ExpireBehavior</span>,
-    <span class="ident">ExpireGracePeriod</span>,
-    <span class="ident">ExplicitContentFilter</span>,
-    <span class="ident">FormatType</span>,
-    <span class="ident">GuildId</span>,
-    <span class="ident">Hoist</span>,
-    <span class="ident">IconHash</span>,
-    <span class="ident">ImageHash</span>,
-    <span class="ident">Id</span>,
-    <span class="ident">Invitable</span>,
-    <span class="ident">InviterId</span>,
-    <span class="ident">Location</span>,
-    <span class="ident">Locked</span>,
-    <span class="ident">MaxAge</span>,
-    <span class="ident">MaxUses</span>,
-    <span class="ident">Mentionable</span>,
-    <span class="ident">MfaLevel</span>,
-    <span class="ident">Mute</span>,
-    <span class="ident">Name</span>,
-    <span class="ident">Nick</span>,
-    <span class="ident">Nsfw</span>,
-    <span class="ident">OwnerId</span>,
-    <span class="ident">PermissionOverwrites</span>,
-    <span class="ident">Permissions</span>,
-    <span class="ident">Position</span>,
-    <span class="ident">PreferredLocale</span>,
-    <span class="ident">PrivacyLevel</span>,
-    <span class="ident">PruneDeleteDays</span>,
-    <span class="ident">PublicUpdatesChannelId</span>,
-    <span class="ident">RateLimitPerUser</span>,
-    <span class="ident">Region</span>,
-    <span class="ident">RulesChannelId</span>,
-    <span class="ident">SplashHash</span>,
-    <span class="ident">Status</span>,
-    <span class="ident">SystemChannelId</span>,
-    <span class="ident">Tags</span>,
-    <span class="ident">Temporary</span>,
-    <span class="ident">Topic</span>,
-    <span class="ident">TriggerMetadata</span>,
-    <span class="ident">TriggerType</span>,
-    <span class="ident">Type</span>,
-    <span class="ident">UnicodeEmoji</span>,
-    <span class="ident">UserLimit</span>,
-    <span class="ident">Uses</span>,
-    <span class="ident">VanityUrlCode</span>,
-    <span class="ident">VerificationLevel</span>,
-    <span class="ident">WidgetChannelId</span>,
-    <span class="ident">WidgetEnabled</span>,
-    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;$add&quot;</span>)]</span>
-    <span class="ident">RolesAdded</span>,
-    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;$remove&quot;</span>)]</span>
-    <span class="ident">RolesRemove</span>,
+<span class="attribute">#[derive(Deserialize)]
+#[serde(field_identifier, rename_all = <span class="string">&quot;snake_case&quot;</span>)]
+</span><span class="kw">enum </span>Key {
+    Actions,
+    AfkChannelId,
+    AfkTimeout,
+    Allow,
+    ApplicationId,
+    Archived,
+    Asset,
+    AutoArchiveDuration,
+    Available,
+    AvatarHash,
+    BannerHash,
+    Bitrate,
+    ChannelId,
+    Code,
+    <span class="attribute">#[serde(rename = <span class="string">&quot;color&quot;</span>)]
+    </span>Colour,
+    CommunicationDisabledUntil,
+    Deaf,
+    DefaultAutoArchiveDuration,
+    DefaultMessageNotifications,
+    Deny,
+    Description,
+    DiscoverySplashHash,
+    Enabled,
+    EnableEmoticons,
+    EntityType,
+    EventType,
+    ExemptChannels,
+    ExemptRoles,
+    ExpireBehavior,
+    ExpireGracePeriod,
+    ExplicitContentFilter,
+    FormatType,
+    GuildId,
+    Hoist,
+    IconHash,
+    ImageHash,
+    Id,
+    Invitable,
+    InviterId,
+    Location,
+    Locked,
+    MaxAge,
+    MaxUses,
+    Mentionable,
+    MfaLevel,
+    Mute,
+    Name,
+    Nick,
+    Nsfw,
+    OwnerId,
+    PermissionOverwrites,
+    Permissions,
+    Position,
+    PreferredLocale,
+    PrivacyLevel,
+    PruneDeleteDays,
+    PublicUpdatesChannelId,
+    RateLimitPerUser,
+    Region,
+    RulesChannelId,
+    SplashHash,
+    Status,
+    SystemChannelId,
+    Tags,
+    Temporary,
+    Topic,
+    TriggerMetadata,
+    TriggerType,
+    Type,
+    UnicodeEmoji,
+    UserLimit,
+    Uses,
+    VanityUrlCode,
+    VerificationLevel,
+    WidgetChannelId,
+    WidgetEnabled,
+    <span class="attribute">#[serde(rename = <span class="string">&quot;$add&quot;</span>)]
+    </span>RolesAdded,
+    <span class="attribute">#[serde(rename = <span class="string">&quot;$remove&quot;</span>)]
+    </span>RolesRemove,
 }
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
-<span class="kw">mod</span> <span class="ident">tests</span> {
-    <span class="kw">use</span> <span class="ident">serde_test</span>::{<span class="ident">assert_tokens</span>, <span class="ident">Token</span>};
+<span class="attribute">#[cfg(test)]
+</span><span class="kw">mod </span>tests {
+    <span class="kw">use super</span>::<span class="kw-2">*</span>;
+    <span class="kw">use </span><span class="kw">crate</span>::json::{assert_json, json};
 
-    <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
-
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">afk_channel_id_variant</span>() {
-        <span class="kw">let</span> <span class="ident">value</span> <span class="op">=</span> <span class="ident">Change::AfkChannelId</span> {
-            <span class="ident">old</span>: <span class="prelude-val">Some</span>(<span class="ident">ChannelId::new</span>(<span class="number">1</span>)),
-            <span class="ident">new</span>: <span class="prelude-val">Some</span>(<span class="ident">ChannelId::new</span>(<span class="number">2</span>)),
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>afk_channel_id_variant() {
+        <span class="kw">let </span>value = Change::AfkChannelId {
+            old: <span class="prelude-val">Some</span>(ChannelId::new(<span class="number">1</span>)),
+            new: <span class="prelude-val">Some</span>(ChannelId::new(<span class="number">2</span>)),
         };
-        <span class="ident">assert_tokens</span>(<span class="kw-2">&amp;</span><span class="ident">value</span>, <span class="kw-2">&amp;</span>[
-            <span class="ident">Token::Struct</span> {
-                <span class="ident">name</span>: <span class="string">&quot;Change&quot;</span>,
-                <span class="ident">len</span>: <span class="number">3</span>,
-            },
-            <span class="ident">Token::Str</span>(<span class="string">&quot;key&quot;</span>),
-            <span class="ident">Token::Str</span>(<span class="string">&quot;afk_channel_id&quot;</span>),
-            <span class="ident">Token::Str</span>(<span class="string">&quot;old_value&quot;</span>),
-            <span class="ident">Token::Some</span>,
-            <span class="ident">Token::NewtypeStruct</span> {
-                <span class="ident">name</span>: <span class="string">&quot;ChannelId&quot;</span>,
-            },
-            <span class="ident">Token::Str</span>(<span class="string">&quot;1&quot;</span>),
-            <span class="ident">Token::Str</span>(<span class="string">&quot;new_value&quot;</span>),
-            <span class="ident">Token::Some</span>,
-            <span class="ident">Token::NewtypeStruct</span> {
-                <span class="ident">name</span>: <span class="string">&quot;ChannelId&quot;</span>,
-            },
-            <span class="ident">Token::Str</span>(<span class="string">&quot;2&quot;</span>),
-            <span class="ident">Token::StructEnd</span>,
-        ]);
+        assert_json(<span class="kw-2">&amp;</span>value, <span class="macro">json!</span>({<span class="string">&quot;key&quot;</span>: <span class="string">&quot;afk_channel_id&quot;</span>, <span class="string">&quot;old_value&quot;</span>: <span class="string">&quot;1&quot;</span>, <span class="string">&quot;new_value&quot;</span>: <span class="string">&quot;2&quot;</span>}));
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">skip_serializing_if_none</span>() {
-        <span class="kw">let</span> <span class="ident">value</span> <span class="op">=</span> <span class="ident">Change::AfkChannelId</span> {
-            <span class="ident">old</span>: <span class="prelude-val">None</span>,
-            <span class="ident">new</span>: <span class="prelude-val">Some</span>(<span class="ident">ChannelId::new</span>(<span class="number">2</span>)),
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>skip_serializing_if_none() {
+        <span class="kw">let </span>value = Change::AfkChannelId {
+            old: <span class="prelude-val">None</span>,
+            new: <span class="prelude-val">Some</span>(ChannelId::new(<span class="number">2</span>)),
         };
-        <span class="ident">assert_tokens</span>(<span class="kw-2">&amp;</span><span class="ident">value</span>, <span class="kw-2">&amp;</span>[
-            <span class="ident">Token::Struct</span> {
-                <span class="ident">name</span>: <span class="string">&quot;Change&quot;</span>,
-                <span class="ident">len</span>: <span class="number">2</span>,
-            },
-            <span class="ident">Token::Str</span>(<span class="string">&quot;key&quot;</span>),
-            <span class="ident">Token::Str</span>(<span class="string">&quot;afk_channel_id&quot;</span>),
-            <span class="ident">Token::Str</span>(<span class="string">&quot;new_value&quot;</span>),
-            <span class="ident">Token::Some</span>,
-            <span class="ident">Token::NewtypeStruct</span> {
-                <span class="ident">name</span>: <span class="string">&quot;ChannelId&quot;</span>,
-            },
-            <span class="ident">Token::Str</span>(<span class="string">&quot;2&quot;</span>),
-            <span class="ident">Token::StructEnd</span>,
-        ]);
-        <span class="kw">let</span> <span class="ident">value</span> <span class="op">=</span> <span class="ident">Change::AfkChannelId</span> {
-            <span class="ident">old</span>: <span class="prelude-val">Some</span>(<span class="ident">ChannelId::new</span>(<span class="number">1</span>)),
-            <span class="ident">new</span>: <span class="prelude-val">None</span>,
+        assert_json(<span class="kw-2">&amp;</span>value, <span class="macro">json!</span>({<span class="string">&quot;key&quot;</span>: <span class="string">&quot;afk_channel_id&quot;</span>, <span class="string">&quot;new_value&quot;</span>: <span class="string">&quot;2&quot;</span>}));
+        <span class="kw">let </span>value = Change::AfkChannelId {
+            old: <span class="prelude-val">Some</span>(ChannelId::new(<span class="number">1</span>)),
+            new: <span class="prelude-val">None</span>,
         };
-        <span class="ident">assert_tokens</span>(<span class="kw-2">&amp;</span><span class="ident">value</span>, <span class="kw-2">&amp;</span>[
-            <span class="ident">Token::Struct</span> {
-                <span class="ident">name</span>: <span class="string">&quot;Change&quot;</span>,
-                <span class="ident">len</span>: <span class="number">2</span>,
-            },
-            <span class="ident">Token::Str</span>(<span class="string">&quot;key&quot;</span>),
-            <span class="ident">Token::Str</span>(<span class="string">&quot;afk_channel_id&quot;</span>),
-            <span class="ident">Token::Str</span>(<span class="string">&quot;old_value&quot;</span>),
-            <span class="ident">Token::Some</span>,
-            <span class="ident">Token::NewtypeStruct</span> {
-                <span class="ident">name</span>: <span class="string">&quot;ChannelId&quot;</span>,
-            },
-            <span class="ident">Token::Str</span>(<span class="string">&quot;1&quot;</span>),
-            <span class="ident">Token::StructEnd</span>,
-        ]);
+        assert_json(<span class="kw-2">&amp;</span>value, <span class="macro">json!</span>({<span class="string">&quot;key&quot;</span>: <span class="string">&quot;afk_channel_id&quot;</span>, <span class="string">&quot;old_value&quot;</span>: <span class="string">&quot;1&quot;</span>}));
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">entity_type_variant</span>() {
-        <span class="kw">let</span> <span class="ident">value</span> <span class="op">=</span> <span class="ident">Change::Type</span> {
-            <span class="ident">old</span>: <span class="prelude-val">Some</span>(<span class="ident">EntityType::Int</span>(<span class="number">123</span>)),
-            <span class="ident">new</span>: <span class="prelude-val">Some</span>(<span class="ident">EntityType::Str</span>(<span class="string">&quot;discord&quot;</span>.<span class="ident">into</span>())),
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>entity_type_variant() {
+        <span class="kw">let </span>value = Change::Type {
+            old: <span class="prelude-val">Some</span>(EntityType::Int(<span class="number">123</span>)),
+            new: <span class="prelude-val">Some</span>(EntityType::Str(<span class="string">&quot;discord&quot;</span>.into())),
         };
-        <span class="ident">assert_tokens</span>(<span class="kw-2">&amp;</span><span class="ident">value</span>, <span class="kw-2">&amp;</span>[
-            <span class="ident">Token::Struct</span> {
-                <span class="ident">name</span>: <span class="string">&quot;Change&quot;</span>,
-                <span class="ident">len</span>: <span class="number">3</span>,
-            },
-            <span class="ident">Token::Str</span>(<span class="string">&quot;key&quot;</span>),
-            <span class="ident">Token::Str</span>(<span class="string">&quot;type&quot;</span>),
-            <span class="ident">Token::Str</span>(<span class="string">&quot;old_value&quot;</span>),
-            <span class="ident">Token::Some</span>,
-            <span class="ident">Token::U64</span>(<span class="number">123</span>),
-            <span class="ident">Token::Str</span>(<span class="string">&quot;new_value&quot;</span>),
-            <span class="ident">Token::Some</span>,
-            <span class="ident">Token::Str</span>(<span class="string">&quot;discord&quot;</span>),
-            <span class="ident">Token::StructEnd</span>,
-        ]);
+        assert_json(<span class="kw-2">&amp;</span>value, <span class="macro">json!</span>({<span class="string">&quot;key&quot;</span>: <span class="string">&quot;type&quot;</span>, <span class="string">&quot;old_value&quot;</span>: <span class="number">123</span>, <span class="string">&quot;new_value&quot;</span>: <span class="string">&quot;discord&quot;</span>}));
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">permissions_variant</span>() {
-        <span class="kw">let</span> <span class="ident">value</span> <span class="op">=</span> <span class="ident">Change::Permissions</span> {
-            <span class="ident">old</span>: <span class="prelude-val">Some</span>(<span class="ident">Permissions::default</span>()),
-            <span class="ident">new</span>: <span class="prelude-val">Some</span>(<span class="ident">Permissions::MANAGE_GUILD</span>),
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>permissions_variant() {
+        <span class="kw">let </span>value = Change::Permissions {
+            old: <span class="prelude-val">Some</span>(Permissions::default()),
+            new: <span class="prelude-val">Some</span>(Permissions::MANAGE_GUILD),
         };
-        <span class="ident">assert_tokens</span>(<span class="kw-2">&amp;</span><span class="ident">value</span>, <span class="kw-2">&amp;</span>[
-            <span class="ident">Token::Struct</span> {
-                <span class="ident">name</span>: <span class="string">&quot;Change&quot;</span>,
-                <span class="ident">len</span>: <span class="number">3</span>,
-            },
-            <span class="ident">Token::Str</span>(<span class="string">&quot;key&quot;</span>),
-            <span class="ident">Token::Str</span>(<span class="string">&quot;permissions&quot;</span>),
-            <span class="ident">Token::Str</span>(<span class="string">&quot;old_value&quot;</span>),
-            <span class="ident">Token::Some</span>,
-            <span class="ident">Token::Str</span>(<span class="string">&quot;0&quot;</span>),
-            <span class="ident">Token::Str</span>(<span class="string">&quot;new_value&quot;</span>),
-            <span class="ident">Token::Some</span>,
-            <span class="ident">Token::Str</span>(<span class="string">&quot;32&quot;</span>),
-            <span class="ident">Token::StructEnd</span>,
-        ]);
+        assert_json(<span class="kw-2">&amp;</span>value, <span class="macro">json!</span>({<span class="string">&quot;key&quot;</span>: <span class="string">&quot;permissions&quot;</span>, <span class="string">&quot;old_value&quot;</span>: <span class="string">&quot;0&quot;</span>, <span class="string">&quot;new_value&quot;</span>: <span class="string">&quot;32&quot;</span>}));
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../../../" data-current-crate="serenity" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0-nightly (10f4ce324 2022-06-22)" ></div>
-</body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../../../" data-current-crate="serenity" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (57f097ea2 2022-10-01)" ></div></body></html>
