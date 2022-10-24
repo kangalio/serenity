@@ -1,3 +1,6 @@
+// Or we'll get deprecation warnings from our own deprecated type (seriously Rust?)
+#![allow(deprecated)]
+
 use futures::future::pending;
 use futures::{Stream, StreamExt as _};
 
@@ -26,7 +29,6 @@ use crate::model::prelude::*;
 /// ```
 pub fn collect<T: Send + 'static>(
     shard: &ShardMessenger,
-    duration: Option<std::time::Duration>,
     extractor: impl Fn(&Event) -> Option<T> + Send + Sync + 'static,
 ) -> impl Stream<Item = T> {
     let (sender, mut receiver) = tokio::sync::mpsc::unbounded_channel();
@@ -36,27 +38,22 @@ pub fn collect<T: Send + 'static>(
         None => !sender.is_closed(),
     })));
 
-    // Need to Box::pin this, or else users have to `pin_mut!()` the stream to the stack
-    let timeout = Box::pin(async move {
-        match duration {
-            Some(d) => tokio::time::sleep(d).await,
-            None => pending::<()>().await,
-        }
-    });
-    futures::stream::poll_fn(move |cx| receiver.poll_recv(cx)).take_until(timeout)
+    futures::stream::poll_fn(move |cx| receiver.poll_recv(cx))
 }
 
 macro_rules! make_specific_collector {
     (
+        $( #[ $($meta:tt)* ] )*
         $collector_type:ident, $item_type:ident,
         $extractor:pat => $value:ident,
         $( $filter_name:ident: $filter_type:ident = $filter_extractor:expr, )*
     ) => {
         #[doc = concat!("A [`", stringify!($collector_type), "`] receives [`", stringify!($item_type), "`]'s match the given filters for a set duration.")]
+        $( #[ $($meta)* ] )*
         #[must_use]
         pub struct $collector_type {
             shard: ShardMessenger,
-            timeout: Option<std::time::Duration>,
+            duration: Option<std::time::Duration>,
             filter: Option<Box<dyn Fn(&$item_type) -> bool + Send + Sync>>,
             $( $filter_name: Option<$filter_type>, )*
         }
@@ -66,15 +63,15 @@ macro_rules! make_specific_collector {
             pub fn new(shard: impl AsRef<ShardMessenger>) -> Self {
                 Self {
                     shard: shard.as_ref().clone(),
-                    timeout: None,
+                    duration: None,
                     filter: None,
                     $( $filter_name: None, )*
                 }
             }
 
             /// Sets a duration for how long the collector shall receive interactions.
-            pub fn timeout(mut self, timeout: std::time::Duration) -> Self {
-                self.timeout = Some(timeout);
+            pub fn timeout(mut self, duration: std::time::Duration) -> Self {
+                self.duration = Some(duration);
                 self
             }
 
@@ -94,7 +91,7 @@ macro_rules! make_specific_collector {
 
             #[doc = concat!("Returns a [`Stream`] over all collected [`", stringify!($item_type), "`].")]
             pub fn collect_stream(self) -> impl Stream<Item = $item_type> {
-                collect(&self.shard, self.timeout, move |event| match event {
+                collect(&self.shard, move |event| match event {
                     $extractor
                         if $( self.$filter_name.map_or(true, |x| $filter_extractor == Some(x)) && )*
                             self.filter.as_ref().map_or(true, |f| f($value)) =>
@@ -103,13 +100,16 @@ macro_rules! make_specific_collector {
                     },
                     _ => None,
                 })
+                // Need to Box::pin this, or else users have to `pin_mut!()` the stream to the stack
+                .take_until(Box::pin(async move { match self.duration {
+                    Some(d) => tokio::time::sleep(d).await,
+                    None => pending::<()>().await,
+                } }))
             }
 
             #[doc = concat!("Returns the next [`", stringify!($item_type), "`] which passes the filters.")]
             pub async fn collect_single(self) -> Option<$item_type> {
-                let stream = self.collect_stream();
-                futures::pin_mut!(stream);
-                stream.next().await
+                self.collect_stream().next().await
             }
         }
     };
@@ -151,6 +151,7 @@ make_specific_collector!(
     guild_id: GuildId = message.guild_id,
 );
 make_specific_collector!(
+    #[deprecated = "use the collect() function to collect arbitrary events"]
     EventCollector, Event,
     event => event,
 );
