@@ -14,14 +14,16 @@ use crate::model::prelude::*;
 /// ```rust
 /// # use std::time::Duration;
 /// # use futures::StreamExt as _;
-/// # use serenity::model::Event;
+/// # use serenity::model::prelude::Event;
+/// # use serenity::client::bridge::gateway::ShardMessenger;
+/// # use serenity::collector::collect;
 /// # async fn _example(shard: &ShardMessenger) {
-/// let stream = collect(shard, Some(Duration::from_secs(10)), |event| match event {
-///     Event::ReactionRemove(event) => Some(event.reaction),
+/// let stream = collect(shard, |event| match event {
+///     Event::ReactionRemove(event) => Some(event.reaction.clone()),
 ///     _ => None,
 /// });
 /// stream
-///     .for_each(|reaction| async {
+///     .for_each(|reaction| async move {
 ///         println!("{}: removed {}", reaction.channel_id, reaction.emoji);
 ///     })
 ///     .await;
