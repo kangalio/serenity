@@ -36,12 +36,13 @@ pub fn collect<T: Send + 'static>(
         None => !sender.is_closed(),
     })));
 
-    let timeout = async move {
+    // Need to Box::pin this, or else users have to `pin_mut!()` the stream to the stack
+    let timeout = Box::pin(async move {
         match duration {
             Some(d) => tokio::time::sleep(d).await,
             None => pending::<()>().await,
         }
-    };
+    });
     futures::stream::poll_fn(move |cx| receiver.poll_recv(cx)).take_until(timeout)
 }
 
