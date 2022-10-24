@@ -17,7 +17,7 @@ use serenity::framework::standard::{
     StandardFramework,
 };
 // Collectors are streams, that means we can use `StreamExt` and `TryStreamExt`.
-use serenity::futures::{pin_mut, stream::StreamExt};
+use serenity::futures::stream::StreamExt;
 use serenity::http::Http;
 use serenity::model::prelude::*;
 use serenity::prelude::*;
@@ -163,15 +163,14 @@ async fn challenge(ctx: &Context, msg: &Message, _: Args) -> CommandResult {
     // We can also collect arbitrary events using the collect() function. For example, here we
     // collect updates to the messages that the user sent above and check for them updating all 5 of
     // them.
-    let collector = serenity::collector::collect(&ctx.shard, move |event| match event {
+    let mut collector = serenity::collector::collect(&ctx.shard, move |event| match event {
         // Only collect MessageUpdate events for the 5 MessageIds we're interested in.
         Event::MessageUpdate(event) if collected.iter().any(|msg| event.id == msg.id) => {
             Some(event.id)
         },
         _ => None,
     })
-    .take_until(tokio::time::sleep(Duration::from_secs(20)));
-    pin_mut!(collector); // Pinning is sometimes required to use streams
+    .take_until(Box::pin(tokio::time::sleep(Duration::from_secs(20))));
 
     let _ = msg.reply(ctx, "Edit each of those 5 messages in 20 seconds").await;
     let mut edited = HashSet::new();
