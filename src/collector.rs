@@ -36,11 +36,14 @@ pub fn collect<T: Send + 'static>(
 ) -> impl Stream<Item = T> {
     let (sender, mut receiver) = tokio::sync::mpsc::unbounded_channel();
 
+    // Register an event callback in the shard. It's kept alive as long as we return `true`
     shard.add_collector(CollectorCallback(Box::new(move |event| match extractor(event) {
+        // If this event matches, we send it to the receiver stream
         Some(item) => sender.send(item).is_ok(),
         None => !sender.is_closed(),
     })));
 
+    // Convert the mpsc Receiver into a Stream
     futures::stream::poll_fn(move |cx| receiver.poll_recv(cx))
 }
 
@@ -48,7 +51,7 @@ macro_rules! make_specific_collector {
     (
         $( #[ $($meta:tt)* ] )*
         $collector_type:ident, $item_type:ident,
-        $extractor:pat => $value:ident,
+        $extractor:pat => $extracted_item:ident,
         $( $filter_name:ident: $filter_type:ident = $filter_extractor:expr, )*
     ) => {
         #[doc = concat!("A [`", stringify!($collector_type), "`] receives [`", stringify!($item_type), "`]'s match the given filters for a set duration.")]
@@ -94,20 +97,34 @@ macro_rules! make_specific_collector {
 
             #[doc = concat!("Returns a [`Stream`] over all collected [`", stringify!($item_type), "`].")]
             pub fn collect_stream(self) -> impl Stream<Item = $item_type> {
-                collect(&self.shard, move |event| match event {
-                    $extractor
-                        if $( self.$filter_name.map_or(true, |x| $filter_extractor == Some(x)) && )*
-                            self.filter.as_ref().map_or(true, |f| f($value)) =>
-                    {
-                        Some($value.clone())
-                    },
-                    _ => None,
-                })
-                // Need to Box::pin this, or else users have to `pin_mut!()` the stream to the stack
-                .take_until(Box::pin(async move { match self.duration {
+                let filters_pass = move |$extracted_item: &$item_type| {
+                    // Check each of the built-in filters (author_id, channel_id, etc.)
+                    $( if let (Some(expected_value), Some(actual_value)) = (self.$filter_name, $filter_extractor) {
+                        if expected_value != actual_value {
+                            return false;
+                        }
+                    } )*
+                    // Check the callback-based filter
+                    if let Some(custom_filter) = &self.filter {
+                        if !custom_filter($extracted_item) {
+                            return false;
+                        }
+                    }
+                    true
+                };
+
+                // A future that completes once the timeout is triggered
+                let timeout = async move { match self.duration {
                     Some(d) => tokio::time::sleep(d).await,
                     None => pending::<()>().await,
-                } }))
+                } };
+
+                let stream = collect(&self.shard, move |event| match event {
+                    $extractor if filters_pass($extracted_item) => Some($extracted_item.clone()),
+                    _ => None,
+                });
+                // Need to Box::pin this, or else users have to `pin_mut!()` the stream to the stack
+                stream.take_until(Box::pin(timeout))
             }
 
             #[doc = concat!("Returns the next [`", stringify!($item_type), "`] which passes the filters.")]
