@@ -22,6 +22,7 @@ use crate::model::prelude::*;
 ///     Event::ReactionRemove(event) => Some(event.reaction.clone()),
 ///     _ => None,
 /// });
+///
 /// stream
 ///     .for_each(|reaction| async move {
 ///         println!("{}: removed {}", reaction.channel_id, reaction.emoji);
@@ -153,7 +154,7 @@ make_specific_collector!(
     guild_id: GuildId = message.guild_id,
 );
 make_specific_collector!(
-    #[deprecated = "use the collect() function to collect arbitrary events"]
+    #[deprecated = "prefer the stand-alone collect() function to collect arbitrary events"]
     EventCollector, Event,
     event => event,
 );
