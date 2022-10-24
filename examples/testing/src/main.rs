@@ -107,6 +107,29 @@ async fn message(ctx: &Context, msg: Message) -> Result<(), serenity::Error> {
                 ]),
             )
             .await?;
+    } else if msg.content == "manybuttons" {
+        let mut custom_id = msg.id.to_string();
+        loop {
+            let msg = channel_id
+                .send_message(
+                    ctx,
+                    CreateMessage::new().components(vec![CreateActionRow::Buttons(vec![
+                        CreateButton::new(custom_id.clone(), ButtonStyle::Primary, custom_id),
+                    ])]),
+                )
+                .await?;
+            let button_press = msg
+                .component_interaction_collector(&ctx.shard)
+                .timeout(std::time::Duration::from_secs(10))
+                .collect_single()
+                .await;
+            match button_press {
+                Some(x) => x.defer(ctx).await?,
+                None => break,
+            }
+
+            custom_id = msg.id.to_string();
+        }
     } else {
         return Ok(());
     }

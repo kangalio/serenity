@@ -6,7 +6,7 @@ use std::env;
 use std::time::Duration;
 
 use serenity::async_trait;
-use serenity::collector::{EventCollectorBuilder, MessageCollectorBuilder};
+use serenity::collector::{EventCollector, MessageCollector};
 use serenity::framework::standard::macros::{command, group, help};
 use serenity::framework::standard::{
     help_commands,
@@ -132,7 +132,7 @@ async fn challenge(ctx: &Context, msg: &Message, _: Args) -> CommandResult {
     let _ = msg.reply(ctx, "Write 5 messages in 10 seconds").await;
 
     // We can create a collector from scratch too using this builder future.
-    let collector = MessageCollectorBuilder::new(&ctx.shard)
+    let collector = MessageCollector::new(&ctx.shard)
     // Only collect messages by this user.
         .author_id(msg.author.id)
         .channel_id(msg.channel_id)
@@ -167,7 +167,7 @@ async fn challenge(ctx: &Context, msg: &Message, _: Args) -> CommandResult {
     // We can also collect arbitrary events using the generic EventCollector. For example, here we
     // collect updates to the messages that the user sent above and check for them updating all 5 of
     // them.
-    let builder = EventCollectorBuilder::new(&ctx.shard)
+    let builder = EventCollector::new(&ctx.shard)
         .add_event_type(EventType::MessageUpdate)
         .timeout(Duration::from_secs(20));
 
