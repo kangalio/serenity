@@ -146,9 +146,9 @@ make_specific_collector!(
     message_id: MessageId = Some(interaction.message.id),
 );
 make_specific_collector!(
-    ModalInteractionCollector, ModalSubmitInteraction,
+    ModalInteractionCollector, ModalInteraction,
     Event::InteractionCreate(InteractionCreateEvent {
-        interaction: Interaction::ModalSubmit(interaction),
+        interaction: Interaction::Modal(interaction),
     }) => interaction,
     author_id: UserId = Some(interaction.user.id),
     channel_id: ChannelId = Some(interaction.channel_id),

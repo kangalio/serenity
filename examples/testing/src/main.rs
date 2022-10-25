@@ -83,28 +83,16 @@ async fn message(ctx: &Context, msg: Message) -> Result<(), serenity::Error> {
         channel_id
             .send_message(
                 ctx,
-                CreateMessage::new().components(vec![
-                    CreateActionRow::Buttons(vec![
-                        CreateButton::new("foo", ButtonStyle::Primary, "0"),
-                        CreateButton::new("bar", ButtonStyle::Secondary, "1"),
-                        CreateButton::new_link("baz", "https://google.com"),
-                    ]),
-                    // ONLY VALID IN MODALS
-                    // CreateActionRow::InputText(CreateInputText::new(
-                    //     InputTextStyle::Short,
-                    //     "hi",
-                    //     "2",
-                    // )),
-                    CreateActionRow::SelectMenu(CreateSelectMenu::new(
-                        "3",
-                        CreateSelectMenuKind::String {
-                            options: vec![
-                                CreateSelectMenuOption::new("foo", "foo"),
-                                CreateSelectMenuOption::new("bar", "bar"),
-                            ],
-                        },
-                    )),
-                ]),
+                CreateMessage::new()
+                    .button(CreateButton::new("foo", "0"))
+                    .button(CreateButton::new("bar", "1").style(ButtonStyle::Secondary))
+                    .button(CreateButton::new_link("baz", "https://google.com"))
+                    .select_menu(CreateSelectMenu::new("3", CreateSelectMenuKind::String {
+                        options: vec![
+                            CreateSelectMenuOption::new("foo", "foo"),
+                            CreateSelectMenuOption::new("bar", "bar"),
+                        ],
+                    })),
             )
             .await?;
     } else if msg.content == "manybuttons" {
@@ -113,9 +101,7 @@ async fn message(ctx: &Context, msg: Message) -> Result<(), serenity::Error> {
             let msg = channel_id
                 .send_message(
                     ctx,
-                    CreateMessage::new().components(vec![CreateActionRow::Buttons(vec![
-                        CreateButton::new(custom_id.clone(), ButtonStyle::Primary, custom_id),
-                    ])]),
+                    CreateMessage::new().button(CreateButton::new(custom_id.clone(), custom_id)),
                 )
                 .await?;
             let button_press = msg
@@ -145,7 +131,7 @@ async fn interaction(
     if interaction.data.name == "editattachments" {
         // Respond with an image
         interaction
-            .create_interaction_response(
+            .create_response(
                 &ctx,
                 CreateInteractionResponse::Message(
                     CreateInteractionResponseMessage::new()
@@ -155,11 +141,11 @@ async fn interaction(
             .await?;
 
         // We need to know the attachments' IDs in order to not lose them in the subsequent edit
-        let msg = interaction.get_interaction_response(ctx).await?;
+        let msg = interaction.get_response(ctx).await?;
 
         // Add another image
         let msg = interaction
-            .edit_original_interaction_response(
+            .edit_response(
                 &ctx,
                 EditInteractionResponse::new()
                     .new_attachment(CreateAttachment::url(ctx, IMAGE_URL_2).await?)
@@ -171,7 +157,7 @@ async fn interaction(
 
         // Only keep the new image, removing the first image
         let _msg = interaction
-            .edit_original_interaction_response(
+            .edit_response(
                 &ctx,
                 EditInteractionResponse::new()
                     .clear_existing_attachments()
@@ -180,7 +166,7 @@ async fn interaction(
             .await?;
     } else if interaction.data.name == "unifiedattachments1" {
         interaction
-            .create_interaction_response(
+            .create_response(
                 ctx,
                 CreateInteractionResponse::Message(
                     CreateInteractionResponseMessage::new().content("works"),
@@ -189,21 +175,18 @@ async fn interaction(
             .await?;
 
         interaction
-            .edit_original_interaction_response(
-                ctx,
-                EditInteractionResponse::new().content("works still"),
-            )
+            .edit_response(ctx, EditInteractionResponse::new().content("works still"))
             .await?;
 
         interaction
-            .create_followup_message(
+            .create_followup(
                 ctx,
                 CreateInteractionResponseFollowup::new().content("still works still"),
             )
             .await?;
     } else if interaction.data.name == "unifiedattachments2" {
         interaction
-            .create_interaction_response(
+            .create_response(
                 ctx,
                 CreateInteractionResponse::Message(
                     CreateInteractionResponseMessage::new()
@@ -213,7 +196,7 @@ async fn interaction(
             .await?;
 
         interaction
-            .edit_original_interaction_response(
+            .edit_response(
                 ctx,
                 EditInteractionResponse::new()
                     .new_attachment(CreateAttachment::url(ctx, IMAGE_URL_2).await?),
@@ -221,7 +204,7 @@ async fn interaction(
             .await?;
 
         interaction
-            .create_followup_message(
+            .create_followup(
                 ctx,
                 CreateInteractionResponseFollowup::new()
                     .add_file(CreateAttachment::url(ctx, IMAGE_URL).await?),
@@ -229,7 +212,7 @@ async fn interaction(
             .await?;
     } else if interaction.data.name == "editembeds" {
         interaction
-            .create_interaction_response(
+            .create_response(
                 &ctx,
                 CreateInteractionResponse::Message(
                     CreateInteractionResponseMessage::new()
@@ -240,37 +223,25 @@ async fn interaction(
             .await?;
 
         // Pre-PR, this falsely deleted the embed
-        interaction
-            .edit_original_interaction_response(&ctx, EditInteractionResponse::new())
-            .await?;
+        interaction.edit_response(&ctx, EditInteractionResponse::new()).await?;
     } else if interaction.data.name == "newselectmenu" {
         interaction
-            .create_interaction_response(
+            .create_response(
                 &ctx,
                 CreateInteractionResponse::Message(
-                    CreateInteractionResponseMessage::new().components(
-                        // Make one action row for each kind of select menu
-                        vec![
-                            CreateSelectMenuKind::String {
-                                options: vec![
-                                    CreateSelectMenuOption::new("foo", "foo"),
-                                    CreateSelectMenuOption::new("bar", "bar"),
-                                ],
-                            },
-                            CreateSelectMenuKind::Mentionable,
-                            CreateSelectMenuKind::Role,
-                            CreateSelectMenuKind::User,
-                            CreateSelectMenuKind::Channel {
-                                channel_types: None,
-                            },
-                        ]
-                        .into_iter()
-                        .enumerate()
-                        .map(|(i, kind)| {
-                            CreateActionRow::SelectMenu(CreateSelectMenu::new(i.to_string(), kind))
-                        })
-                        .collect(),
-                    ),
+                    CreateInteractionResponseMessage::new()
+                        .select_menu(CreateSelectMenu::new("0", CreateSelectMenuKind::String {
+                            options: vec![
+                                CreateSelectMenuOption::new("foo", "foo"),
+                                CreateSelectMenuOption::new("bar", "bar"),
+                            ],
+                        }))
+                        .select_menu(CreateSelectMenu::new("1", CreateSelectMenuKind::Mentionable))
+                        .select_menu(CreateSelectMenu::new("2", CreateSelectMenuKind::Role))
+                        .select_menu(CreateSelectMenu::new("3", CreateSelectMenuKind::User))
+                        .select_menu(CreateSelectMenu::new("4", CreateSelectMenuKind::Channel {
+                            channel_types: None,
+                        })),
                 ),
             )
             .await?;
