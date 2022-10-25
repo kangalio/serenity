@@ -87,7 +87,7 @@ cache = ["fxhash", "dashmap", "parking_lot"]
 collector = ["gateway", "model", "derivative", "nougat"]
 # Wraps the gateway and http functionality into a single interface
 # TODO: should this require "gateway"?
-client = ["http", "typemap_rev"]
+client = ["http", "gateway", "typemap_rev"]
 # Enables the Framework trait which is an abstraction for old-style text commands.
 framework = ["client", "model", "utils"]
 # Enables gateway support, which allows bots to listen for Discord events.
