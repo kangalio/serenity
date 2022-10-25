@@ -827,13 +827,13 @@ impl ChannelId {
 
     /// Returns a builder which can be awaited to obtain a message or stream of messages in this channel.
     #[cfg(feature = "collector")]
-    pub fn reply_collector(self, shard_messenger: &ShardMessenger) -> MessageCollector {
+    pub fn reply_collector(self, shard_messenger: impl AsRef<ShardMessenger>) -> MessageCollector {
         MessageCollector::new(shard_messenger).channel_id(self)
     }
 
     /// Returns a builder which can be awaited to obtain a reaction or stream of reactions sent in this channel.
     #[cfg(feature = "collector")]
-    pub fn reaction_collector(self, shard_messenger: &ShardMessenger) -> ReactionCollector {
+    pub fn reaction_collector(self, shard_messenger: impl AsRef<ShardMessenger>) -> ReactionCollector {
         ReactionCollector::new(shard_messenger).channel_id(self)
     }
 
