@@ -30,13 +30,12 @@ use crate::model::id::{
     UserId,
 };
 use crate::model::user::User;
-use crate::model::utils::{remove_from_map, remove_from_map_opt};
 use crate::model::Permissions;
 
 /// An interaction triggered by a message component.
 ///
 /// [Discord docs](https://discord.com/developers/docs/interactions/receiving-and-responding#interaction-object-interaction-structure).
-#[derive(Clone, Debug, Serialize)]
+#[derive(Clone, Debug)]
 #[non_exhaustive]
 pub struct ComponentInteraction {
     /// Id of the interaction.
@@ -46,14 +45,12 @@ pub struct ComponentInteraction {
     /// The data of the interaction which was triggered.
     pub data: ComponentInteractionData,
     /// The guild Id this interaction was sent from, if there is one.
-    #[serde(skip_serializing_if = "Option::is_none")]
     pub guild_id: Option<GuildId>,
     /// The channel Id this interaction was sent from.
     pub channel_id: ChannelId,
     /// The `member` data for the invoking user.
     ///
     /// **Note**: It is only present if the interaction is triggered in a guild.
-    #[serde(skip_serializing_if = "Option::is_none")]
     pub member: Option<Member>,
     /// The `user` object for the invoking user.
     pub user: User,
@@ -217,39 +214,6 @@ impl ComponentInteraction {
     }
 }
 
-impl<'de> Deserialize<'de> for ComponentInteraction {
-    fn deserialize<D: Deserializer<'de>>(deserializer: D) -> StdResult<Self, D::Error> {
-        let mut map = JsonMap::deserialize(deserializer)?;
-
-        let guild_id = remove_from_map_opt(&mut map, "guild_id")?;
-
-        if let Some(guild_id) = guild_id {
-            add_guild_id_to_resolved(&mut map, guild_id);
-        }
-
-        let member = remove_from_map_opt::<Member, _>(&mut map, "member")?;
-        let user = remove_from_map_opt(&mut map, "user")?
-            .or_else(|| member.as_ref().map(|m| m.user.clone()))
-            .ok_or_else(|| DeError::custom("expected user or member"))?;
-
-        Ok(Self {
-            guild_id,
-            member,
-            user,
-            id: remove_from_map(&mut map, "id")?,
-            application_id: remove_from_map(&mut map, "application_id")?,
-            data: remove_from_map(&mut map, "data")?,
-            channel_id: remove_from_map(&mut map, "channel_id")?,
-            token: remove_from_map(&mut map, "token")?,
-            version: remove_from_map(&mut map, "version")?,
-            message: remove_from_map(&mut map, "message")?,
-            app_permissions: remove_from_map_opt(&mut map, "app_permissions")?,
-            locale: remove_from_map(&mut map, "locale")?,
-            guild_locale: remove_from_map_opt(&mut map, "guild_locale")?,
-        })
-    }
-}
-
 #[derive(Clone, Debug)]
 pub enum ComponentInteractionDataKind {
     Button,
@@ -261,86 +225,14 @@ pub enum ComponentInteractionDataKind {
     Unknown(u8),
 }
 
-impl<'de> Deserialize<'de> for ComponentInteractionDataKind {
-    fn deserialize<D: Deserializer<'de>>(deserializer: D) -> StdResult<Self, D::Error> {
-        #[derive(Deserialize)]
-        struct Json {
-            component_type: ComponentType,
-            values: Option<serde_json::Value>,
-        }
-        let json = Json::deserialize(deserializer)?;
-
-        macro_rules! parse_values {
-            () => {
-                serde_json::from_value(
-                    json.values.ok_or_else(|| D::Error::missing_field("values"))?,
-                )
-                .map_err(D::Error::custom)?
-            };
-        }
-
-        Ok(match json.component_type {
-            ComponentType::Button => Self::Button,
-            ComponentType::StringSelect => Self::StringSelect {
-                values: parse_values!(),
-            },
-            ComponentType::UserSelect => Self::UserSelect {
-                values: parse_values!(),
-            },
-            ComponentType::RoleSelect => Self::RoleSelect {
-                values: parse_values!(),
-            },
-            ComponentType::MentionableSelect => Self::MentionableSelect {
-                values: parse_values!(),
-            },
-            ComponentType::ChannelSelect => Self::ChannelSelect {
-                values: parse_values!(),
-            },
-            ComponentType::Unknown(x) => Self::Unknown(x),
-            x @ (ComponentType::ActionRow | ComponentType::InputText) => {
-                return Err(D::Error::custom(format_args!(
-                    "invalid message component type in this context: {:?}",
-                    x,
-                )));
-            },
-        })
-    }
-}
-
-impl Serialize for ComponentInteractionDataKind {
-    fn serialize<S: serde::Serializer>(&self, serializer: S) -> StdResult<S::Ok, S::Error> {
-        serde_json::json!({
-            "component_type": match self {
-                Self::Button { .. } => 2,
-                Self::StringSelect { .. } => 3,
-                Self::UserSelect { .. } => 5,
-                Self::RoleSelect { .. } => 6,
-                Self::MentionableSelect { .. } => 7,
-                Self::ChannelSelect { .. } => 8,
-                Self::Unknown(x) => *x,
-            },
-            "values": match self {
-                Self::StringSelect { values } => serde_json::to_value(values).map_err(S::Error::custom)?,
-                Self::UserSelect { values } => serde_json::to_value(values).map_err(S::Error::custom)?,
-                Self::RoleSelect { values } => serde_json::to_value(values).map_err(S::Error::custom)?,
-                Self::MentionableSelect { values } => serde_json::to_value(values).map_err(S::Error::custom)?,
-                Self::ChannelSelect { values } => serde_json::to_value(values).map_err(S::Error::custom)?,
-                Self::Button | Self::Unknown(_) => serde_json::Value::Null,
-            },
-        })
-        .serialize(serializer)
-    }
-}
-
 /// A message component interaction data, provided by [`ComponentInteraction::data`]
 ///
 /// [Discord docs](https://discord.com/developers/docs/interactions/receiving-and-responding#interaction-object-message-component-data-structure).
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug)]
 #[non_exhaustive]
 pub struct ComponentInteractionData {
     /// The custom id of the component.
     pub custom_id: String,
     /// Type and type-specific data of this component interaction.
-    #[serde(flatten)]
     pub kind: ComponentInteractionDataKind,
 }

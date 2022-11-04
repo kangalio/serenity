@@ -33,7 +33,6 @@ pub use self::role::*;
 pub use self::scheduled_event::*;
 pub use self::system_channel::*;
 pub use self::welcome_screen::*;
-use super::utils::*;
 #[cfg(feature = "model")]
 use crate::builder::{
     AddMember,
@@ -68,13 +67,12 @@ use crate::model::application::command::{Command, CommandPermission};
 #[cfg(feature = "model")]
 use crate::model::guild::automod::Rule;
 use crate::model::prelude::*;
-use crate::model::utils::{emojis, presences, roles, stickers};
 use crate::model::Timestamp;
 
 /// A representation of a banning of a user.
 ///
 /// [Discord docs](https://discord.com/developers/docs/resources/guild#ban-object).
-#[derive(Clone, Debug, Eq, Hash, PartialEq, Deserialize, Serialize)]
+#[derive(Clone, Debug, Eq, Hash, PartialEq)]
 pub struct Ban {
     /// The reason given for this ban.
     pub reason: Option<String>,
@@ -86,7 +84,7 @@ pub struct Ban {
 ///
 /// [Discord docs](https://discord.com/developers/docs/resources/guild#guild-object) plus
 /// [extension](https://discord.com/developers/docs/topics/gateway#guild-create).
-#[derive(Clone, Debug, Default, Deserialize, Serialize)]
+#[derive(Clone, Debug, Default)]
 #[non_exhaustive]
 pub struct Guild {
     /// Id of a voice channel that's considered the AFK channel.
@@ -100,14 +98,11 @@ pub struct Guild {
     ///
     /// This contains all channels regardless of permissions (i.e. the ability
     /// of the bot to read from or connect to them).
-    #[serde(serialize_with = "serialize_map_values")]
-    #[serde(deserialize_with = "deserialize_guild_channels")]
     pub channels: HashMap<ChannelId, GuildChannel>,
     /// Indicator of whether notifications for all messages are enabled by
     /// default in the guild.
     pub default_message_notifications: DefaultMessageNotificationLevel,
     /// All of the guild's custom emojis.
-    #[serde(with = "emojis")]
     pub emojis: HashMap<EmojiId, Emoji>,
     /// Default explicit content filter level.
     pub explicit_content_filter: ExplicitContentFilter,
@@ -164,8 +159,6 @@ pub struct Guild {
     /// Members might not all be available when the [`ReadyEvent`] is received
     /// if the [`Self::member_count`] is greater than the [`LARGE_THRESHOLD`] set by
     /// the library.
-    #[serde(serialize_with = "serialize_map_values")]
-    #[serde(deserialize_with = "deserialize_members")]
     pub members: HashMap<UserId, Member>,
     /// Indicator of whether the guild requires multi-factor authentication for
     /// [`Role`]s or [`User`]s with moderation permissions.
@@ -178,10 +171,8 @@ pub struct Guild {
     ///
     /// **Note**: This will be empty unless the "guild presences" privileged
     /// intent is enabled.
-    #[serde(with = "presences")]
     pub presences: HashMap<UserId, Presence>,
     /// A mapping of the guild's roles.
-    #[serde(with = "roles")]
     pub roles: HashMap<RoleId, Role>,
     /// An identifying hash of the guild's splash icon.
     ///
@@ -208,16 +199,12 @@ pub struct Guild {
     /// Indicator of the current verification level of the guild.
     pub verification_level: VerificationLevel,
     /// A mapping of [`User`]s to their current voice state.
-    #[serde(serialize_with = "serialize_map_values")]
-    #[serde(deserialize_with = "deserialize_voice_states")]
     pub voice_states: HashMap<UserId, VoiceState>,
     /// The server's description, if it has one.
     pub description: Option<String>,
     /// The server's premium boosting level.
-    #[serde(default)]
     pub premium_tier: PremiumTier,
     /// The total number of users currently boosting this server.
-    #[serde(default)]
     pub premium_subscription_count: u64,
     /// The guild's banner, if it has one.
     pub banner: Option<String>,
@@ -251,13 +238,10 @@ pub struct Guild {
     /// The channel id that the widget will generate an invite to, or null if set to no invite
     pub widget_channel_id: Option<ChannelId>,
     /// The stage instances in this guild.
-    #[serde(default)]
     pub stage_instances: Vec<StageInstance>,
     /// All active threads in this guild that current user has permission to view.
-    #[serde(default)]
     pub threads: Vec<GuildChannel>,
     /// All of the guild's custom stickers.
-    #[serde(with = "stickers")]
     pub stickers: HashMap<StickerId, Sticker>,
 }
 
@@ -2554,7 +2538,7 @@ fn closest_to_origin(origin: &str, word_a: &str, word_b: &str) -> std::cmp::Orde
 /// A [`Guild`] widget.
 ///
 /// [Discord docs](https://discord.com/developers/docs/resources/guild#guild-widget-settings-object).
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug)]
 #[non_exhaustive]
 pub struct GuildWidget {
     /// Whether the widget is enabled.
@@ -2567,7 +2551,7 @@ pub struct GuildWidget {
 /// prune operation.
 ///
 /// [Discord docs](https://discord.com/developers/docs/resources/guild#get-guild-prune-count).
-#[derive(Clone, Copy, Debug, Deserialize, Serialize)]
+#[derive(Clone, Copy, Debug)]
 pub struct GuildPrune {
     /// The number of members that would be pruned by the operation.
     pub pruned: u64,
@@ -2577,7 +2561,7 @@ pub struct GuildPrune {
 ///
 /// [Discord docs](https://discord.com/developers/docs/resources/guild#guild-object), subset undocumented (closest thing is
 /// [this](https://discord.com/developers/docs/topics/rpc#getguilds-get-guilds-response-structure)).
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug)]
 pub struct GuildInfo {
     /// The unique Id of the guild.
     ///
@@ -2622,12 +2606,11 @@ impl InviteGuild {
 /// Data for an unavailable guild.
 ///
 /// [Discord docs](https://discord.com/developers/docs/resources/guild#unavailable-guild-object).
-#[derive(Clone, Copy, Debug, Deserialize, Serialize)]
+#[derive(Clone, Copy, Debug)]
 pub struct UnavailableGuild {
     /// The Id of the [`Guild`] that may be unavailable.
     pub id: GuildId,
     /// Indicator of whether the guild is unavailable.
-    #[serde(default)]
     pub unavailable: bool,
 }
 
@@ -2635,8 +2618,8 @@ enum_number! {
     /// Default message notification level for a guild.
     ///
     /// [Discord docs](https://discord.com/developers/docs/resources/guild#guild-object-default-message-notification-level).
-    #[derive(Clone, Copy, Debug, Default, Eq, Hash, Ord, PartialEq, PartialOrd, Deserialize, Serialize)]
-    #[serde(from = "u8", into = "u8")]
+    #[derive(Clone, Copy, Debug, Default, Eq, Hash, Ord, PartialEq, PartialOrd)]
+
     #[non_exhaustive]
     pub enum DefaultMessageNotificationLevel {
         /// Receive notifications for everything.
@@ -2652,8 +2635,8 @@ enum_number! {
     /// Setting used to filter explicit messages from members.
     ///
     /// [Discord docs](https://discord.com/developers/docs/resources/guild#guild-object-explicit-content-filter-level).
-    #[derive(Clone, Copy, Debug, Default, Eq, Hash, Ord, PartialEq, PartialOrd, Deserialize, Serialize)]
-    #[serde(from = "u8", into = "u8")]
+    #[derive(Clone, Copy, Debug, Default, Eq, Hash, Ord, PartialEq, PartialOrd)]
+
     #[non_exhaustive]
     pub enum ExplicitContentFilter {
         /// Don't scan any messages.
@@ -2671,8 +2654,8 @@ enum_number! {
     /// Multi-Factor Authentication level for guild moderators.
     ///
     /// [Discord docs](https://discord.com/developers/docs/resources/guild#guild-object-mfa-level).
-    #[derive(Clone, Copy, Debug, Default, Eq, Hash, Ord, PartialEq, PartialOrd, Deserialize, Serialize)]
-    #[serde(from = "u8", into = "u8")]
+    #[derive(Clone, Copy, Debug, Default, Eq, Hash, Ord, PartialEq, PartialOrd)]
+
     #[non_exhaustive]
     pub enum MfaLevel {
         /// MFA is disabled.
@@ -2689,8 +2672,8 @@ enum_number! {
     /// messages in a [`Guild`].
     ///
     /// [Discord docs](https://discord.com/developers/docs/resources/guild#guild-object-verification-level).
-    #[derive(Clone, Copy, Debug, Default, Eq, Hash, Ord, PartialEq, PartialOrd, Deserialize, Serialize)]
-    #[serde(from = "u8", into = "u8")]
+    #[derive(Clone, Copy, Debug, Default, Eq, Hash, Ord, PartialEq, PartialOrd)]
+
     #[non_exhaustive]
     pub enum VerificationLevel {
         /// Does not require any verification.
@@ -2712,8 +2695,8 @@ enum_number! {
     /// The [`Guild`] nsfw level.
     ///
     /// [Discord docs](https://discord.com/developers/docs/resources/guild#guild-object-guild-nsfw-level).
-    #[derive(Clone, Copy, Debug, Default, Eq, Hash, Ord, PartialEq, PartialOrd, Deserialize, Serialize)]
-    #[serde(from = "u8", into = "u8")]
+    #[derive(Clone, Copy, Debug, Default, Eq, Hash, Ord, PartialEq, PartialOrd)]
+
     #[non_exhaustive]
     pub enum NsfwLevel {
         /// The nsfw level is not specified.

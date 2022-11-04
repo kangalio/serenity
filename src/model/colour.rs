@@ -68,7 +68,7 @@
 /// ```
 ///
 /// [`Role`]: crate::model::guild::Role
-#[derive(Clone, Copy, Debug, Default, Eq, Ord, PartialEq, PartialOrd, Deserialize, Serialize)]
+#[derive(Clone, Copy, Debug, Default, Eq, Ord, PartialEq, PartialOrd)]
 pub struct Colour(pub u32);
 
 impl Colour {

@@ -15,7 +15,6 @@ use crate::json::from_value;
 use crate::model::guild::PartialMember;
 use crate::model::id::{ApplicationId, GuildId, InteractionId};
 use crate::model::user::User;
-use crate::model::utils::deserialize_val;
 use crate::model::Permissions;
 
 /// [Discord docs](https://discord.com/developers/docs/interactions/receiving-and-responding#interaction-object)
@@ -142,42 +141,12 @@ impl Interaction {
     }
 }
 
-impl<'de> Deserialize<'de> for Interaction {
-    fn deserialize<D: Deserializer<'de>>(deserializer: D) -> std::result::Result<Self, D::Error> {
-        let map = JsonMap::deserialize(deserializer)?;
-
-        let raw_kind = map.get("type").ok_or_else(|| DeError::missing_field("type"))?.clone();
-        let value = Value::from(map);
-
-        match deserialize_val(raw_kind)? {
-            InteractionType::Command => from_value(value).map(Interaction::Command),
-            InteractionType::Component => from_value(value).map(Interaction::Component),
-            InteractionType::Autocomplete => from_value(value).map(Interaction::Autocomplete),
-            InteractionType::Modal => from_value(value).map(Interaction::Modal),
-            InteractionType::Ping => from_value(value).map(Interaction::Ping),
-            InteractionType::Unknown(_) => return Err(DeError::custom("Unknown interaction type")),
-        }
-        .map_err(DeError::custom)
-    }
-}
-
-impl Serialize for Interaction {
-    fn serialize<S: Serializer>(&self, serializer: S) -> std::result::Result<S::Ok, S::Error> {
-        match self {
-            Self::Ping(i) => i.serialize(serializer),
-            Self::Command(i) | Self::Autocomplete(i) => i.serialize(serializer),
-            Self::Component(i) => i.serialize(serializer),
-            Self::Modal(i) => i.serialize(serializer),
-        }
-    }
-}
-
 enum_number! {
     /// The type of an Interaction.
     ///
     /// [Discord docs](https://discord.com/developers/docs/interactions/receiving-and-responding#interaction-object-interaction-type).
-    #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Deserialize, Serialize)]
-    #[serde(from = "u8", into = "u8")]
+    #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+
     #[non_exhaustive]
     pub enum InteractionType {
         Ping = 1,
@@ -209,13 +178,12 @@ bitflags! {
 /// [`Message`]: crate::model::channel::Message
 ///
 /// [Discord docs](https://discord.com/developers/docs/interactions/receiving-and-responding#message-interaction-object).
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug)]
 #[non_exhaustive]
 pub struct MessageInteraction {
     /// The id of the interaction.
     pub id: InteractionId,
     /// The type of the interaction.
-    #[serde(rename = "type")]
     pub kind: InteractionType,
     /// The name of the [`Command`].
     ///
@@ -224,7 +192,6 @@ pub struct MessageInteraction {
     /// The user who invoked the interaction.
     pub user: User,
     /// The member who invoked the interaction in the guild.
-    #[serde(skip_serializing_if = "Option::is_none")]
     pub member: Option<PartialMember>,
 }
 

@@ -15,7 +15,7 @@ use crate::internal::prelude::*;
 /// Information can not be accessed for guilds the current user is banned from.
 ///
 /// [Discord docs](https://discord.com/developers/docs/resources/invite#invite-object).
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug)]
 #[non_exhaustive]
 pub struct Invite {
     /// The approximate number of [`Member`]s in the related [`Guild`].
@@ -195,18 +195,18 @@ impl Invite {
 ///
 /// [Discord docs](https://discord.com/developers/docs/resources/invite#invite-object-example-invite-object).
 #[non_exhaustive]
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug)]
 pub struct InviteChannel {
     pub id: ChannelId,
     pub name: String,
-    #[serde(rename = "type")]
+    
     pub kind: ChannelType,
 }
 
 /// A minimal amount of information about the guild an invite points to.
 ///
 /// [Discord docs](https://discord.com/developers/docs/resources/invite#invite-object-example-invite-object).
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug)]
 #[non_exhaustive]
 pub struct InviteGuild {
     pub id: GuildId,
@@ -272,7 +272,7 @@ impl InviteGuild {
 /// [Manage Guild]: Permissions::MANAGE_GUILD
 ///
 /// [Discord docs](https://discord.com/developers/docs/resources/invite#invite-metadata-object) (extends [`Invite`] fields).
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug)]
 #[non_exhaustive]
 pub struct RichInvite {
     /// A representation of the minimal amount of information needed about the
@@ -388,7 +388,7 @@ impl RichInvite {
 }
 
 /// [Discord docs](https://discord.com/developers/docs/resources/invite#invite-stage-instance-object).
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug)]
 #[non_exhaustive]
 pub struct InviteStageInstance {
     /// The members speaking in the Stage
@@ -403,8 +403,8 @@ pub struct InviteStageInstance {
 
 enum_number! {
     /// [Discord docs](https://discord.com/developers/docs/resources/invite#invite-object-invite-target-types).
-    #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Deserialize, Serialize)]
-    #[serde(from = "u8", into = "u8")]
+    #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+    
     #[non_exhaustive]
     pub enum InviteTargetType {
         Normal = 0,

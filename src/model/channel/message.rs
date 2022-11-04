@@ -31,7 +31,7 @@ use crate::utils;
 /// private channel.
 ///
 /// [Discord docs](https://discord.com/developers/docs/resources/channel#message-object).
-#[derive(Clone, Debug, Default, Deserialize, Serialize)]
+#[derive(Clone, Debug, Default)]
 #[non_exhaustive]
 pub struct Message {
     /// The unique Id of the message. Can be used to calculate the creation date
@@ -59,7 +59,7 @@ pub struct Message {
     pub guild_id: Option<GuildId>,
     /// Indicator of the type of message this is, i.e. whether it is a regular
     /// message or a system message.
-    #[serde(rename = "type")]
+    
     pub kind: MessageType,
     /// A partial amount of data about the user's member data, if this message
     /// was sent in a guild.
@@ -83,17 +83,17 @@ pub struct Message {
     /// [Refer to Discord's documentation for more information][discord-docs].
     ///
     /// [discord-docs]: https://discord.com/developers/docs/resources/channel#message-object
-    #[serde(default = "Vec::new")]
+    
     pub mention_channels: Vec<ChannelMention>,
     /// Array of users mentioned in the message.
     pub mentions: Vec<User>,
     /// Non-repeating number used for ensuring message order.
-    #[serde(default)]
+    
     pub nonce: Option<Nonce>,
     /// Indicator of whether the message is pinned.
     pub pinned: bool,
     /// Array of reactions performed on the message.
-    #[serde(default)]
+    
     pub reactions: Vec<MessageReaction>,
     /// Initial message creation timestamp, calculated from its Id.
     pub timestamp: Timestamp,
@@ -113,7 +113,7 @@ pub struct Message {
     /// Bit flags describing extra features of the message.
     pub flags: Option<MessageFlags>,
     /// Array of message sticker item objects.
-    #[serde(default)]
+    
     pub sticker_items: Vec<StickerItem>,
     /// The message that was replied to using this message.
     pub referenced_message: Option<Box<Message>>, // Boxed to avoid recursion
@@ -122,7 +122,7 @@ pub struct Message {
     /// [`Interaction`]: crate::model::application::interaction::Interaction
     pub interaction: Option<Box<MessageInteraction>>,
     /// The components of this message
-    #[serde(default)]
+    
     pub components: Vec<ActionRow>,
 }
 
@@ -808,7 +808,7 @@ impl<'a> From<&'a Message> for MessageId {
 /// [Discord docs](https://discord.com/developers/docs/resources/channel#reaction-object).
 ///
 /// [reaction type]: ReactionType
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug)]
 #[non_exhaustive]
 pub struct MessageReaction {
     /// The amount of the type of reaction that have been sent for the
@@ -817,7 +817,7 @@ pub struct MessageReaction {
     /// Indicator of whether the current user has sent the type of reaction.
     pub me: bool,
     /// The type of reaction.
-    #[serde(rename = "emoji")]
+    
     pub reaction_type: ReactionType,
 }
 
@@ -825,8 +825,8 @@ enum_number! {
     /// Differentiates between regular and different types of system messages.
     ///
     /// [Discord docs](https://discord.com/developers/docs/resources/channel#message-object-message-types).
-    #[derive(Clone, Copy, Debug, Default, Eq, Hash, Ord, PartialEq, PartialOrd, Deserialize, Serialize)]
-    #[serde(from = "u8", into = "u8")]
+    #[derive(Clone, Copy, Debug, Default, Eq, Hash, Ord, PartialEq, PartialOrd)]
+    
     #[non_exhaustive]
     pub enum MessageType {
         /// A regular message.
@@ -884,8 +884,8 @@ enum_number! {
 
 enum_number! {
     /// [Discord docs](https://discord.com/developers/docs/resources/channel#message-object-message-activity-types).
-    #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Deserialize, Serialize)]
-    #[serde(from = "u8", into = "u8")]
+    #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+    
     #[non_exhaustive]
     pub enum MessageActivityKind {
         Join = 1,
@@ -899,7 +899,7 @@ enum_number! {
 /// Rich Presence application information.
 ///
 /// [Discord docs](https://discord.com/developers/docs/resources/application#application-object).
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug)]
 #[non_exhaustive]
 pub struct MessageApplication {
     /// ID of the application.
@@ -917,11 +917,11 @@ pub struct MessageApplication {
 /// Rich Presence activity information.
 ///
 /// [Discord docs](https://discord.com/developers/docs/resources/channel#message-object-message-activity-structure).
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug)]
 #[non_exhaustive]
 pub struct MessageActivity {
     /// Kind of message activity.
-    #[serde(rename = "type")]
+    
     pub kind: MessageActivityKind,
     /// `party_id` from a Rich Presence event.
     pub party_id: Option<String>,
@@ -930,7 +930,7 @@ pub struct MessageActivity {
 /// Reference data sent with crossposted messages.
 ///
 /// [Discord docs](https://discord.com/developers/docs/resources/channel#message-reference-object-message-reference-structure).
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug)]
 #[non_exhaustive]
 pub struct MessageReference {
     /// ID of the originating message.
@@ -962,14 +962,14 @@ impl From<(ChannelId, MessageId)> for MessageReference {
 }
 
 /// [Discord docs](https://discord.com/developers/docs/resources/channel#channel-mention-object).
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug)]
 pub struct ChannelMention {
     /// ID of the channel.
     pub id: ChannelId,
     /// ID of the guild containing the channel.
     pub guild_id: GuildId,
     /// The kind of channel
-    #[serde(rename = "type")]
+    
     pub kind: ChannelType,
     /// The name of the channel
     pub name: String,
@@ -1037,8 +1037,8 @@ impl MessageId {
     }
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize)]
-#[serde(untagged)]
+#[derive(Clone, Debug)]
+
 pub enum Nonce {
     String(String),
     Number(u64),

@@ -29,26 +29,26 @@ use crate::json::to_string;
 use crate::model::application::oauth::Scope;
 use crate::model::mention::Mentionable;
 
-/// Used with `#[serde(with|deserialize_with|serialize_with)]`
+/// Used with ``
 ///
 /// # Examples
 ///
 /// ```rust,ignore
-/// #[derive(Deserialize, Serialize)]
+/// #[derive()]
 /// struct A {
-///     #[serde(with = "discriminator")]
+///     
 ///     id: u16,
 /// }
 ///
-/// #[derive(Deserialize)]
+/// #[derive()]
 /// struct B {
-///     #[serde(deserialize_with = "discriminator::deserialize")]
+///     
 ///     id: u16,
 /// }
 ///
-/// #[derive(Serialize)]
+/// #[derive()]
 /// struct C {
-///     #[serde(serialize_with = "discriminator::serialize")]
+///     
 ///     id: u16,
 /// }
 /// ```
@@ -86,26 +86,26 @@ pub(crate) mod discriminator {
         }
     }
 
-    /// Used with `#[serde(with|deserialize_with|serialize_with)]`
+    /// Used with ``
     ///
     /// # Examples
     ///
     /// ```rust,ignore
-    /// #[derive(Deserialize, Serialize)]
+    /// #[derive()]
     /// struct A {
-    ///     #[serde(with = "discriminator::option")]
+    ///     
     ///     id: Option<u16>,
     /// }
     ///
-    /// #[derive(Deserialize)]
+    /// #[derive()]
     /// struct B {
-    ///     #[serde(deserialize_with = "discriminator::option::deserialize")]
+    ///     
     ///     id: Option<u16>,
     /// }
     ///
-    /// #[derive(Serialize)]
+    /// #[derive()]
     /// struct C {
-    ///     #[serde(serialize_with = "discriminator::option::serialize")]
+    ///     
     ///     id: Option<u16>,
     /// }
     /// ```
@@ -165,18 +165,18 @@ pub(crate) mod discriminator {
 ///
 /// [Discord docs](https://discord.com/developers/docs/resources/user#user-object).
 // TODO: replace this with User
-#[derive(Clone, Debug, Default, Deserialize, Serialize)]
+#[derive(Clone, Debug, Default)]
 #[non_exhaustive]
 pub struct CurrentUser {
     pub id: UserId,
     pub avatar: Option<String>,
-    #[serde(default)]
+
     pub bot: bool,
-    #[serde(with = "discriminator")]
+
     pub discriminator: u16,
     pub email: Option<String>,
     pub mfa_enabled: bool,
-    #[serde(rename = "username")]
+
     pub name: String,
     pub verified: Option<bool>,
     pub public_flags: Option<UserPublicFlags>,
@@ -520,54 +520,35 @@ impl CurrentUser {
 /// The default avatar is calculated via the result of `discriminator % 5`.
 ///
 /// The has of the avatar can be retrieved via calling [`Self::name`] on the enum.
-#[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Deserialize, Serialize)]
+#[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 #[non_exhaustive]
 pub enum DefaultAvatar {
     /// The avatar when the result is `0`.
-    #[serde(rename = "6debd47ed13483642cf09e832ed0bc1b")]
     Blurple,
     /// The avatar when the result is `1`.
-    #[serde(rename = "322c936a8c8be1b803cd94861bdfa868")]
     Grey,
     /// The avatar when the result is `2`.
-    #[serde(rename = "dd4dbc0016779df1378e7812eabaa04d")]
     Green,
     /// The avatar when the result is `3`.
-    #[serde(rename = "0e291f67c9274a1abdddeb3fd919cbaa")]
     Orange,
     /// The avatar when the result is `4`.
-    #[serde(rename = "1cbd08c76f8af6dddce02c5138971129")]
     Red,
-}
-
-impl DefaultAvatar {
-    /// Retrieves the String hash of the default avatar.
-    ///
-    /// # Errors
-    ///
-    /// May return a [`Error::Json`] if there is a serialization error.
-    pub fn name(self) -> Result<String> {
-        to_string(&self).map_err(From::from)
-    }
 }
 
 /// The representation of a user's status.
 ///
 /// [Discord docs](https://discord.com/developers/docs/topics/gateway#update-presence-status-types).
-#[derive(
-    Clone, Copy, Debug, Default, Eq, Hash, Ord, PartialEq, PartialOrd, Deserialize, Serialize,
-)]
+#[derive(Clone, Copy, Debug, Default, Eq, Hash, Ord, PartialEq, PartialOrd)]
 #[non_exhaustive]
 pub enum OnlineStatus {
-    #[serde(rename = "dnd")]
     DoNotDisturb,
-    #[serde(rename = "idle")]
+
     Idle,
-    #[serde(rename = "invisible")]
+
     Invisible,
-    #[serde(rename = "offline")]
+
     Offline,
-    #[serde(rename = "online")]
+
     #[default]
     Online,
 }
@@ -588,7 +569,7 @@ impl OnlineStatus {
 /// Information about a user.
 ///
 /// [Discord docs](https://discord.com/developers/docs/resources/user#user-object).
-#[derive(Clone, Debug, Default, Deserialize, Serialize)]
+#[derive(Clone, Debug, Default)]
 #[non_exhaustive]
 pub struct User {
     /// The unique Id of the user. Can be used to calculate the account's
@@ -597,15 +578,12 @@ pub struct User {
     /// Optional avatar hash.
     pub avatar: Option<String>,
     /// Indicator of whether the user is a bot.
-    #[serde(default)]
     pub bot: bool,
     /// The account's discriminator to differentiate the user from others with
     /// the same [`Self::name`]. The name+discriminator pair is always unique.
-    #[serde(with = "discriminator")]
     pub discriminator: u16,
     /// The account's username. Changing username will trigger a discriminator
     /// change if the username+discriminator pair becomes non-unique.
-    #[serde(rename = "username")]
     pub name: String,
     /// The public flags on a user's account
     pub public_flags: Option<UserPublicFlags>,
@@ -619,7 +597,6 @@ pub struct User {
     ///
     /// **Note**: This will only be present if the user is fetched via Rest API,
     /// e.g. with [`Http::get_user`].
-    #[serde(rename = "accent_color")]
     pub accent_colour: Option<Colour>,
 }
 
@@ -1184,12 +1161,11 @@ mod test {
         use super::discriminator;
         use crate::json::{assert_json, json};
 
-        #[derive(Debug, PartialEq, Deserialize, Serialize)]
+        #[derive(Debug, PartialEq)]
         struct User {
-            #[serde(with = "discriminator")]
             discriminator: u16,
         }
-        #[derive(Debug, PartialEq, Deserialize, Serialize)]
+        #[derive(Debug, PartialEq)]
         struct UserOpt {
             #[serde(
                 default,

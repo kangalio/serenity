@@ -10,7 +10,6 @@ mod change;
 mod utils;
 
 pub use change::{AffectedRole, Change, EntityType};
-use utils::{optional_string, users, webhooks};
 
 use crate::model::prelude::*;
 
@@ -81,19 +80,6 @@ impl Action {
             140..=143 => Action::AutoMod(unsafe { transmute(value) }),
             _ => Action::Unknown(value),
         }
-    }
-}
-
-impl<'de> Deserialize<'de> for Action {
-    fn deserialize<D: Deserializer<'de>>(deserializer: D) -> StdResult<Self, D::Error> {
-        let value = u8::deserialize(deserializer)?;
-        Ok(Action::from_value(value))
-    }
-}
-
-impl Serialize for Action {
-    fn serialize<S: Serializer>(&self, serializer: S) -> StdResult<S::Ok, S::Error> {
-        serializer.serialize_u8(self.num())
     }
 }
 
@@ -246,25 +232,23 @@ pub enum AutoModAction {
 }
 
 /// [Discord docs](https://discord.com/developers/docs/resources/audit-log#audit-log-object).
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug)]
 #[non_exhaustive]
 pub struct AuditLogs {
-    #[serde(rename = "audit_log_entries")]
     pub entries: Vec<AuditLogEntry>,
-    #[serde(with = "users")]
+
     pub users: HashMap<UserId, User>,
-    #[serde(with = "webhooks")]
+
     pub webhooks: HashMap<WebhookId, Webhook>,
 }
 
 /// [Discord docs](https://discord.com/developers/docs/resources/audit-log#audit-log-entry-object).
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug)]
 #[non_exhaustive]
 pub struct AuditLogEntry {
     /// Determines to what entity an [`Self::action`] was used on.
     pub target_id: Option<GenericId>,
     /// Determines what action was done on a [`Self::target_id`]
-    #[serde(rename = "action_type")]
     pub action: Action,
     /// What was the reasoning by doing an action on a target? If there was one.
     pub reason: Option<String>,
@@ -279,32 +263,24 @@ pub struct AuditLogEntry {
 }
 
 /// [Discord docs](https://discord.com/developers/docs/resources/audit-log#audit-log-entry-object-optional-audit-entry-info).
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug)]
 #[non_exhaustive]
 pub struct Options {
     /// Number of days after which inactive members were kicked.
-    #[serde(default, with = "optional_string")]
     pub delete_member_days: Option<u64>,
     /// Number of members removed by the prune
-    #[serde(default, with = "optional_string")]
     pub members_removed: Option<u64>,
     /// Channel in which the messages were deleted
-    #[serde(default)]
     pub channel_id: Option<ChannelId>,
     /// Number of deleted messages.
-    #[serde(default, with = "optional_string")]
     pub count: Option<u64>,
     /// Id of the overwritten entity
-    #[serde(default)]
     pub id: Option<GenericId>,
     /// Type of overwritten entity ("member" or "role").
-    #[serde(default, rename = "type")]
     pub kind: Option<String>,
     /// Message that was pinned or unpinned.
-    #[serde(default)]
     pub message_id: Option<MessageId>,
     /// Name of the role if type is "role"
-    #[serde(default)]
     pub role_name: Option<String>,
 }
 
@@ -380,7 +356,7 @@ mod tests {
     fn action_serde() {
         use serde_json::json;
 
-        #[derive(Debug, Deserialize, Serialize)]
+        #[derive(Debug)]
         struct T {
             action: Action,
         }

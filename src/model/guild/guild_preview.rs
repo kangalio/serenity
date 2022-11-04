@@ -6,7 +6,7 @@ use crate::model::id::GuildId;
 /// [Discord docs](https://discord.com/developers/docs/resources/guild#guild-preview-object).
 ///
 /// [`Guild`]: super::Guild
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug)]
 #[non_exhaustive]
 pub struct GuildPreview {
     /// The guild Id.

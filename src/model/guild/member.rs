@@ -19,7 +19,7 @@ use crate::model::Timestamp;
 /// Information about a member of a guild.
 ///
 /// [Discord docs](https://discord.com/developers/docs/resources/guild#guild-member-object).
-#[derive(Clone, Debug, Default, Deserialize, Serialize)]
+#[derive(Clone, Debug, Default)]
 #[non_exhaustive]
 pub struct Member {
     /// Indicator of whether the member can hear in voice channels.
@@ -39,7 +39,7 @@ pub struct Member {
     /// Attached User struct.
     pub user: User,
     /// Indicator that the member hasn't accepted the rules of the guild yet.
-    #[serde(default)]
+    
     pub pending: bool,
     /// Timestamp representing the date since the member is boosting the guild.
     pub premium_since: Option<Timestamp>,
@@ -60,7 +60,7 @@ pub struct Member {
 /// Helper for deserialization without a `GuildId` but then later updated to the correct `GuildId`.
 ///
 /// The only difference to `Member` is `guild_id` is wrapped in `Option`.
-#[derive(Deserialize)]
+#[derive()]
 pub(crate) struct InterimMember {
     pub deaf: bool,
     pub guild_id: Option<GuildId>,
@@ -69,7 +69,7 @@ pub(crate) struct InterimMember {
     pub nick: Option<String>,
     pub roles: Vec<RoleId>,
     pub user: User,
-    #[serde(default)]
+    
     pub pending: bool,
     pub premium_since: Option<Timestamp>,
     pub permissions: Option<Permissions>,
@@ -581,16 +581,16 @@ impl fmt::Display for Member {
 /// This is used in [`Message`]s from [`Guild`]s.
 ///
 /// [Discord docs](https://discord.com/developers/docs/resources/guild#guild-member-object), subset specification unknown
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug)]
 #[non_exhaustive]
 pub struct PartialMember {
     /// Indicator of whether the member can hear in voice channels.
-    #[serde(default)]
+    
     pub deaf: bool,
     /// Timestamp representing the date when the member joined.
     pub joined_at: Option<Timestamp>,
     /// Indicator of whether the member can speak in voice channels
-    #[serde(default)]
+    
     pub mute: bool,
     /// The member's nickname, if present.
     ///
@@ -599,7 +599,7 @@ pub struct PartialMember {
     /// Vector of Ids of [`Role`]s given to the member.
     pub roles: Vec<RoleId>,
     /// Indicator that the member hasn't accepted the rules of the guild yet.
-    #[serde(default)]
+    
     pub pending: bool,
     /// Timestamp representing the date since the member is boosting the guild.
     pub premium_since: Option<Timestamp>,
@@ -625,7 +625,7 @@ fn avatar_url(guild_id: GuildId, user_id: UserId, hash: Option<&String>) -> Opti
 }
 
 /// [Discord docs](https://discord.com/developers/docs/resources/channel#thread-member-object).
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug)]
 #[non_exhaustive]
 pub struct ThreadMember {
     /// The id of the thread.

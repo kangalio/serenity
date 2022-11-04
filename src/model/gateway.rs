@@ -4,7 +4,6 @@ use serde::ser::SerializeSeq;
 use url::Url;
 
 use super::prelude::*;
-use super::utils::*;
 
 /// A representation of the data retrieved from the bot gateway endpoint.
 ///
@@ -14,7 +13,7 @@ use super::utils::*;
 /// This is only applicable to bot users.
 ///
 /// [Discord docs](https://discord.com/developers/docs/topics/gateway#get-gateway-bot-json-response).
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug)]
 #[non_exhaustive]
 pub struct BotGateway {
     /// Information describing how many gateway sessions you can initiate within
@@ -30,7 +29,7 @@ pub struct BotGateway {
 /// Representation of an activity that a [`User`] is performing.
 ///
 /// [Discord docs](https://discord.com/developers/docs/topics/gateway-events#activity-object-activity-structure).
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug)]
 #[non_exhaustive]
 pub struct Activity {
     /// The ID of the application for the activity.
@@ -44,7 +43,6 @@ pub struct Activity {
     /// Whether or not the activity is an instanced game session.
     pub instance: Option<bool>,
     /// The type of activity being performed
-    #[serde(default, rename = "type")]
     pub kind: ActivityType,
     /// The name of the activity.
     pub name: String,
@@ -72,12 +70,11 @@ pub struct Activity {
     /// The buttons of this activity.
     ///
     /// **Note**: There can only be up to 2 buttons.
-    #[serde(default, deserialize_with = "deserialize_buttons")]
     pub buttons: Vec<ActivityButton>,
 }
 
 /// [Discord docs](https://discord.com/developers/docs/topics/gateway#activity-object-activity-buttons).
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug)]
 #[non_exhaustive]
 pub struct ActivityButton {
     /// The text shown on the button.
@@ -85,14 +82,13 @@ pub struct ActivityButton {
     /// The url opened when clicking the button.
     ///
     /// **Note**: Bots cannot access activity button URL.
-    #[serde(default)]
     pub url: String,
 }
 
 /// The assets for an activity.
 ///
 /// [Discord docs](https://discord.com/developers/docs/topics/gateway#activity-object-activity-assets).
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug)]
 #[non_exhaustive]
 pub struct ActivityAssets {
     /// The ID for a large asset of the activity, usually a snowflake.
@@ -135,7 +131,7 @@ bitflags! {
 /// Information about an activity's party.
 ///
 /// [Discord docs](https://discord.com/developers/docs/topics/gateway#activity-object-activity-party).
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug)]
 #[non_exhaustive]
 pub struct ActivityParty {
     /// The ID of the party.
@@ -147,13 +143,12 @@ pub struct ActivityParty {
 /// Secrets for an activity.
 ///
 /// [Discord docs](https://discord.com/developers/docs/topics/gateway#activity-object-activity-secrets).
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug)]
 #[non_exhaustive]
 pub struct ActivitySecrets {
     /// The secret for joining a party.
     pub join: Option<String>,
     /// The secret for a specific instanced match.
-    #[serde(rename = "match")]
     pub match_: Option<String>,
     /// The secret for spectating an activity.
     pub spectate: Option<String>,
@@ -162,7 +157,7 @@ pub struct ActivitySecrets {
 /// Representation of an emoji used in a custom status
 ///
 /// [Discord docs](https://discord.com/developers/docs/topics/gateway#activity-object-activity-emoji).
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug)]
 pub struct ActivityEmoji {
     /// The name of the emoji.
     pub name: String,
@@ -174,8 +169,8 @@ pub struct ActivityEmoji {
 
 enum_number! {
     /// [Discord docs](https://discord.com/developers/docs/topics/gateway#activity-object-activity-types).
-    #[derive(Clone, Copy, Debug, Default, Eq, Hash, Ord, PartialEq, PartialOrd, Deserialize, Serialize)]
-    #[serde(from = "u8", into = "u8")]
+    #[derive(Clone, Copy, Debug, Default, Eq, Hash, Ord, PartialEq, PartialOrd)]
+
     #[non_exhaustive]
     pub enum ActivityType {
         /// An indicator that the user is playing a game.
@@ -200,7 +195,7 @@ enum_number! {
 /// For the bot-specific gateway, refer to [`BotGateway`].
 ///
 /// [Discord docs](https://discord.com/developers/docs/topics/gateway#get-gateway-example-response).
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug)]
 #[non_exhaustive]
 pub struct Gateway {
     /// The gateway to connect to.
@@ -210,7 +205,7 @@ pub struct Gateway {
 /// Information detailing the current active status of a [`User`].
 ///
 /// [Discord docs](https://discord.com/developers/docs/topics/gateway#client-status-object).
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug)]
 pub struct ClientStatus {
     pub desktop: Option<OnlineStatus>,
     pub mobile: Option<OnlineStatus>,
@@ -220,17 +215,17 @@ pub struct ClientStatus {
 /// Information about the user of a [`Presence`] event.
 ///
 /// [Discord docs](https://discord.com/developers/docs/topics/gateway#presence-update).
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug)]
 #[non_exhaustive]
 pub struct PresenceUser {
     pub id: UserId,
     pub avatar: Option<String>,
     pub bot: Option<bool>,
-    #[serde(default, skip_serializing_if = "Option::is_none", with = "discriminator::option")]
+
     pub discriminator: Option<u16>,
     pub email: Option<String>,
     pub mfa_enabled: Option<bool>,
-    #[serde(rename = "username")]
+
     pub name: Option<String>,
     pub verified: Option<bool>,
     pub public_flags: Option<UserPublicFlags>,
@@ -291,14 +286,12 @@ impl PresenceUser {
 /// Information detailing the current online status of a [`User`].
 ///
 /// [Discord docs](https://discord.com/developers/docs/topics/gateway#presence-update-presence-update-event-fields).
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug)]
 #[non_exhaustive]
 pub struct Presence {
     /// [`User`]'s current activities.
-    #[serde(default)]
     pub activities: Vec<Activity>,
     /// The devices a user are currently active on, if available.
-    #[serde(default)]
     pub client_status: Option<ClientStatus>,
     /// The `GuildId` the presence update is coming from.
     pub guild_id: Option<GuildId>,
@@ -311,21 +304,21 @@ pub struct Presence {
 /// An initial set of information given after IDENTIFYing to the gateway.
 ///
 /// [Discord docs](https://discord.com/developers/docs/topics/gateway#ready-ready-event-fields).
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug)]
 #[non_exhaustive]
 pub struct Ready {
     pub application: PartialCurrentApplicationInfo,
     pub guilds: Vec<UnavailableGuild>,
-    #[serde(default, with = "presences")]
+
     pub presences: HashMap<UserId, Presence>,
-    #[serde(default, with = "private_channels")]
+
     pub private_channels: HashMap<ChannelId, Channel>,
     pub session_id: String,
     pub shard: Option<ShardInfo>,
-    #[serde(default, rename = "_trace")]
+
     pub trace: Vec<String>,
     pub user: CurrentUser,
-    #[serde(rename = "v")]
+
     pub version: u64,
 }
 
@@ -333,7 +326,7 @@ pub struct Ready {
 /// ratelimit period.
 ///
 /// [Discord docs](https://discord.com/developers/docs/topics/gateway#session-start-limit-object-session-start-limit-structure).
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug)]
 #[non_exhaustive]
 pub struct SessionStartLimit {
     /// The number of sessions that you can still initiate within the current
@@ -364,28 +357,10 @@ impl ShardInfo {
     }
 }
 
-impl<'de> serde::Deserialize<'de> for ShardInfo {
-    fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> StdResult<Self, D::Error> {
-        <(u32, u32)>::deserialize(deserializer).map(|(id, total)| ShardInfo {
-            id,
-            total,
-        })
-    }
-}
-
-impl serde::Serialize for ShardInfo {
-    fn serialize<S: serde::Serializer>(&self, serializer: S) -> StdResult<S::Ok, S::Error> {
-        let mut seq = serializer.serialize_seq(Some(2))?;
-        seq.serialize_element(&self.id)?;
-        seq.serialize_element(&self.total)?;
-        seq.end()
-    }
-}
-
 /// Timestamps of when a user started and/or is ending their activity.
 ///
 /// [Discord docs](https://discord.com/developers/docs/game-sdk/activities#data-models-activitytimestamps-struct).
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug)]
 #[non_exhaustive]
 pub struct ActivityTimestamps {
     pub end: Option<u64>,

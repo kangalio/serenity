@@ -788,21 +788,6 @@ impl Permissions {
     }
 }
 
-impl<'de> Deserialize<'de> for Permissions {
-    fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let permissions_str = String::deserialize(deserializer)?;
-        let permissions_num = permissions_str.parse().map_err(DeError::custom)?;
-
-        Ok(Permissions::from_bits_truncate(permissions_num))
-    }
-}
-
-impl Serialize for Permissions {
-    fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
-        serializer.collect_str(&self.bits())
-    }
-}
-
 #[cfg(feature = "model")]
 impl fmt::Display for Permissions {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {

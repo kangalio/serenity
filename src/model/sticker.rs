@@ -5,7 +5,6 @@ use crate::http::Http;
 #[cfg(feature = "model")]
 use crate::internal::prelude::*;
 use crate::model::prelude::*;
-use crate::model::utils::comma_separated_string;
 
 #[cfg(feature = "model")]
 impl StickerId {
@@ -55,7 +54,7 @@ impl StickerId {
 /// The smallest amount of data required to render a sticker.
 ///
 /// [Discord docs](https://discord.com/developers/docs/resources/sticker#sticker-item-object).
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug)]
 #[non_exhaustive]
 pub struct StickerItem {
     /// The unique ID given to this sticker.
@@ -95,7 +94,7 @@ impl StickerItem {
 /// Bots currently can only receive messages with stickers, not send.
 ///
 /// [Discord docs](https://discord.com/developers/docs/resources/sticker#sticker-pack-object).
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug)]
 #[non_exhaustive]
 pub struct StickerPack {
     /// The unique ID given to this sticker sticker pack.
@@ -138,7 +137,7 @@ fn banner_url(banner_asset_id: StickerPackBannerId) -> String {
 /// Bots cannot send stickers.
 ///
 /// [Discord docs](https://discord.com/developers/docs/resources/sticker#sticker-object).
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug)]
 #[non_exhaustive]
 pub struct Sticker {
     /// The unique ID given to this sticker.
@@ -152,16 +151,13 @@ pub struct Sticker {
     /// For guild stickers, the Discord name of a unicode emoji representing the
     /// sticker's expression. For standard stickers, a list of
     /// related expressions.
-    #[serde(with = "comma_separated_string")]
     pub tags: Vec<String>,
     /// The type of sticker.
-    #[serde(rename = "type")]
     pub kind: StickerType,
     /// The type of sticker format.
     pub format_type: StickerFormatType,
     /// Whether or not this guild sticker can be used, may be false due to loss
     /// of Server Boosts.
-    #[serde(default)]
     pub available: bool,
     /// Id of the guild that owns this sticker.
     pub guild_id: Option<GuildId>,
@@ -246,8 +242,8 @@ enum_number! {
     /// Differentiates between sticker types.
     ///
     /// [Discord docs](https://discord.com/developers/docs/resources/sticker#sticker-object-sticker-types).
-    #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Deserialize, Serialize)]
-    #[serde(from = "u8", into = "u8")]
+    #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+
     #[non_exhaustive]
     pub enum StickerType {
         /// An official sticker in a pack, part of Nitro or in a removed purchasable
@@ -263,8 +259,8 @@ enum_number! {
     /// Differentiates between sticker formats.
     ///
     /// [Discord docs](https://discord.com/developers/docs/resources/sticker#sticker-object-sticker-format-types).
-    #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Deserialize, Serialize)]
-    #[serde(from = "u8", into = "u8")]
+    #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+
     #[non_exhaustive]
     pub enum StickerFormatType {
         /// A PNG format sticker.

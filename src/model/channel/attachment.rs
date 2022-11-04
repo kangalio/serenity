@@ -4,14 +4,13 @@ use reqwest::Client as ReqwestClient;
 #[cfg(feature = "model")]
 use crate::internal::prelude::*;
 use crate::model::id::AttachmentId;
-use crate::model::utils::is_false;
 
 /// A file uploaded with a message. Not to be confused with [`Embed`]s.
 ///
 /// [Discord docs](https://discord.com/developers/docs/resources/channel#attachment-object).
 ///
 /// [`Embed`]: super::Embed
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug)]
 #[non_exhaustive]
 pub struct Attachment {
     /// The unique ID given to this attachment.
@@ -39,7 +38,6 @@ pub struct Attachment {
     ///
     /// Ephemeral attachments on messages are guaranteed to be available as long as
     /// the message itself exists.
-    #[serde(default, skip_serializing_if = "is_false")]
     pub ephemeral: bool,
 }
 

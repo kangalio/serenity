@@ -45,13 +45,11 @@ use serde::{Deserialize, Serialize};
 /// Discord's epoch starts at "2015-01-01T00:00:00+00:00"
 const DISCORD_EPOCH: u64 = 1_420_070_400_000;
 
-#[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd, Deserialize, Serialize)]
-#[serde(transparent)]
+#[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
+
 pub struct Timestamp(
     #[cfg(feature = "chrono")] DateTime<Utc>,
-    #[cfg(not(feature = "chrono"))]
-    #[serde(with = "rfc3339")]
-    OffsetDateTime,
+    #[cfg(not(feature = "chrono"))] OffsetDateTime,
 );
 
 impl Timestamp {

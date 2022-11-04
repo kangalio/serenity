@@ -18,13 +18,12 @@ use crate::model::guild::Member;
 use crate::model::id::MessageId;
 use crate::model::id::{ApplicationId, ChannelId, GuildId, InteractionId};
 use crate::model::user::User;
-use crate::model::utils::{remove_from_map, remove_from_map_opt};
 use crate::model::Permissions;
 
 /// An interaction triggered by a modal submit.
 ///
 /// [Discord docs](https://discord.com/developers/docs/interactions/receiving-and-responding#interaction-object).
-#[derive(Clone, Debug, Serialize)]
+#[derive(Clone, Debug)]
 #[non_exhaustive]
 pub struct ModalInteraction {
     /// Id of the interaction.
@@ -34,14 +33,12 @@ pub struct ModalInteraction {
     /// The data of the interaction which was triggered.
     pub data: ModalInteractionData,
     /// The guild Id this interaction was sent from, if there is one.
-    #[serde(skip_serializing_if = "Option::is_none")]
     pub guild_id: Option<GuildId>,
     /// The channel Id this interaction was sent from.
     pub channel_id: ChannelId,
     /// The `member` data for the invoking user.
     ///
     /// **Note**: It is only present if the interaction is triggered in a guild.
-    #[serde(skip_serializing_if = "Option::is_none")]
     pub member: Option<Member>,
     /// The `user` object for the invoking user.
     pub user: User,
@@ -53,7 +50,6 @@ pub struct ModalInteraction {
     ///
     /// **Note**: Does not exist if the modal interaction originates from
     /// an application command interaction
-    #[serde(skip_serializing_if = "Option::is_none")]
     pub message: Option<Box<Message>>,
     /// Permissions the app or bot has within the channel the interaction was sent from.
     pub app_permissions: Option<Permissions>,
@@ -180,42 +176,10 @@ impl ModalInteraction {
     }
 }
 
-impl<'de> Deserialize<'de> for ModalInteraction {
-    fn deserialize<D: Deserializer<'de>>(deserializer: D) -> StdResult<Self, D::Error> {
-        let mut map = JsonMap::deserialize(deserializer)?;
-
-        let guild_id = remove_from_map_opt::<GuildId, _>(&mut map, "guild_id")?;
-        if let Some(guild_id) = guild_id {
-            add_guild_id_to_resolved(&mut map, guild_id);
-        }
-
-        let member = remove_from_map_opt::<Member, _>(&mut map, "member")?;
-        let user = remove_from_map_opt(&mut map, "user")?
-            .or_else(|| member.as_ref().map(|m| m.user.clone()))
-            .ok_or_else(|| DeError::custom("expected user or member"))?;
-
-        Ok(Self {
-            member,
-            user,
-            id: remove_from_map(&mut map, "id")?,
-            guild_id,
-            application_id: remove_from_map(&mut map, "application_id")?,
-            data: remove_from_map(&mut map, "data")?,
-            channel_id: remove_from_map(&mut map, "channel_id")?,
-            token: remove_from_map(&mut map, "token")?,
-            version: remove_from_map(&mut map, "version")?,
-            message: remove_from_map_opt(&mut map, "message")?,
-            app_permissions: remove_from_map_opt(&mut map, "app_permissions")?,
-            locale: remove_from_map(&mut map, "locale")?,
-            guild_locale: remove_from_map_opt(&mut map, "guild_locale")?,
-        })
-    }
-}
-
 /// A modal submit interaction data, provided by [`ModalInteraction::data`]
 ///
 /// [Discord docs](https://discord.com/developers/docs/interactions/receiving-and-responding#interaction-object-interaction-data-structure).
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug)]
 #[non_exhaustive]
 pub struct ModalInteractionData {
     /// The custom id of the modal

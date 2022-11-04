@@ -14,7 +14,7 @@ use crate::model::id::{ChannelId, GuildId, MessageId, RoleId, RuleId, UserId};
 /// Configured auto moderation rule.
 ///
 /// [Discord docs](https://discord.com/developers/docs/resources/auto-moderation#auto-moderation-rule-object).
-#[derive(Clone, Debug, PartialEq, Eq, Deserialize, Serialize)]
+#[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Rule {
     /// ID of the rule.
     pub id: RuleId,
@@ -27,7 +27,6 @@ pub struct Rule {
     /// Event context in which the rule should be checked.
     pub event_type: EventType,
     /// Characterizes the type of content which can trigger the rule.
-    #[serde(flatten)]
     pub trigger: Trigger,
     /// Actions which will execute when the rule is triggered.
     pub actions: Vec<Action>,
@@ -46,8 +45,7 @@ pub struct Rule {
 /// Indicates in what event context a rule should be checked.
 ///
 /// [Discord docs](https://discord.com/developers/docs/resources/auto-moderation#auto-moderation-rule-object-event-types).
-#[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Deserialize, Serialize)]
-#[serde(from = "u8", into = "u8")]
+#[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 #[non_exhaustive]
 pub enum EventType {
     MessageSend,
@@ -88,67 +86,23 @@ pub enum Trigger {
 }
 
 /// Helper struct for the (de)serialization of `Trigger`.
-#[derive(Deserialize, Serialize)]
-#[serde(rename = "Trigger")]
+#[derive()]
+
 struct InterimTrigger<'a> {
-    #[serde(rename = "trigger_type")]
     kind: TriggerType,
-    #[serde(rename = "trigger_metadata")]
+
     metadata: InterimTriggerMetadata<'a>,
 }
 
 /// Helper struct for the (de)serialization of `Trigger`.
 ///
 /// [Discord docs](https://discord.com/developers/docs/resources/auto-moderation#auto-moderation-rule-object-trigger-metadata).
-#[derive(Deserialize, Serialize)]
-#[serde(rename = "TriggerMetadata")]
+#[derive()]
+
 struct InterimTriggerMetadata<'a> {
-    #[serde(skip_serializing_if = "Option::is_none")]
     keyword_filter: Option<Cow<'a, [String]>>,
-    #[serde(skip_serializing_if = "Option::is_none")]
+
     presets: Option<Cow<'a, [KeywordPresetType]>>,
-}
-
-impl<'de> Deserialize<'de> for Trigger {
-    fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let trigger = InterimTrigger::deserialize(deserializer)?;
-        let trigger = match trigger.kind {
-            TriggerType::Keyword => {
-                let keywords = trigger
-                    .metadata
-                    .keyword_filter
-                    .ok_or_else(|| Error::missing_field("keyword_filter"))?;
-                Self::Keyword(keywords.into_owned())
-            },
-            TriggerType::HarmfulLink => Self::HarmfulLink,
-            TriggerType::Spam => Self::Spam,
-            TriggerType::KeywordPreset => {
-                let presets =
-                    trigger.metadata.presets.ok_or_else(|| Error::missing_field("presets"))?;
-                Self::KeywordPreset(presets.into_owned())
-            },
-            TriggerType::Unknown(unknown) => Self::Unknown(unknown),
-        };
-        Ok(trigger)
-    }
-}
-
-impl Serialize for Trigger {
-    fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
-        let mut trigger = InterimTrigger {
-            kind: self.kind(),
-            metadata: InterimTriggerMetadata {
-                keyword_filter: None,
-                presets: None,
-            },
-        };
-        match self {
-            Self::Keyword(keywords) => trigger.metadata.keyword_filter = Some(keywords.into()),
-            Self::KeywordPreset(presets) => trigger.metadata.presets = Some(presets.into()),
-            _ => {},
-        }
-        trigger.serialize(serializer)
-    }
 }
 
 impl Trigger {
@@ -167,8 +121,7 @@ impl Trigger {
 /// Type of [`Trigger`].
 ///
 /// [Discord docs](https://discord.com/developers/docs/resources/auto-moderation#auto-moderation-rule-object-trigger-types).
-#[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Deserialize, Serialize)]
-#[serde(from = "u8", into = "u8")]
+#[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 #[non_exhaustive]
 pub enum TriggerType {
     Keyword,
@@ -210,7 +163,7 @@ impl From<TriggerType> for u8 {
 /// [`Change::TriggerMetadata`]: crate::model::guild::audit_log::Change::TriggerMetadata
 ///
 /// [Discord docs](https://discord.com/developers/docs/resources/auto-moderation#auto-moderation-rule-object-trigger-metadata).
-#[derive(Clone, Debug, PartialEq, Eq, Deserialize, Serialize)]
+#[derive(Clone, Debug, PartialEq, Eq)]
 pub struct TriggerMetadata {
     keyword_filter: Option<Vec<String>>,
     presets: Option<Vec<KeywordPresetType>>,
@@ -219,8 +172,7 @@ pub struct TriggerMetadata {
 /// Internally pre-defined wordsets which will be searched for in content.
 ///
 /// [Discord docs](https://discord.com/developers/docs/resources/auto-moderation#auto-moderation-rule-object-keyword-preset-types).
-#[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Deserialize, Serialize)]
-#[serde(from = "u8", into = "u8")]
+#[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 #[non_exhaustive]
 pub enum KeywordPresetType {
     Profanity,
@@ -277,7 +229,7 @@ pub enum Action {
 /// blocked).
 ///
 /// [Discord docs](https://discord.com/developers/docs/topics/gateway#auto-moderation-action-execution).
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug)]
 pub struct ActionExecution {
     /// ID of the guild in which the action was executed.
     pub guild_id: GuildId,
@@ -286,7 +238,6 @@ pub struct ActionExecution {
     /// ID of the rule which action belongs to.
     pub rule_id: RuleId,
     /// Trigger type of rule which was triggered.
-    #[serde(rename = "rule_trigger_type")]
     pub trigger_type: TriggerType,
     /// ID of the user which generated the content which triggered the rule.
     pub user_id: UserId,
@@ -317,80 +268,19 @@ pub struct ActionExecution {
 }
 
 /// Helper struct for the (de)serialization of `Action`.
-#[derive(Default, Deserialize, Serialize)]
+#[derive(Default)]
 struct RawActionMetadata {
-    #[serde(skip_serializing_if = "Option::is_none")]
     channel_id: Option<ChannelId>,
-    #[serde(skip_serializing_if = "Option::is_none")]
+
     duration_seconds: Option<u64>,
 }
 
 /// Helper struct for the (de)serialization of `Action`.
-#[derive(Deserialize, Serialize)]
+#[derive()]
 struct RawAction {
-    #[serde(rename = "type")]
     kind: ActionType,
-    #[serde(skip_serializing_if = "Option::is_none")]
+
     metadata: Option<RawActionMetadata>,
-}
-
-// The manual implementation is required because serde doesn't support integer tags for
-// internally/adjacently tagged enums.
-//
-// See [Integer/boolean tags for internally/adjacently tagged
-// enums](https://github.com/serde-rs/serde/pull/2056).
-impl<'de> Deserialize<'de> for Action {
-    fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let action = RawAction::deserialize(deserializer)?;
-        Ok(match action.kind {
-            ActionType::BlockMessage => Action::BlockMessage,
-            ActionType::Alert => Action::Alert(
-                action
-                    .metadata
-                    .ok_or_else(|| Error::missing_field("metadata"))?
-                    .channel_id
-                    .ok_or_else(|| Error::missing_field("channel_id"))?,
-            ),
-            ActionType::Timeout => Action::Timeout(Duration::from_secs(
-                action
-                    .metadata
-                    .ok_or_else(|| Error::missing_field("metadata"))?
-                    .duration_seconds
-                    .ok_or_else(|| Error::missing_field("duration_seconds"))?,
-            )),
-            ActionType::Unknown(unknown) => Action::Unknown(unknown),
-        })
-    }
-}
-
-impl Serialize for Action {
-    fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
-        let action = match *self {
-            Action::BlockMessage => RawAction {
-                kind: ActionType::BlockMessage,
-                metadata: None,
-            },
-            Action::Alert(channel_id) => RawAction {
-                kind: ActionType::Alert,
-                metadata: Some(RawActionMetadata {
-                    channel_id: Some(channel_id),
-                    ..Default::default()
-                }),
-            },
-            Action::Timeout(duration) => RawAction {
-                kind: ActionType::Timeout,
-                metadata: Some(RawActionMetadata {
-                    duration_seconds: Some(duration.as_secs()),
-                    ..Default::default()
-                }),
-            },
-            Action::Unknown(n) => RawAction {
-                kind: ActionType::Unknown(n),
-                metadata: None,
-            },
-        };
-        action.serialize(serializer)
-    }
 }
 
 impl Action {
@@ -408,8 +298,7 @@ impl Action {
 /// Type of [`Action`].
 ///
 /// [Discord docs](https://discord.com/developers/docs/resources/auto-moderation#auto-moderation-action-object-action-types).
-#[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Deserialize, Serialize)]
-#[serde(from = "u8", into = "u8")]
+#[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 #[non_exhaustive]
 pub enum ActionType {
     /// Blocks the content of a message according to the rule.
@@ -458,9 +347,8 @@ mod tests {
 
     #[test]
     fn rule_trigger_serde() {
-        #[derive(Debug, PartialEq, Deserialize, Serialize)]
+        #[derive(Debug, PartialEq)]
         struct Rule {
-            #[serde(flatten)]
             trigger: Trigger,
         }
 

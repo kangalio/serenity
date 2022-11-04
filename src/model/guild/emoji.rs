@@ -12,7 +12,6 @@ use crate::json::json;
 use crate::model::id::GuildId;
 use crate::model::id::{EmojiId, RoleId};
 use crate::model::user::User;
-use crate::model::utils::default_true;
 #[cfg(all(feature = "cache", feature = "model"))]
 use crate::model::ModelError;
 
@@ -21,15 +20,13 @@ use crate::model::ModelError;
 /// guild it was created in.
 ///
 /// [Discord docs](https://discord.com/developers/docs/resources/emoji#emoji-object).
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug)]
 #[non_exhaustive]
 pub struct Emoji {
     /// Whether the emoji is animated.
-    #[serde(default)]
     pub animated: bool,
     /// Whether the emoji can be used. This may be false when the guild loses boosts,
     /// reducing the emoji limit.
-    #[serde(default = "default_true")]
     pub available: bool,
     /// The Id of the emoji.
     pub id: EmojiId,
@@ -39,17 +36,14 @@ pub struct Emoji {
     /// Whether the emoji is managed via an [`Integration`] service.
     ///
     /// [`Integration`]: super::Integration
-    #[serde(default)]
     pub managed: bool,
     /// Whether the emoji name needs to be surrounded by colons in order to be
     /// used by the client.
-    #[serde(default)]
     pub require_colons: bool,
     /// A list of [`Role`]s that are allowed to use the emoji. If there are no
     /// roles specified, then usage is unrestricted.
     ///
     /// [`Role`]: super::Role
-    #[serde(default)]
     pub roles: Vec<RoleId>,
     /// The user who created the emoji.
     pub user: Option<User>,

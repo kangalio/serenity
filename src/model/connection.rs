@@ -5,7 +5,7 @@ use super::prelude::*;
 /// Information about a connection between the current user and a third party service.
 ///
 /// [Discord docs](https://discord.com/developers/docs/resources/user#connection-object-connection-structure).
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug)]
 #[non_exhaustive]
 pub struct Connection {
     /// The ID of the account on the other side of this connection.
@@ -15,13 +15,10 @@ pub struct Connection {
     /// The service that this connection represents (e.g. twitch, youtube)
     ///
     /// [Discord docs](https://discord.com/developers/docs/resources/user#connection-object-services).
-    #[serde(rename = "type")]
     pub kind: String,
     /// Whether this connection has been revoked and is no longer valid.
-    #[serde(default)]
     pub revoked: bool,
     /// A list of partial guild [`Integration`]s that use this connection.
-    #[serde(default)]
     pub integrations: Vec<Integration>,
     /// Whether this connection has been verified and the user has proven they own the account.
     pub verified: bool,
@@ -37,8 +34,8 @@ enum_number! {
     /// The visibility of a user connection on a user's profile.
     ///
     /// [Discord docs](https://discord.com/developers/docs/resources/user#connection-object-visibility-types).
-    #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Deserialize, Serialize)]
-    #[serde(from = "u8", into = "u8")]
+    #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+
     #[non_exhaustive]
     pub enum ConnectionVisibility {
         None = 0,

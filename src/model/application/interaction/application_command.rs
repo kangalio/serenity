@@ -36,13 +36,12 @@ use crate::model::id::{
     UserId,
 };
 use crate::model::user::User;
-use crate::model::utils::{remove_from_map, remove_from_map_opt};
 use crate::model::Permissions;
 
 /// An interaction when a user invokes a slash command.
 ///
 /// [Discord docs](https://discord.com/developers/docs/interactions/receiving-and-responding#interaction-object).
-#[derive(Clone, Debug, Serialize)]
+#[derive(Clone, Debug)]
 #[non_exhaustive]
 pub struct CommandInteraction {
     /// Id of the interaction.
@@ -52,14 +51,12 @@ pub struct CommandInteraction {
     /// The data of the interaction which was triggered.
     pub data: CommandData,
     /// The guild Id this interaction was sent from, if there is one.
-    #[serde(skip_serializing_if = "Option::is_none")]
     pub guild_id: Option<GuildId>,
     /// The channel Id this interaction was sent from.
     pub channel_id: ChannelId,
     /// The `member` data for the invoking user.
     ///
     /// **Note**: It is only present if the interaction is triggered in a guild.
-    #[serde(skip_serializing_if = "Option::is_none")]
     pub member: Option<Box<Member>>,
     /// The `user` object for the invoking user.
     pub user: User,
@@ -221,42 +218,10 @@ impl CommandInteraction {
     }
 }
 
-impl<'de> Deserialize<'de> for CommandInteraction {
-    fn deserialize<D: Deserializer<'de>>(deserializer: D) -> StdResult<Self, D::Error> {
-        let mut map = JsonMap::deserialize(deserializer)?;
-
-        let guild_id = remove_from_map_opt::<GuildId, _>(&mut map, "guild_id")?;
-
-        if let Some(guild_id) = guild_id {
-            add_guild_id_to_resolved(&mut map, guild_id);
-        }
-
-        let member = remove_from_map_opt::<Box<Member>, _>(&mut map, "member")?;
-        let user = remove_from_map_opt(&mut map, "user")?
-            .or_else(|| member.as_ref().map(|m| m.user.clone()))
-            .ok_or_else(|| DeError::custom("expected user or member"))?;
-
-        Ok(Self {
-            guild_id,
-            member,
-            user,
-            id: remove_from_map(&mut map, "id")?,
-            application_id: remove_from_map(&mut map, "application_id")?,
-            data: remove_from_map(&mut map, "data")?,
-            channel_id: remove_from_map(&mut map, "channel_id")?,
-            token: remove_from_map(&mut map, "token")?,
-            version: remove_from_map(&mut map, "version")?,
-            app_permissions: remove_from_map_opt(&mut map, "app_permissions")?,
-            locale: remove_from_map(&mut map, "locale")?,
-            guild_locale: remove_from_map_opt(&mut map, "guild_locale")?,
-        })
-    }
-}
-
 /// The command data payload.
 ///
 /// [Discord docs](https://discord.com/developers/docs/interactions/receiving-and-responding#interaction-object-interaction-data-structure).
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug)]
 #[non_exhaustive]
 pub struct CommandData {
     /// The Id of the invoked command.
@@ -264,16 +229,13 @@ pub struct CommandData {
     /// The name of the invoked command.
     pub name: String,
     /// The application command type of the triggered application command.
-    #[serde(rename = "type")]
     pub kind: CommandType,
     /// The parameters and the given values.
     /// The converted objects from the given options.
-    #[serde(default)]
     pub resolved: CommandDataResolved,
-    #[serde(default)]
+
     pub options: Vec<CommandDataOption>,
     /// The Id of the guild the command is registered to.
-    #[serde(skip_serializing_if = "Option::is_none")]
     pub guild_id: Option<GuildId>,
     /// The targeted user or message, if the triggered application command type
     /// is [`User`] or [`Message`].
@@ -468,26 +430,20 @@ pub enum ResolvedTarget<'a> {
 /// It contains the objects of [`CommandDataOption`]s.
 ///
 /// [Discord docs](https://discord.com/developers/docs/interactions/receiving-and-responding#interaction-object-resolved-data-structure).
-#[derive(Clone, Debug, Default, Deserialize, Serialize)]
+#[derive(Clone, Debug, Default)]
 #[non_exhaustive]
 pub struct CommandDataResolved {
     /// The resolved users.
-    #[serde(default, skip_serializing_if = "HashMap::is_empty")]
     pub users: HashMap<UserId, User>,
     /// The resolved partial members.
-    #[serde(default, skip_serializing_if = "HashMap::is_empty")]
     pub members: HashMap<UserId, PartialMember>,
     /// The resolved roles.
-    #[serde(default, skip_serializing_if = "HashMap::is_empty")]
     pub roles: HashMap<RoleId, Role>,
     /// The resolved partial channels.
-    #[serde(default, skip_serializing_if = "HashMap::is_empty")]
     pub channels: HashMap<ChannelId, PartialChannel>,
     /// The resolved messages.
-    #[serde(default, skip_serializing_if = "HashMap::is_empty")]
     pub messages: HashMap<MessageId, Message>,
     /// The resolved attachments.
-    #[serde(default, skip_serializing_if = "HashMap::is_empty")]
     pub attachments: HashMap<AttachmentId, Attachment>,
 }
 
@@ -515,106 +471,17 @@ impl CommandDataOption {
     }
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive()]
 struct RawCommandDataOption {
     name: String,
-    #[serde(rename = "type")]
+
     kind: CommandOptionType,
-    #[serde(skip_serializing_if = "Option::is_none")]
+
     value: Option<serde_json::Value>,
-    #[serde(skip_serializing_if = "Option::is_none")]
+
     options: Option<Vec<RawCommandDataOption>>,
-    #[serde(skip_serializing_if = "Option::is_none")]
+
     focused: Option<bool>,
-}
-
-fn option_from_raw<E: DeError>(raw: RawCommandDataOption) -> StdResult<CommandDataOption, E> {
-    macro_rules! value {
-        () => {
-            serde_json::from_value(raw.value.ok_or_else(|| DeError::missing_field("value"))?)
-                .map_err(DeError::custom)?
-        };
-    }
-
-    let value = match raw.kind {
-        _ if raw.focused == Some(true) => CommandDataOptionValue::Autocomplete {
-            kind: raw.kind,
-            value: value!(),
-        },
-        CommandOptionType::Boolean => CommandDataOptionValue::Boolean(value!()),
-        CommandOptionType::Integer => CommandDataOptionValue::Integer(value!()),
-        CommandOptionType::Number => CommandDataOptionValue::Number(value!()),
-        CommandOptionType::String => CommandDataOptionValue::String(value!()),
-        CommandOptionType::SubCommand => {
-            let options = raw.options.ok_or_else(|| DeError::missing_field("options"))?;
-            let options = options.into_iter().map(option_from_raw).collect::<StdResult<_, E>>()?;
-            CommandDataOptionValue::SubCommand(options)
-        },
-        CommandOptionType::SubCommandGroup => {
-            let options = raw.options.ok_or_else(|| DeError::missing_field("options"))?;
-            let options = options.into_iter().map(option_from_raw).collect::<StdResult<_, E>>()?;
-            CommandDataOptionValue::SubCommandGroup(options)
-        },
-        CommandOptionType::Attachment => CommandDataOptionValue::Attachment(value!()),
-        CommandOptionType::Channel => CommandDataOptionValue::Channel(value!()),
-        CommandOptionType::Mentionable => CommandDataOptionValue::Mentionable(value!()),
-        CommandOptionType::Role => CommandDataOptionValue::Role(value!()),
-        CommandOptionType::User => CommandDataOptionValue::User(value!()),
-        CommandOptionType::Unknown(unknown) => CommandDataOptionValue::Unknown(unknown),
-    };
-
-    Ok(CommandDataOption {
-        name: raw.name,
-        value,
-    })
-}
-
-fn option_to_raw(option: &CommandDataOption) -> StdResult<RawCommandDataOption, serde_json::Error> {
-    let mut raw = RawCommandDataOption {
-        name: option.name.clone(),
-        kind: option.kind(),
-        value: None,
-        options: None,
-        focused: None,
-    };
-
-    match &option.value {
-        CommandDataOptionValue::Autocomplete {
-            kind: _,
-            value,
-        } => {
-            raw.value = Some(serde_json::to_value(value)?);
-            raw.focused = Some(true);
-        },
-        CommandDataOptionValue::Boolean(v) => raw.value = Some(serde_json::to_value(v)?),
-        CommandDataOptionValue::Integer(v) => raw.value = Some(serde_json::to_value(v)?),
-        CommandDataOptionValue::Number(v) => raw.value = Some(serde_json::to_value(v)?),
-        CommandDataOptionValue::String(v) => raw.value = Some(serde_json::to_value(v)?),
-        CommandDataOptionValue::SubCommand(o) | CommandDataOptionValue::SubCommandGroup(o) => {
-            raw.options =
-                Some(o.iter().map(option_to_raw).collect::<StdResult<_, serde_json::Error>>()?);
-        },
-        CommandDataOptionValue::Attachment(v) => raw.value = Some(serde_json::to_value(v)?),
-        CommandDataOptionValue::Channel(v) => raw.value = Some(serde_json::to_value(v)?),
-        CommandDataOptionValue::Mentionable(v) => raw.value = Some(serde_json::to_value(v)?),
-        CommandDataOptionValue::Role(v) => raw.value = Some(serde_json::to_value(v)?),
-        CommandDataOptionValue::User(v) => raw.value = Some(serde_json::to_value(v)?),
-        CommandDataOptionValue::Unknown(_) => {},
-    }
-
-    Ok(raw)
-}
-
-impl<'de> Deserialize<'de> for CommandDataOption {
-    fn deserialize<D: Deserializer<'de>>(deserializer: D) -> StdResult<Self, D::Error> {
-        option_from_raw(RawCommandDataOption::deserialize(deserializer)?)
-    }
-}
-
-impl Serialize for CommandDataOption {
-    fn serialize<S: Serializer>(&self, serializer: S) -> StdResult<S::Ok, S::Error> {
-        option_to_raw(self).map_err(S::Error::custom)?.serialize(serializer)
-    }
 }
 
 /// The value of an [`CommandDataOption`].

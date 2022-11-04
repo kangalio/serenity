@@ -13,7 +13,7 @@ use super::user::User;
 use super::Permissions;
 
 /// Partial information about the given application.
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug)]
 pub struct PartialCurrentApplicationInfo {
     /// The unique Id of the user.
     pub id: ApplicationId,
@@ -24,47 +24,47 @@ pub struct PartialCurrentApplicationInfo {
 /// Information about the current application and its owner.
 ///
 /// [Discord docs](https://discord.com/developers/docs/resources/application#application-object-application-structure).
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug)]
 #[non_exhaustive]
 pub struct CurrentApplicationInfo {
     pub id: ApplicationId,
     pub name: String,
     pub icon: Option<String>,
     pub description: String,
-    #[serde(default)]
+
     pub rpc_origins: Vec<String>,
     pub bot_public: bool,
     pub bot_require_code_grant: bool,
-    #[serde(default)]
+
     pub terms_of_service_url: Option<String>,
-    #[serde(default)]
+
     pub privacy_policy_url: Option<String>,
     // TODO: this is an optional field according to Discord and should be Option<User>
     pub owner: User,
     pub verify_key: String,
     pub team: Option<Team>,
-    #[serde(default)]
+
     pub guild_id: Option<GuildId>,
-    #[serde(default)]
+
     pub primary_sku_id: Option<SkuId>,
-    #[serde(default)]
+
     pub slug: Option<String>,
-    #[serde(default)]
+
     pub cover_image: Option<String>,
-    #[serde(default)]
+
     pub flags: Option<ApplicationFlags>,
-    #[serde(default)]
+
     pub tags: Option<Vec<String>>,
-    #[serde(default)]
+
     pub install_params: Option<InstallParams>,
-    #[serde(default)]
+
     pub custom_install_url: Option<String>,
 }
 
 /// Information about the Team group of the application.
 ///
 /// [Discord docs](https://discord.com/developers/docs/topics/teams#data-models-team-object).
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug)]
 pub struct Team {
     /// The icon of the team.
     pub icon: Option<String>,
@@ -81,7 +81,7 @@ pub struct Team {
 /// Information about a Member on a Team.
 ///
 /// [Discord docs](https://discord.com/developers/docs/topics/teams#data-models-team-member-object).
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug)]
 pub struct TeamMember {
     /// The member's membership state.
     pub membership_state: MembershipState,
@@ -97,8 +97,8 @@ pub struct TeamMember {
 
 enum_number! {
     /// [Discord docs](https://discord.com/developers/docs/topics/teams#data-models-membership-state-enum).
-    #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Deserialize, Serialize)]
-    #[serde(from = "u8", into = "u8")]
+    #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+
     #[non_exhaustive]
     pub enum MembershipState {
         Invited = 1,
@@ -127,7 +127,7 @@ bitflags! {
 /// Settings for the application's default in-app authorization link
 ///
 /// [Discord docs](https://discord.com/developers/docs/resources/application#install-params-object-install-params-structure).
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone)]
 pub struct InstallParams {
     pub scopes: Vec<Scope>,
     pub permissions: Permissions,

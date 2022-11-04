@@ -11,7 +11,7 @@ use crate::model::Timestamp;
 /// Information about an available voice region.
 ///
 /// [Discord docs](https://discord.com/developers/docs/resources/voice#voice-region-object).
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug)]
 #[non_exhaustive]
 pub struct VoiceRegion {
     /// Whether it is a custom voice region, which is used for events.
@@ -29,7 +29,7 @@ pub struct VoiceRegion {
 /// A user's state within a voice channel.
 ///
 /// [Discord docs](https://discord.com/developers/docs/resources/voice#voice-state-object).
-#[derive(Clone, Serialize)]
+#[derive(Clone)]
 #[non_exhaustive]
 pub struct VoiceState {
     pub channel_id: Option<ChannelId>,
@@ -68,50 +68,5 @@ impl fmt::Debug for VoiceState {
             .field("user_id", &self.user_id)
             .field("request_to_speak_timestamp", &self.request_to_speak_timestamp)
             .finish()
-    }
-}
-
-impl<'de> Deserialize<'de> for VoiceState {
-    fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        #[derive(Deserialize)]
-        struct InterimVoiceState {
-            channel_id: Option<ChannelId>,
-            deaf: bool,
-            guild_id: Option<GuildId>,
-            member: Option<InterimMember>,
-            mute: bool,
-            self_deaf: bool,
-            self_mute: bool,
-            self_stream: Option<bool>,
-            self_video: bool,
-            session_id: String,
-            suppress: bool,
-            token: Option<String>,
-            user_id: UserId,
-            request_to_speak_timestamp: Option<Timestamp>,
-        }
-
-        let mut state = InterimVoiceState::deserialize(deserializer)?;
-
-        if let (Some(guild_id), Some(member)) = (state.guild_id, state.member.as_mut()) {
-            member.guild_id = Some(guild_id);
-        }
-
-        Ok(VoiceState {
-            channel_id: state.channel_id,
-            deaf: state.deaf,
-            guild_id: state.guild_id,
-            member: state.member.map(Member::from),
-            mute: state.mute,
-            self_deaf: state.self_deaf,
-            self_mute: state.self_mute,
-            self_stream: state.self_stream,
-            self_video: state.self_video,
-            session_id: state.session_id,
-            suppress: state.suppress,
-            token: state.token,
-            user_id: state.user_id,
-            request_to_speak_timestamp: state.request_to_speak_timestamp,
-        })
     }
 }

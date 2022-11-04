@@ -36,7 +36,7 @@ use crate::model::Timestamp;
 /// [`Self::rate_limit_per_user`] will be [`None`].
 ///
 /// [Discord docs](https://discord.com/developers/docs/resources/channel#channel-object).
-#[derive(Clone, Debug, Default, Deserialize, Serialize)]
+#[derive(Clone, Debug, Default)]
 #[non_exhaustive]
 pub struct GuildChannel {
     /// The unique Id of the channel.
@@ -57,7 +57,7 @@ pub struct GuildChannel {
     /// incremented by one.
     pub guild_id: GuildId,
     /// The type of the channel.
-    #[serde(rename = "type")]
+    
     pub kind: ChannelType,
     /// The Id of the last message sent in the channel.
     ///
@@ -70,12 +70,12 @@ pub struct GuildChannel {
     /// The name of the channel.
     pub name: String,
     /// Permission overwrites for [`Member`]s and for [`Role`]s.
-    #[serde(default)]
+    
     pub permission_overwrites: Vec<PermissionOverwrite>,
     /// The position of the channel.
     ///
     /// The default text channel will _almost always_ have a position of `0`.
-    #[serde(default)]
+    
     pub position: u32,
     /// The topic of the channel.
     ///
@@ -89,14 +89,14 @@ pub struct GuildChannel {
     /// Note however, it's recommended to use [`Self::is_nsfw`] as it's gonna be more accurate.
     // This field can or can not be present sometimes, but if it isn't
     // default to `false`.
-    #[serde(default)]
+    
     pub nsfw: bool,
     /// A rate limit that applies per user and excludes bots.
     ///
     /// **Note**: This is only available for text channels excluding news
     /// channels.
     #[doc(alias = "slowmode")]
-    #[serde(default)]
+    
     pub rate_limit_per_user: Option<u64>,
     /// The region override.
     ///
@@ -1177,7 +1177,7 @@ impl fmt::Display for GuildChannel {
 ///
 /// [Discord docs](https://discord.com/developers/docs/resources/channel#channel-object),
 /// [subset description](https://discord.com/developers/docs/topics/gateway#thread-delete)
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug)]
 pub struct PartialGuildChannel {
     /// The channel Id.
     pub id: ChannelId,
@@ -1186,6 +1186,6 @@ pub struct PartialGuildChannel {
     /// The channel category Id,  or the parent text channel Id for a thread.
     pub parent_id: ChannelId,
     /// The channel type.
-    #[serde(rename = "type")]
+    
     pub kind: ChannelType,
 }

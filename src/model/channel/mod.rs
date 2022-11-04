@@ -31,7 +31,6 @@ use crate::cache::FromStrAndCache;
 use crate::http::CacheHttp;
 use crate::json::prelude::*;
 use crate::model::prelude::*;
-use crate::model::utils::is_false;
 use crate::model::Timestamp;
 #[cfg(all(feature = "cache", feature = "model", feature = "utils"))]
 use crate::utils::parse_channel;
@@ -41,8 +40,7 @@ use crate::utils::parse_channel;
 pub type AttachmentType<'a> = crate::builder::CreateAttachment;
 
 /// A container for any channel.
-#[derive(Clone, Debug, Serialize)]
-#[serde(untagged)]
+#[derive(Clone, Debug)]
 #[non_exhaustive]
 pub enum Channel {
     /// A channel within a [`Guild`].
@@ -174,30 +172,6 @@ impl Channel {
     }
 }
 
-impl<'de> Deserialize<'de> for Channel {
-    fn deserialize<D: Deserializer<'de>>(deserializer: D) -> StdResult<Self, D::Error> {
-        let map = JsonMap::deserialize(deserializer)?;
-
-        let kind = {
-            let kind = map.get("type").ok_or_else(|| DeError::missing_field("type"))?;
-            kind.as_u64().ok_or_else(|| {
-                DeError::invalid_type(
-                    Unexpected::Other("non-positive integer"),
-                    &"a positive integer",
-                )
-            })?
-        };
-
-        let value = Value::from(map);
-        match kind {
-            0 | 2 | 4 | 5 | 10 | 11 | 12 | 13 | 14 | 15 => from_value(value).map(Channel::Guild),
-            1 => from_value(value).map(Channel::Private),
-            _ => return Err(DeError::custom("Unknown channel type")),
-        }
-        .map_err(DeError::custom)
-    }
-}
-
 impl fmt::Display for Channel {
     /// Formats the channel into a "mentioned" string.
     ///
@@ -218,8 +192,8 @@ enum_number! {
     /// A representation of a type of channel.
     ///
     /// [Discord docs](https://discord.com/developers/docs/resources/channel#channel-object-channel-types).
-    #[derive(Clone, Copy, Debug, Default, Eq, Hash, Ord, PartialEq, PartialOrd, Deserialize, Serialize)]
-    #[serde(from = "u8", into = "u8")]
+    #[derive(Clone, Copy, Debug, Default, Eq, Hash, Ord, PartialEq, PartialOrd)]
+
     #[non_exhaustive]
     pub enum ChannelType {
         /// An indicator that the channel is a text [`GuildChannel`].
@@ -275,12 +249,12 @@ impl ChannelType {
 }
 
 /// [Discord docs](https://discord.com/developers/docs/resources/channel#overwrite-object).
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug)]
 pub(crate) struct PermissionOverwriteData {
     allow: Permissions,
     deny: Permissions,
     id: TargetId,
-    #[serde(rename = "type")]
+
     kind: u8,
 }
 
@@ -329,8 +303,8 @@ impl From<PermissionOverwrite> for PermissionOverwriteData {
 /// A channel-specific permission overwrite for a member or role.
 ///
 /// [Discord docs](https://discord.com/developers/docs/resources/channel#overwrite-object).
-#[derive(Clone, Debug, Eq, PartialEq, Deserialize, Serialize)]
-#[serde(try_from = "PermissionOverwriteData", into = "PermissionOverwriteData")]
+#[derive(Clone, Debug, Eq, PartialEq)]
+
 pub struct PermissionOverwrite {
     pub allow: Permissions,
     pub deny: Permissions,
@@ -355,8 +329,8 @@ enum_number! {
     /// The video quality mode for a voice channel.
     ///
     /// [Discord docs](https://discord.com/developers/docs/resources/channel#channel-object-video-quality-modes).
-    #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Deserialize, Serialize)]
-    #[serde(from = "u8", into = "u8")]
+    #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+
     #[non_exhaustive]
     pub enum VideoQualityMode {
         /// An indicator that the video quality is chosen by Discord for optimal
@@ -369,7 +343,7 @@ enum_number! {
 }
 
 /// [Discord docs](https://discord.com/developers/docs/resources/stage-instance#stage-instance-object).
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug)]
 #[non_exhaustive]
 pub struct StageInstance {
     /// The Id of the stage instance.
@@ -385,7 +359,7 @@ pub struct StageInstance {
 /// A thread data.
 ///
 /// [Discord docs](https://discord.com/developers/docs/resources/channel#thread-metadata-object).
-#[derive(Clone, Copy, Debug, Deserialize, Serialize)]
+#[derive(Clone, Copy, Debug)]
 #[non_exhaustive]
 pub struct ThreadMetadata {
     /// Whether the thread is archived.
@@ -397,7 +371,6 @@ pub struct ThreadMetadata {
     /// Timestamp when the thread's archive status was last changed, used for calculating recent activity.
     pub archive_timestamp: Option<Timestamp>,
     /// When a thread is locked, only users with `MANAGE_THREADS` permission can unarchive it.
-    #[serde(default)]
     pub locked: bool,
     /// Timestamp when the thread was created.
     ///
@@ -406,14 +379,13 @@ pub struct ThreadMetadata {
     /// Whether non-moderators can add other non-moderators to a thread.
     ///
     /// **Note**: Only available on private threads.
-    #[serde(default, skip_serializing_if = "is_false")]
     pub invitable: bool,
 }
 
 /// A response to getting several threads channels.
 ///
 /// Discord docs: scattered, but e.g. [here](https://discord.com/developers/docs/resources/channel#list-public-archived-threads-response-body).
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug)]
 #[non_exhaustive]
 pub struct ThreadsData {
     /// The threads channels.
@@ -421,7 +393,6 @@ pub struct ThreadsData {
     /// A thread member for each returned thread the current user has joined.
     pub members: Vec<ThreadMember>,
     /// Whether there are potentially additional threads that could be returned on a subsequent call.
-    #[serde(default)]
     pub has_more: bool,
 }
 

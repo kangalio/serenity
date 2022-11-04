@@ -9,13 +9,12 @@ use crate::http::CacheHttp;
 #[cfg(feature = "model")]
 use crate::http::{Http, Typing};
 use crate::model::prelude::*;
-use crate::model::utils::single_recipient;
 use crate::model::Timestamp;
 
 /// A Direct Message text channel with another user.
 ///
 /// [Discord docs](https://discord.com/developers/docs/resources/channel#channel-object).
-#[derive(Clone, Debug, Default, Deserialize, Serialize)]
+#[derive(Clone, Debug, Default)]
 #[non_exhaustive]
 pub struct PrivateChannel {
     /// The unique Id of the private channel.
@@ -29,10 +28,8 @@ pub struct PrivateChannel {
     /// Indicator of the type of channel this is.
     ///
     /// This should always be [`ChannelType::Private`].
-    #[serde(rename = "type")]
     pub kind: ChannelType,
     /// The recipient to the private channel.
-    #[serde(with = "single_recipient", rename = "recipients")]
     pub recipient: User,
 }
 

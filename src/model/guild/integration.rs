@@ -4,17 +4,17 @@ use crate::model::Timestamp;
 /// Various information about integrations.
 ///
 /// [Discord docs](https://discord.com/developers/docs/resources/guild#integration-object).
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug)]
 #[non_exhaustive]
 pub struct Integration {
     pub id: IntegrationId,
     pub guild_id: GuildId,
     pub account: IntegrationAccount,
     pub enabled: bool,
-    #[serde(rename = "expire_behaviour")]
+    
     pub expire_behaviour: Option<IntegrationExpireBehaviour>,
     pub expire_grace_period: Option<u64>,
-    #[serde(rename = "type")]
+    
     pub kind: String,
     pub name: String,
     pub role_id: Option<RoleId>,
@@ -31,8 +31,8 @@ enum_number! {
     /// The behavior once the integration expires.
     ///
     /// [Discord docs](https://discord.com/developers/docs/resources/guild#integration-object-integration-expire-behaviors).
-    #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Deserialize, Serialize)]
-    #[serde(from = "u8", into = "u8")]
+    #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+    
     #[non_exhaustive]
     pub enum IntegrationExpireBehaviour {
         RemoveRole = 0,
@@ -51,7 +51,7 @@ impl From<Integration> for IntegrationId {
 /// Integration account object.
 ///
 /// [Discord docs](https://discord.com/developers/docs/resources/guild#integration-account-object).
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug)]
 #[non_exhaustive]
 pub struct IntegrationAccount {
     pub id: String,
@@ -61,7 +61,7 @@ pub struct IntegrationAccount {
 /// Integration application object.
 ///
 /// [Discord docs](https://discord.com/developers/docs/resources/guild#integration-application-object).
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug)]
 #[non_exhaustive]
 pub struct IntegrationApplication {
     pub id: ApplicationId,

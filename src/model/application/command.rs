@@ -24,13 +24,13 @@ use crate::model::Permissions;
 /// The base command model that belongs to an application.
 ///
 /// [Discord docs](https://discord.com/developers/docs/interactions/application-commands#application-command-object-application-command-structure).
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug)]
 #[non_exhaustive]
 pub struct Command {
     /// The command Id.
     pub id: CommandId,
     /// The application command kind.
-    #[serde(rename = "type")]
+    
     pub kind: CommandType,
     /// The parent application Id.
     pub application_id: ApplicationId,
@@ -67,13 +67,13 @@ pub struct Command {
     /// ([source](https://discord.com/developers/docs/interactions/application-commands#retrieving-localized-commands)).
     pub description_localizations: Option<HashMap<String, String>>,
     /// The parameters for the command.
-    #[serde(default)]
+    
     pub options: Vec<CommandOption>,
     /// The default permissions required to execute the command.
     pub default_member_permissions: Option<Permissions>,
     /// Indicates whether the command is available in DMs with the app, only for globally-scoped commands.
     /// By default, commands are visible.
-    #[serde(default)]
+    
     pub dm_permission: Option<bool>,
     /// An autoincremented version identifier updated during substantial record changes.
     pub version: CommandVersionId,
@@ -206,8 +206,8 @@ enum_number! {
     /// The type of an application command.
     ///
     /// [Discord docs](https://discord.com/developers/docs/interactions/application-commands#application-command-object-application-command-types).
-    #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Deserialize, Serialize)]
-    #[serde(from = "u8", into = "u8")]
+    #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+    
     #[non_exhaustive]
     pub enum CommandType {
         ChatInput = 1,
@@ -220,24 +220,24 @@ enum_number! {
 /// The parameters for an [`Command`].
 ///
 /// [Discord docs](https://discord.com/developers/docs/interactions/application-commands#application-command-object-application-command-option-structure).
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug)]
 #[non_exhaustive]
 pub struct CommandOption {
     /// The option type.
-    #[serde(rename = "type")]
+    
     pub kind: CommandOptionType,
     /// The option name.
     pub name: String,
     /// Localizations of the option name with locale as the key
-    #[serde(skip_serializing_if = "Option::is_none")]
+    
     pub name_localizations: Option<std::collections::HashMap<String, String>>,
     /// The option description.
     pub description: String,
     /// Localizations of the option description with locale as the key
-    #[serde(skip_serializing_if = "Option::is_none")]
+    
     pub description_localizations: Option<std::collections::HashMap<String, String>>,
     /// Whether the parameter is optional or required.
-    #[serde(default)]
+    
     pub required: bool,
     /// Choices the user can pick from.
     ///
@@ -245,7 +245,7 @@ pub struct CommandOption {
     ///
     /// [`String`]: CommandOptionType::String
     /// [`Integer`]: CommandOptionType::Integer
-    #[serde(default)]
+    
     pub choices: Vec<CommandOptionChoice>,
     /// The nested options.
     ///
@@ -253,26 +253,26 @@ pub struct CommandOption {
     ///
     /// [`SubCommand`]: CommandOptionType::SubCommand
     /// [`SubCommandGroup`]: CommandOptionType::SubCommandGroup
-    #[serde(default)]
+    
     pub options: Vec<CommandOption>,
     /// If the option is a [`Channel`], it will only be able to show these types.
     ///
     /// [`Channel`]: CommandOptionType::Channel
-    #[serde(default)]
+    
     pub channel_types: Vec<ChannelType>,
     /// Minimum permitted value for Integer or Number options
-    #[serde(default)]
+    
     pub min_value: Option<serde_json::Number>,
     /// Maximum permitted value for Integer or Number options
-    #[serde(default)]
+    
     pub max_value: Option<serde_json::Number>,
     /// Minimum permitted length for String options
-    #[serde(default)]
+    
     pub min_length: Option<u16>,
     /// Maximum permitted length for String options
-    #[serde(default)]
+    
     pub max_length: Option<u16>,
-    #[serde(default)]
+    
     pub autocomplete: bool,
 }
 
@@ -280,8 +280,8 @@ enum_number! {
     /// The type of an [`CommandOption`].
     ///
     /// [Discord docs](https://discord.com/developers/docs/interactions/application-commands#application-command-object-application-command-option-type).
-    #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Deserialize, Serialize)]
-    #[serde(from = "u8", into = "u8")]
+    #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+    
     #[non_exhaustive]
     pub enum CommandOptionType {
         SubCommand = 1,
@@ -302,13 +302,13 @@ enum_number! {
 /// The only valid values a user can pick in an [`CommandOption`].
 ///
 /// [Discord docs](https://discord.com/developers/docs/interactions/application-commands#application-command-object-application-command-option-choice-structure).
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug)]
 #[non_exhaustive]
 pub struct CommandOptionChoice {
     /// The choice name.
     pub name: String,
     /// Localizations of the choice name, with locale as key
-    #[serde(skip_serializing_if = "Option::is_none")]
+    
     pub name_localizations: Option<std::collections::HashMap<String, String>>,
     /// The choice value.
     pub value: Value,
@@ -317,7 +317,7 @@ pub struct CommandOptionChoice {
 /// An [`Command`] permission.
 ///
 /// [Discord docs](https://discord.com/developers/docs/interactions/application-commands#application-command-permissions-object-guild-application-command-permissions-structure).
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug)]
 #[non_exhaustive]
 pub struct CommandPermission {
     /// The id of the command.
@@ -333,13 +333,13 @@ pub struct CommandPermission {
 /// The [`CommandPermission`] data.
 ///
 /// [Discord docs](https://discord.com/developers/docs/interactions/application-commands#application-command-permissions-object-application-command-permissions-structure).
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug)]
 #[non_exhaustive]
 pub struct CommandPermissionData {
     /// The [`RoleId`] or [`UserId`], depends on `kind` value.
     pub id: CommandPermissionId,
     /// The type of data this permissions applies to.
-    #[serde(rename = "type")]
+    
     pub kind: CommandPermissionType,
     /// Whether or not the provided data can use the command or not.
     pub permission: bool,
@@ -349,8 +349,8 @@ enum_number! {
     /// The type of an [`CommandPermissionData`].
     ///
     /// [Discord docs](https://discord.com/developers/docs/interactions/application-commands#application-command-permissions-object-application-command-permission-type).
-    #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Deserialize, Serialize)]
-    #[serde(from = "u8", into = "u8")]
+    #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+    
     #[non_exhaustive]
     pub enum CommandPermissionType {
         Role = 1,

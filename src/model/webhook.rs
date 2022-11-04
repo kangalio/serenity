@@ -21,8 +21,8 @@ enum_number! {
     /// A representation of a type of webhook.
     ///
     /// [Discord docs](https://discord.com/developers/docs/resources/webhook#webhook-object-webhook-types).
-    #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Deserialize, Serialize)]
-    #[serde(from = "u8", into = "u8")]
+    #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+    
     #[non_exhaustive]
     pub enum WebhookType {
         /// An indicator that the webhook can post messages to channels with
@@ -55,7 +55,7 @@ impl WebhookType {
 /// use.
 ///
 /// [Discord docs](https://discord.com/developers/docs/resources/webhook#webhook-object).
-#[derive(Clone, Deserialize, Serialize)]
+#[derive(Clone)]
 #[non_exhaustive]
 pub struct Webhook {
     /// The unique Id.
@@ -63,7 +63,7 @@ pub struct Webhook {
     /// Can be used to calculate the creation date of the webhook.
     pub id: WebhookId,
     /// The type of the webhook.
-    #[serde(rename = "type")]
+    
     pub kind: WebhookType,
     /// The default avatar.
     ///

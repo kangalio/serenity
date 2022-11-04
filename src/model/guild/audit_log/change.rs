@@ -11,15 +11,15 @@ use crate::model::id::{ApplicationId, ChannelId, GenericId, GuildId, RoleId, Use
 use crate::model::sticker::StickerFormatType;
 use crate::model::{Permissions, Timestamp};
 
-#[derive(Debug, PartialEq, Eq, Deserialize, Serialize)]
+#[derive(Debug, PartialEq, Eq)]
 #[non_exhaustive]
 pub struct AffectedRole {
     pub id: RoleId,
     pub name: String,
 }
 
-#[derive(Debug, PartialEq, Eq, Deserialize, Serialize)]
-#[serde(untagged)]
+#[derive(Debug, PartialEq, Eq)]
+
 #[non_exhaustive]
 pub enum EntityType {
     Int(u64),
@@ -32,21 +32,21 @@ macro_rules! generate_change {
         $key:literal => $name:ident ($type:ty),
     )* ) => {
         #[cfg_attr(not(simd_json), allow(clippy::derive_partial_eq_without_eq))]
-        #[derive(Debug, PartialEq, Serialize, Deserialize)]
+        #[derive(Debug, PartialEq)]
         // serde_json's Value impls Eq, simd-json's Value doesn't
         #[cfg_attr(not(feature = "simd-json"), derive(Eq))]
         #[non_exhaustive]
-        #[serde(tag = "key")]
-        #[serde(rename_all = "snake_case")]
+        
+        
         pub enum Change {
             $(
                 $( #[doc = $doc] )?
                 $name {
-                    #[serde(skip_serializing_if = "Option::is_none")]
-                    #[serde(rename = "old_value")]
+                    
+                    
                     old: Option<$type>,
-                    #[serde(skip_serializing_if = "Option::is_none")]
-                    #[serde(rename = "new_value")]
+                    
+                    
                     new: Option<$type>,
                 },
             )*
@@ -54,11 +54,11 @@ macro_rules! generate_change {
             /// Unknown key was changed.
             Other {
                 name: String,
-                #[serde(skip_serializing_if = "Option::is_none")]
-                #[serde(rename = "old_value")]
+                
+                
                 old_value: Option<Value>,
-                #[serde(skip_serializing_if = "Option::is_none")]
-                #[serde(rename = "new_value")]
+                
+                
                 new_value: Option<Value>,
             },
         }

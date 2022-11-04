@@ -14,7 +14,6 @@ use crate::http::Http;
 #[cfg(all(feature = "cache", feature = "model"))]
 use crate::internal::prelude::*;
 use crate::model::prelude::*;
-use crate::model::utils::is_false;
 #[cfg(all(feature = "cache", feature = "model", feature = "utils"))]
 use crate::utils::parse_role;
 
@@ -26,7 +25,7 @@ use crate::utils::parse_role;
 /// permissions.
 ///
 /// [Discord docs](https://discord.com/developers/docs/topics/permissions#role-object).
-#[derive(Clone, Debug, Default, Deserialize, Serialize)]
+#[derive(Clone, Debug, Default)]
 #[non_exhaustive]
 pub struct Role {
     /// The Id of the role. Can be used to calculate the role's creation date.
@@ -34,7 +33,6 @@ pub struct Role {
     /// The Id of the Guild the Role is in.
     pub guild_id: GuildId,
     /// The colour of the role.
-    #[serde(rename = "color")]
     pub colour: Colour,
     /// Indicator of whether the role is pinned above lesser roles.
     ///
@@ -48,7 +46,6 @@ pub struct Role {
     ///
     /// Only members of the role will be notified if a role is mentioned with
     /// this set to `true`.
-    #[serde(default)]
     pub mentionable: bool,
     /// The name of the role.
     pub name: String,
@@ -67,7 +64,6 @@ pub struct Role {
     /// such as guild subscriber role, or if the role is linked to an [`Integration`] or a bot.
     ///
     /// [`Integration`]: super::Integration
-    #[serde(default)]
     pub tags: RoleTags,
     /// Role icon image hash.
     ///
@@ -81,21 +77,21 @@ pub struct Role {
 /// Helper for deserialization without a `GuildId` but then later updated to the correct `GuildId`.
 ///
 /// The only difference to `Role` is `guild_id` is wrapped in `Option`.
-#[derive(Deserialize)]
+#[derive()]
 pub(crate) struct InterimRole {
     pub id: RoleId,
-    #[serde(default)]
+
     pub guild_id: Option<GuildId>,
-    #[serde(rename = "color")]
+
     pub colour: Colour,
     pub hoist: bool,
     pub managed: bool,
-    #[serde(default)]
+
     pub mentionable: bool,
     pub name: String,
     pub permissions: Permissions,
     pub position: u32,
-    #[serde(default)]
+
     pub tags: RoleTags,
 }
 
@@ -286,7 +282,7 @@ impl FromStrAndCache for Role {
 /// The tags of a [`Role`].
 ///
 /// [Discord docs](https://discord.com/developers/docs/topics/permissions#role-object-role-tags-structure).
-#[derive(Clone, Debug, Default, Eq, PartialEq, Deserialize, Serialize)]
+#[derive(Clone, Debug, Default, Eq, PartialEq)]
 #[non_exhaustive]
 pub struct RoleTags {
     /// The Id of the bot the [`Role`] belongs to.
@@ -294,7 +290,6 @@ pub struct RoleTags {
     /// The Id of the integration the [`Role`] belongs to.
     pub integration_id: Option<IntegrationId>,
     /// Whether this is the guild's premium subscriber role.
-    #[serde(default, skip_serializing_if = "is_false", with = "premium_subscriber")]
     pub premium_subscriber: bool,
 }
 

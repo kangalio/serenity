@@ -19,6 +19,8 @@
 //! use serenity::model::prelude::*;
 //! ```
 
+#![allow(unused)]
+
 #[macro_use]
 mod utils;
 

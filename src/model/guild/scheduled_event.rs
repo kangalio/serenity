@@ -3,7 +3,7 @@ use crate::model::prelude::*;
 /// Information about a guild scheduled event.
 ///
 /// [Discord docs](https://discord.com/developers/docs/resources/guild-scheduled-event#guild-scheduled-event-object).
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug)]
 #[non_exhaustive]
 pub struct ScheduledEvent {
     /// The Id of the scheduled event.
@@ -21,10 +21,8 @@ pub struct ScheduledEvent {
     /// The description of the scheduled event, if any.
     pub description: Option<String>,
     /// The event's starting time.
-    #[serde(rename = "scheduled_start_time")]
     pub start_time: Timestamp,
     /// The event's ending time; optional.
-    #[serde(rename = "scheduled_end_time")]
     pub end_time: Option<Timestamp>,
     /// The event's status; either Scheduled, Active, Completed, or Canceled.
     pub status: ScheduledEventStatus,
@@ -34,10 +32,8 @@ pub struct ScheduledEvent {
     pub creator: Option<User>,
     /// The type of the event, indicating if it will take place in a Stage Instance, a Voice
     /// Channel, or at some External location.
-    #[serde(rename = "entity_type")]
     pub kind: ScheduledEventType,
     /// Optional event location, only required for External events.
-    #[serde(rename = "entity_metadata")]
     pub metadata: Option<ScheduledEventMetadata>,
     /// Number of users interested in the event.
     ///
@@ -50,8 +46,8 @@ pub struct ScheduledEvent {
 
 enum_number! {
     /// [Discord docs](https://discord.com/developers/docs/resources/guild-scheduled-event#guild-scheduled-event-object-guild-scheduled-event-status).
-    #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Deserialize, Serialize)]
-    #[serde(from = "u8", into = "u8")]
+    #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+
     #[non_exhaustive]
     pub enum ScheduledEventStatus {
         Scheduled = 1,
@@ -64,8 +60,8 @@ enum_number! {
 
 enum_number! {
     /// [Discord docs](https://discord.com/developers/docs/resources/guild-scheduled-event#guild-scheduled-event-object-guild-scheduled-event-entity-types).
-    #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Deserialize, Serialize)]
-    #[serde(from = "u8", into = "u8")]
+    #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+
     #[non_exhaustive]
     pub enum ScheduledEventType {
         StageInstance = 1,
@@ -76,17 +72,15 @@ enum_number! {
 }
 
 /// [Discord docs](https://discord.com/developers/docs/resources/guild-scheduled-event#guild-scheduled-event-object-guild-scheduled-event-entity-metadata).
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug)]
 pub struct ScheduledEventMetadata {
     // TODO: Change to `Option<String>` in next version.
-    #[serde(default)]
     pub location: String,
 }
 
 /// [Discord docs](https://discord.com/developers/docs/resources/guild-scheduled-event#guild-scheduled-event-user-object).
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug)]
 pub struct ScheduledEventUser {
-    #[serde(rename = "guild_scheduled_event_id")]
     pub event_id: ScheduledEventId,
     pub user: User,
     pub member: Option<Member>,
