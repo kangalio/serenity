@@ -6,12 +6,15 @@ use serde::{Deserialize, Serialize};
 
 #[cfg(feature = "model")]
 use crate::builder::{
-    CreateAutocompleteResponse,
     CreateInteractionResponse,
     CreateInteractionResponseFollowup,
     CreateInteractionResponseMessage,
     EditInteractionResponse,
 };
+#[cfg(feature = "collector")]
+use crate::builder::{CreateQuickModal, QuickModalResponse};
+#[cfg(feature = "collector")]
+use crate::client::Context;
 #[cfg(feature = "model")]
 use crate::http::Http;
 use crate::internal::prelude::*;
@@ -96,19 +99,6 @@ impl CommandInteraction {
         &self,
         http: impl AsRef<Http>,
         builder: CreateInteractionResponse,
-    ) -> Result<()> {
-        builder.execute(http, self.id, &self.token).await
-    }
-
-    /// Creates a response to an autocomplete interaction.
-    ///
-    /// # Errors
-    ///
-    /// Returns an [`Error::Http`] if the API returns an error.
-    pub async fn create_autocomplete_response(
-        &self,
-        http: impl AsRef<Http>,
-        builder: CreateAutocompleteResponse,
     ) -> Result<()> {
         builder.execute(http, self.id, &self.token).await
     }
@@ -214,6 +204,20 @@ impl CommandInteraction {
     pub async fn defer(&self, http: impl AsRef<Http>) -> Result<()> {
         let builder = CreateInteractionResponse::Defer(CreateInteractionResponseMessage::default());
         self.create_response(http, builder).await
+    }
+
+    /// See [`CreateQuickModal`].
+    ///
+    /// # Errors
+    ///
+    /// See [`CreateQuickModal::execute()`].
+    #[cfg(feature = "collector")]
+    pub async fn quick_modal(
+        &self,
+        ctx: &Context,
+        builder: CreateQuickModal,
+    ) -> Result<Option<QuickModalResponse>> {
+        builder.execute(ctx, self.id, &self.token).await
     }
 }
 

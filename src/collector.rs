@@ -52,7 +52,7 @@ macro_rules! make_specific_collector {
         $( #[ $($meta:tt)* ] )*
         $collector_type:ident, $item_type:ident,
         $extractor:pat => $extracted_item:ident,
-        $( $filter_name:ident: $filter_type:ident = $filter_extractor:expr, )*
+        $( $filter_name:ident: $filter_type:ty => $filter_passes:expr, )*
     ) => {
         #[doc = concat!("A [`", stringify!($collector_type), "`] receives [`", stringify!($item_type), "`]'s match the given filters for a set duration.")]
         $( #[ $($meta)* ] )*
@@ -99,8 +99,8 @@ macro_rules! make_specific_collector {
             pub fn collect_stream(self) -> impl Stream<Item = $item_type> {
                 let filters_pass = move |$extracted_item: &$item_type| {
                     // Check each of the built-in filters (author_id, channel_id, etc.)
-                    $( if let (Some(expected_value), Some(actual_value)) = (self.$filter_name, $filter_extractor) {
-                        if expected_value != actual_value {
+                    $( if let Some($filter_name) = &self.$filter_name {
+                        if !$filter_passes {
                             return false;
                         }
                     } )*
@@ -140,35 +140,37 @@ make_specific_collector!(
     Event::InteractionCreate(InteractionCreateEvent {
         interaction: Interaction::Component(interaction),
     }) => interaction,
-    author_id: UserId = Some(interaction.user.id),
-    channel_id: ChannelId = Some(interaction.channel_id),
-    guild_id: GuildId = interaction.guild_id,
-    message_id: MessageId = Some(interaction.message.id),
+    author_id: UserId => interaction.user.id == *author_id,
+    channel_id: ChannelId => interaction.channel_id == *channel_id,
+    guild_id: GuildId => interaction.guild_id.map_or(true, |x| x == *guild_id),
+    message_id: MessageId => interaction.message.id == *message_id,
+    custom_ids: Vec<String> => custom_ids.contains(&interaction.data.custom_id),
 );
 make_specific_collector!(
     ModalInteractionCollector, ModalInteraction,
     Event::InteractionCreate(InteractionCreateEvent {
         interaction: Interaction::Modal(interaction),
     }) => interaction,
-    author_id: UserId = Some(interaction.user.id),
-    channel_id: ChannelId = Some(interaction.channel_id),
-    guild_id: GuildId = interaction.guild_id,
-    message_id: MessageId = interaction.message.as_ref().map(|m| m.id),
+    author_id: UserId => interaction.user.id == *author_id,
+    channel_id: ChannelId => interaction.channel_id == *channel_id,
+    guild_id: GuildId => interaction.guild_id.map_or(true, |g| g == *guild_id),
+    message_id: MessageId => interaction.message.as_ref().map_or(true, |m| m.id == *message_id),
+    custom_ids: Vec<String> => custom_ids.contains(&interaction.data.custom_id),
 );
 make_specific_collector!(
     ReactionCollector, Reaction,
     Event::ReactionAdd(ReactionAddEvent { reaction }) => reaction,
-    author_id: UserId = reaction.user_id,
-    channel_id: ChannelId = Some(reaction.channel_id),
-    guild_id: GuildId = reaction.guild_id,
-    message_id: MessageId = Some(reaction.message_id),
+    author_id: UserId => reaction.user_id.map_or(true, |a| a == *author_id),
+    channel_id: ChannelId => reaction.channel_id == *channel_id,
+    guild_id: GuildId => reaction.guild_id.map_or(true, |g| g == *guild_id),
+    message_id: MessageId => reaction.message_id == *message_id,
 );
 make_specific_collector!(
     MessageCollector, Message,
     Event::MessageCreate(MessageCreateEvent { message }) => message,
-    author_id: UserId = Some(message.author.id),
-    channel_id: ChannelId = Some(message.channel_id),
-    guild_id: GuildId = message.guild_id,
+    author_id: UserId => message.author.id == *author_id,
+    channel_id: ChannelId => message.channel_id == *channel_id,
+    guild_id: GuildId => message.guild_id.map_or(true, |g| g == *guild_id),
 );
 make_specific_collector!(
     #[deprecated = "prefer the stand-alone collect() function to collect arbitrary events"]

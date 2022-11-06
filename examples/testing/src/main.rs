@@ -1,4 +1,5 @@
 use serenity::builder::*;
+use serenity::model::prelude::command::CommandOptionType;
 use serenity::model::prelude::component::ButtonStyle;
 use serenity::model::prelude::interaction::application_command::*;
 use serenity::model::prelude::*;
@@ -43,6 +44,15 @@ async fn message(ctx: &Context, msg: Message) -> Result<(), serenity::Error> {
                 CreateCommand::new("newselectmenu").description("test command"),
             )
             .await?;
+        guild_id
+            .create_application_command(
+                &ctx,
+                CreateCommand::new("autocomplete").description("test command").add_option(
+                    CreateCommandOption::new(CommandOptionType::String, "foo", "foo")
+                        .set_autocomplete(true),
+                ),
+            )
+            .await?;
     } else if msg.content == "edit" {
         let mut msg = channel_id
             .send_message(
@@ -84,9 +94,11 @@ async fn message(ctx: &Context, msg: Message) -> Result<(), serenity::Error> {
             .send_message(
                 ctx,
                 CreateMessage::new()
-                    .button(CreateButton::new("foo", "0"))
-                    .button(CreateButton::new("bar", "1").style(ButtonStyle::Secondary))
-                    .button(CreateButton::new_link("baz", "https://google.com"))
+                    .button(CreateButton::new("0").label("Foo"))
+                    .button(CreateButton::new("1").emoji('🤗').style(ButtonStyle::Secondary))
+                    .button(
+                        CreateButton::new_link("https://google.com").emoji('🔍').label("Search"),
+                    )
                     .select_menu(CreateSelectMenu::new("3", CreateSelectMenuKind::String {
                         options: vec![
                             CreateSelectMenuOption::new("foo", "foo"),
@@ -101,7 +113,8 @@ async fn message(ctx: &Context, msg: Message) -> Result<(), serenity::Error> {
             let msg = channel_id
                 .send_message(
                     ctx,
-                    CreateMessage::new().button(CreateButton::new(custom_id.clone(), custom_id)),
+                    CreateMessage::new()
+                        .button(CreateButton::new(custom_id.clone()).label(custom_id)),
                 )
                 .await?;
             let button_press = msg
@@ -116,6 +129,10 @@ async fn message(ctx: &Context, msg: Message) -> Result<(), serenity::Error> {
 
             custom_id = msg.id.to_string();
         }
+    } else if msg.content == "reactionremoveemoji" {
+        // Test new ReactionRemoveEmoji gateway event: https://github.com/serenity-rs/serenity/issues/2248
+        msg.react(ctx, '👍').await?;
+        msg.delete_reaction_emoji(ctx, '👍').await?;
     } else {
         return Ok(());
     }
@@ -261,8 +278,23 @@ impl EventHandler for Handler {
         match i {
             Interaction::Command(i) => interaction(&ctx, i).await.unwrap(),
             Interaction::Component(i) => println!("{:#?}", i.data),
+            Interaction::Autocomplete(i) => {
+                i.create_response(
+                    &ctx,
+                    CreateInteractionResponse::Autocomplete(
+                        CreateAutocompleteResponse::new()
+                            .add_string_choice("suggestion", "suggestion"),
+                    ),
+                )
+                .await
+                .unwrap();
+            },
             _ => {},
         }
+    }
+
+    async fn reaction_remove_emoji(&self, _ctx: Context, removed_reactions: Reaction) {
+        println!("Got ReactionRemoveEmoji event: {:?}", removed_reactions);
     }
 }
 
