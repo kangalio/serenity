@@ -136,10 +136,17 @@ macro_rules! make_specific_collector {
 }
 
 make_specific_collector!(
+    // First line has name of the collector type, and the type of the collected items.
     ComponentInteractionCollector, ComponentInteraction,
+    // This defines the extractor pattern, which extracts the data we want to collect from an Event.
     Event::InteractionCreate(InteractionCreateEvent {
         interaction: Interaction::Component(interaction),
     }) => interaction,
+    // All following lines define built-in filters of the collector.
+    // Each line consists of:
+    // - the filter name (the name of the generated builder-like method on the collector type)
+    // - filter argument type (used as argument of the builder-like method on the collector type)
+    // - filter expression (this expressoin must return true to let the event through)
     author_id: UserId => interaction.user.id == *author_id,
     channel_id: ChannelId => interaction.channel_id == *channel_id,
     guild_id: GuildId => interaction.guild_id.map_or(true, |x| x == *guild_id),
