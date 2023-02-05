@@ -62,6 +62,13 @@ pub struct HttpBuilder {
 impl HttpBuilder {
     /// Construct a new builder to call methods on for the HTTP construction.
     /// The `token` will automatically be prefixed "Bot " if not already.
+    #[cfg_attr(
+        feature = "absolute_ratelimits",
+        deprecated = "\n\
+            You've enabled the absolute_ratelimits feature but it has been removed.\n\
+            Configure absolute ratelimits via Ratelimiter::set_absolute_ratelimits instead.\n\
+            You can set the Ratelimiter of Http via HttpBuilder::ratelimiter."
+    )]
     pub fn new(token: impl AsRef<str>) -> Self {
         Self {
             client: None,
@@ -208,6 +215,13 @@ pub struct Http {
 
 impl Http {
     #[must_use]
+    #[cfg_attr(
+        feature = "absolute_ratelimits",
+        deprecated = "\n\
+            You've enabled the absolute_ratelimits feature but it has been removed.\n\
+            Configure absolute ratelimits via Ratelimiter::set_absolute_ratelimits instead.\n\
+            You can set the Ratelimiter of Http via HttpBuilder::ratelimiter."
+    )]
     pub fn new(token: &str) -> Self {
         HttpBuilder::new(token).build()
     }

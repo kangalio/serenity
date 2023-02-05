@@ -109,6 +109,14 @@ impl ClientBuilder {
     /// If you have enabled the `framework`-feature (on by default), you must specify
     /// a framework via the [`Self::framework`] method,
     /// otherwise awaiting the builder will cause a panic.
+    #[cfg(feature = "gateway")]
+    #[cfg_attr(
+        feature = "absolute_ratelimits",
+        deprecated = "\n\
+            You've enabled the absolute_ratelimits feature but it has been removed.\n\
+            Configure absolute ratelimits via Ratelimiter::set_absolute_ratelimits instead.\n\
+            You can set the Ratelimiter of Http via HttpBuilder::ratelimiter."
+    )]
     pub fn new(token: impl AsRef<str>, intents: GatewayIntents) -> Self {
         Self::_new(Http::new(token.as_ref()), intents)
     }
@@ -120,6 +128,13 @@ impl ClientBuilder {
     /// If you have enabled the `framework`-feature (on by default), you must specify
     /// a framework via the [`Self::framework`] method,
     /// otherwise awaiting the builder will cause a panic.
+    #[cfg_attr(
+        feature = "absolute_ratelimits",
+        deprecated = "\n\
+            You've enabled the absolute_ratelimits feature but it has been removed.\n\
+            Configure absolute ratelimits via Ratelimiter::set_absolute_ratelimits instead.\n\
+            You can set the Ratelimiter of Http via HttpBuilder::ratelimiter."
+    )]
     pub fn new_with_http(http: Http, intents: GatewayIntents) -> Self {
         Self::_new(http, intents)
     }
@@ -345,7 +360,6 @@ impl ClientBuilder {
     }
 }
 
-#[cfg(feature = "gateway")]
 impl IntoFuture for ClientBuilder {
     type Output = Result<Client>;
 
@@ -679,6 +693,13 @@ pub struct Client {
 }
 
 impl Client {
+    #[cfg_attr(
+        feature = "absolute_ratelimits",
+        deprecated = "\n\
+            You've enabled the absolute_ratelimits feature but it has been removed.\n\
+            Configure absolute ratelimits via Ratelimiter::set_absolute_ratelimits instead.\n\
+            You can set the Ratelimiter of Http via HttpBuilder::ratelimiter."
+    )]
     pub fn builder(token: impl AsRef<str>, intents: GatewayIntents) -> ClientBuilder {
         ClientBuilder::new(token, intents)
     }
